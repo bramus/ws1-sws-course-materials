@@ -147,7 +147,7 @@
 								PHP can be configured via a file named <code>php.ini</code>
 							</li>
 							<li class="fragment">We'll take a closer look at this file when it's needed</li>
-							<li class="fragment">The <code>php.ini</code> that is shipped with Wampserver/MAMP is configured correctly</li>
+							<li class="fragment">Note: the <code>php.ini</code> shipped with Wampserver/MAMP is configured correctly</li>
 						</ul>
 					</section>
 
@@ -158,6 +158,11 @@
 								From the shell
 								<ul>
 									<li class="fragment">Run <code>php -a</code> to get an interative shell at which you can type in PHP statements
+										<ul class="fragment">
+											<li>cfr. the MySQL shell where you type in SQL statements (queries)</li>
+											<li>A <code>;</code> ends a statement</li>
+											<li>Type <code>quit</code> or <code>exit</code> to leave the shell</li>
+										</ul>
 										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -a
 Interactive shell
 
@@ -165,11 +170,6 @@ php &gt; echo 'hello';
 hello
 php &gt; quit
 bramus$</code></pre></div>
-										<ul class="fragment">
-											<li>cfr. the MySQL shell where you type in SQL statements (queries)</li>
-											<li>A <code>;</code> ends a statement</li>
-											<li>Type <code>quit</code> or <code>exit</code> to leave the shell</li>
-										</ul>
 									</li>
 								</ul>
 							</li>
@@ -196,7 +196,7 @@ bramus$</code></pre></div>
 										<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 	echo 'hello' . PHP_EOL;
 ?&gt;</code></pre></div>
-<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php file.php
+<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-example.php
 hello
 bramus$</code></pre></div>
 									</li>
@@ -222,17 +222,252 @@ bramus$</code></pre></div>
 				</section>
 				
 
-				<!-- PHP Syntax: Variables/Arrays/Casting, Selections/Iterations/Operators,  -->
+				<!-- PHP Syntax: Variables/Arrays/Casting, -->
 				<section>
 					<section>
-						<h2>PHP Syntax</h2>
+						<h2>PHP Variables</h2>
 					</section>
 
 					<section>
-						<h2></h2>
+						<h2>Before we dive in</h2>
+						<ul>
+							<li class="fragment">
+								Strings are enclosed by <code>'</code> or <code>&quot;</code>
+							</li>
+							<li class="fragment">
+								Use <code>echo</code> or <code>print</code> to output something onscreen.
+								<pre class="bigger"><code class="language-php">bramus$ php -a
+Interactive shell
+
+php &gt; echo 'hello';
+hello
+php &gt; echo('hello');
+hello
+php &gt; print 'hello';
+hello
+php &gt; print('hello');
+hello</code></pre>
+								<ul>
+									<li class="fragment">The first example is the preferred syntax</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Statements end in a <code>;</code>
+								<pre class="bigger"><code class="language-php">php &gt; echo 'hello'
+php &gt; ;
+hello</code></pre>
+							</li>
+						</ul>
 					</section>
+
+					<section>
+						<h2>Name, Value &amp; Type</h2>
+						<ul>
+							<li class="fragment">
+								Variables have a <em>name</em> and a <em>value</em>
+								<ul class="fragment">
+									<li>Variable names start with a <code>$</code></li>
+								</ul>
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
+php &gt; echo $a;
+3</code></pre></div>
+							</li>
+							<li class="fragment">
+								Variables are of a certain type
+								<ul>
+									<li>Primitive types: boolean, integer, float <em>(aka double)</em>, string</li>
+									<li>Combined types: Array, Object</li>
+									<li>Special types: resource, NULL</li>
+									<li>Pseudo types: mixed, number, callback</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Dynamic &amp; Weak typing</h2>
+						<ul>
+							<li class="fragment">PHP is dynamically typed
+								<ul>
+									<li>When declaring a variable, you cannot specify the type. PHP will <em>guess</em> the data type when assigning a value</li>
+								</ul>
+							</li>
+							<li class="fragment">PHP is weakly typed
+								<ul>
+									<li>PHP will adjust the type of a var when a new value is assigned
+										<ul>
+											<li>This phenomenon is known as <em>implicit type conversion</em> or <em>coercion</em></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">Both are typical properties of scripting languages</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
+php &gt; echo gettype($a);
+integer
+php &gt; $a = 'Hello';
+php &gt; echo gettype($a);
+string</code></pre></div>
+					</section>
+
+					<section>
+						<h2>Type casting</h2>
+						<ul>
+							<li class="fragment">
+								To enforce a variable being of a certain type, you must explicitly cast it to that type
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
+php &gt; echo gettype($a);
+integer
+php &gt; $a = (string) $a;
+php &gt; echo gettype($a);
+string</code></pre></div>
+					</section>
+
+					<section>
+						<h2>A few pointers</h2>
+						<ul>
+							<li class="fragment">
+								PHP is case sensitive
+								<ul>
+									<li>
+										<code>$firstName</code> and <code>$firstname</code> are not the same!
+										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $firstName = 'Bramus';
+php &gt; echo $firstName;
+Bramus
+php &gt; echo $firstname;
+
+Notice: Undefined variable: firstname in php shell code on line 1</code></pre></div>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								To concatenate strings, you must use a <code>.</code>
+								<ul>
+									<li>
+										When using a <code>+</code>, PHP will think you're adding numbers <em>(weak typing!)</em>
+										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $firstName = 'Bramus';
+php &gt; $lastName = 'Van Damme',
+php &gt; echo $firstName + ' ' + $lastName;
+0
+php &gt; echo $firstName . ' ' . $lastName;
+Bramus Van Damme
+</code></pre></div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Interpolation</h2>
+						<ul>
+							<li class="fragment">
+								Also known as <em>Variable Substitution</em>
+							</li>
+							<li class="fragment">
+								When enclosed between <code>&quot;</code>, PHP will try to substitute any string that could resemble a variable
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $firstName = 'Bramus';
+php &gt; echo "variable: $firstName\n";
+variable: Bramus
+php &gt; echo "variable: \$firstName\n";
+variable: $firstName
+php &gt; echo 'variable: $firstName\n';
+variable: $firstName\n
+php &gt; echo 'variable: \$firstName\n';
+variable: \$firstName\n
+php &gt; echo 'variable: ' . $firstName . '\n';
+variable: Bramus\n
+php &gt; echo 'variable: ' . $firstName . "\n";
+variable: Bramus
+php &gt; echo 'variable: ' . $firstName . PHP_EOL;
+variable: Bramus</code></pre></div>
+								<ul>
+									<li class="fragment">Course convention: always use <code>'</code> to prevent interpolation</li>
+									<li class="fragment">Course convention: always use <code>PHP_EOL</code> instead of <code>&quot;\n&quot;</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Arrays (1)</h2>
+						<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr = array();
+php &gt; $arr[] = 'se7en';
+php &gt; $arr[] = 123;
+php &gt; $arr[] = true;
+php &gt; echo $arr[1];
+123</code></pre></div>
+						<ul class="fragment">
+							<li>Declaration rule isn't mandatory but attests a good coding style</li>
+							<li>Mixing of types forms no problem</li>
+							<li>Automatic indexing</li>
+							<li>Index is numeric and sequential. We call this type of array a <em>sequential array</em></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Arrays (2)</h2>
+						<ul class="fragment">
+							<li>It's possible to set the start index</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr = array();
+php &gt; $arr[2] = 'se7en';
+php &gt; $arr[] = 123;
+php &gt; $arr[] = true;
+php &gt; echo $arr[3];
+123</code></pre></div>
+					</section>
+
+					<section>
+						<h2>Arrays (3)</h2>
+						<ul>
+							<li class="fragment">
+								It's possible to set the indices/keys yourself
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr = array();
+php &gt; $arr[2] = 'se7en';
+php &gt; $arr[8] = 123;
+php &gt; $arr[4] = true;
+php &gt; echo $arr[8];
+123</code></pre></div>
+							</li>
+							<li class="fragment">
+								Indices/keys can be strings too
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr = array();
+php &gt; $arr['BE'] = 'Belgium';
+php &gt; $arr['NL'] = 'The Netherlands';
+php &gt; $arr['FR'] = 'France';
+php &gt; echo $arr['BE'];
+Belgium</code></pre></div>
+							</li>
+							<li class="fragment">We call these <em>associative array</em>s</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Arrays (4)</h2>
+						<ul>
+							<li class="fragment">
+								It's possible to declare and initialize an array in one go
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr1 = array('Brussels', 'Ghent', 'Antwerp');</code></pre></div>
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr2 = array('NL' => 'The Netherlands', 'BE' => 'Belgium');</code></pre></div>
+<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr2 = array(
+php ( 'NL' => 'The Netherlands',
+php ( 'BE' => 'Belgium'
+php ( );</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 				
+
+				<!-- Selections/Iterations/Operators -->
+				<section>
+					<section>
+						<h2>Selections, Iterations &amp; Operators</h2>
+					</section>
+				</section>
 
 				<!-- Functions: Built-in PHP Functions, Roll your own functions -->
 				<section>
@@ -278,7 +513,7 @@ bramus$</code></pre></div>
 				<!-- Conventions: code style -->
 				<section>
 					<section>
-						<h2>Conventions</h2>
+						<h2>Closing note: conventions</h2>
 					</section>
 				</section>
 
