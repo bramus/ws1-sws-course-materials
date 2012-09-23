@@ -46,6 +46,22 @@
 			ins code, code.ok {
 				color: #5C5;
 			}
+
+			table {
+				font-size: 15px;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			table td, table th {
+				line-height: 1.4;
+				border: 1px solid #ccc;
+				padding: 4px;
+			}
+
+			table th {
+				background: #333;
+			}
 		</style>
 	</head>
 	
@@ -979,6 +995,187 @@ array(3) {
 					<section>
 						<h2>Dates in PHP</h2>
 					</section>
+
+					<section>
+						<h2>Timestamps</h2>
+						<ul>
+							<li class="fragment">
+								<em>Epoch time</em>
+								<ul>
+									<li>
+										Numerical value: number of seconds since the epoch
+										<ul>
+											<li>epoch = Midnight January 1st, 1970 (GMT)</li>
+											<li>Not counting leap seconds</li>
+										</ul>
+									</li>
+									<li>Also known as <em>Unix time</em> or <em>Posix time</em></li>
+									<li>Dates expressed in Unix time are called <em>timestamps</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Allow one to precisely indicate a given point in time
+								<ul>
+									<li><code>0</code> = January 1 1970, 00:00:00 GMT</li>
+									<li><code>86400</code> = Januari 2 1970, 00:00:00 GMT</li>
+									<li><code>31536000</code> = Januari 1 1971, 00:00:00 GMT</li>
+									<li><code>440423100</code> = December 26 1983, 11:45:00 GMT</li>
+									<li><code>946684800</code> = Januari 1 2000, 00:00:00 GMT</li>
+									<li><code>1234567890</code> = February 13 2009, 23:31:30 GMT</li>
+									<li>&hellip;</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Dates and PHP</h2>
+						<ul>
+							<li class="fragment">
+								Timestampfunctions in PHP
+								<ul>
+									<li><code>time()</code> returns the number of seconds since the epoch</li>
+									<li><code>mktime()</code> allows you to build a timestamp for a given hour, minute, second, month, day and year</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Converting between dates and timestamps
+								<ul>
+									<li>
+										<code>strtotime(string $time, [int $now])</code>
+										<ul>
+											<li>Convert a given date to a timestamp</li>
+											<li><code>$time</code> is something like <code>2012-24-09</code> but can also be <code>next friday</code></li>
+											<li>Second (optional) param used to calculate an offset</li>
+										</ul>
+									</li>
+									<li>
+										<code>date(string $format, [int $timestamp])</code>
+										<ul>
+											<li>Convert a given timestamp to a date</li>
+											<li>If <code>$timestamp</code> is empty, the current one is used</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Date Format</h2>
+						<ul>
+							<li class="fragment">
+								The <code>$format</code> param needs to be built manually
+								<table>
+									<thead>
+										<tr>
+											<th><code>format</code> character</th>
+											<th>Description</th>
+											<th>Example returned values</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><em>d</em></td>
+											<td>Day of the month, 2 digits with leading zeros</td>
+											<td><em>01</em> to <em>31</em></td>
+										</tr>
+										<tr>
+											<td><em>D</em></td>
+											<td>A textual representation of a day, three letters</td>
+											<td><em>Mon</em> through <em>Sun</em></td>
+										</tr>
+										<tr>
+											<td><em>l</em> (lowercase 'L')</td>
+											<td>A full textual representation of the day of the week</td>
+											<td><em>Sunday</em> through <em>Saturday</em></td>
+										</tr>
+										<tr>
+											<td><em>w</em></td>
+											<td>Numeric representation of the day of the week</td>
+											<td><em>0</em> (for Sunday) through <em>6</em> (for Saturday)</td>
+										</tr>
+										<tr>
+											<td><em>F</em></td>
+											<td>A full textual representation of a month, such as January or March</td>
+											<td><em>January</em> through <em>December</em></td>
+										</tr>
+										<tr>
+											<td><em>m</em></td>
+											<td>Numeric representation of a month, with leading zeros</td>
+											<td><em>01</em> through <em>12</em></td>
+										</tr>
+										<tr>
+											<td><em>M</em></td>
+											<td>A short textual representation of a month, three letters</td>
+											<td><em>Jan</em> through <em>Dec</em></td>
+										</tr>
+										<tr>
+											<td><em>Y</em></td>
+											<td>A full numeric representation of a year, 4 digits</td>
+											<td>Examples: <em>1999</em> or <em>2003</em></td>
+										</tr>
+										<tr>
+											<td><em>y</em></td>
+											<td>A two digit representation of a year</td>
+											<td>Examples: <em>99</em> or <em>03</em></td>
+										</tr>
+										<tr>
+											<td><em>H</em></td>
+											<td>24-hour format of an hour with leading zeros</td>
+											<td><em>00</em> through <em>23</em></td>
+										</tr>
+										<tr>
+											<td><em>i</em></td>
+											<td>Minutes with leading zeros</td>
+											<td><em>00</em> to <em>59</em></td>
+										</tr>
+										<tr>
+											<td><em>s</em></td>
+											<td>Seconds, with leading zeros</td>
+											<td><em>00</em> through <em>59</em></td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+						</ul>
+						<footer class="fragment">Note: this is only a fragment. Full list at <a href="http://php.net/date">http://php.net/date</a></footer>
+					</section>
+
+
+					<section>
+						<h2>Date Examples</h2>
+						<ul>
+							<li class="fragment">
+								Example 1
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/dates1.php">&lt;?php
+	echo date('l');
+	echo date('l jS \of F Y h:i:s A');
+	echo 'July 1, 2000 is on a ' . date('l', mktime(0, 0, 0, 7, 1, 2000));</code></pre></div>
+							</li>
+							<li class="fragment">
+								Example 2
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/dates2.php">&lt;?php
+	// Assuming today is March 10th, 2001, 5:16:18 pm, and that we are in the
+	// Mountain Standard Time (MST) Time Zone
+	$today = mktime(17,16,18,3,10,2001);
+	date_default_timezone_set('America/Phoenix');
+
+	echo date('F j, Y, g:i a'); // March 10, 2001, 5:16 pm
+	echo date('m.d.y'); // 03.10.01
+	echo date('j, n, Y'); // 10, 3, 2001
+	echo date('Ymd'); // 20010310
+	echo date('h-i-s, j-m-y, it is'); // 05-16-18, 10-03-01, 1631 1618
+	echo date('\i\t \i\s \t\h\e jS \d\a\y.'); // it is the 10th day.
+	echo date('D M j G:i:s T Y'); // Sat Mar 10 17:16:18 MST 2001
+	echo date('H:m:s \m \i\s\ \m\o\n\t\h'); // 17:03:18 m is month
+	echo date('H:i:s'); // 17:16:18</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 				
 
