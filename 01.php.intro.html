@@ -191,7 +191,7 @@ bramus$</code></pre></div>
 										Run <code>php [-f] <em>file.php</em></code> to &ldquo;execute&rdquo; a file that contains PHP code
 										<ul class="fragment">
 											<li>You must wrap your PHP code between <code>&lt;?php</code> and <code>?&gt;</code></li>
-											<li>The closing <code>?&gt;</code> is optional</li>
+											<li>The closing <code>?&gt;</code> is optional.</li>
 										</ul>
 										<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 	echo 'hello' . PHP_EOL;
@@ -462,11 +462,188 @@ php ( );</code></pre></div>
 				</section>
 				
 
+				<!-- Code Comments -->
+				<section>
+					<section>
+						<h2>Code Comments</h2>
+					</section>
+					<section>
+						<h2>Code Comments</h2>
+						<ul>
+							<li class="fragment">
+								Same as in Java
+								<div class="fragment"><pre class="bigger"><code class="language-php">// Single line comment
+
+/* Multi
+line
+comment
+*/
+
+/**
+ * Preferred way
+ * to layout
+ * multi-line
+ * comments
+ */</code></pre></div>
+							</li>
+						</ul>
+					</section>
+				</section>
+				
+
 				<!-- Selections/Iterations/Operators -->
 				<section>
 					<section>
 						<h2>Selections, Iterations &amp; Operators</h2>
 					</section>
+
+					<section>
+						<h2>Selections (1)</h2>
+						<ul>
+							<li class="fragment">
+								Same as in Java
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+
+	if ($condition) {
+		// do something
+	}
+	
+	if ($condition) {
+		// do something
+	} else {
+		// do something else
+	}
+	
+	switch ($var) {
+		
+		case $value1: 
+			// do something
+			break;
+			
+		case $value2:
+			// do something 
+			break; 
+			
+		default:
+			// do something
+			
+	}</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Selections (2)</h2>
+						<ul>
+							<li class="fragment">
+								Example
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+
+	$a = 7;
+	if ($a < 9) {
+		echo '$a is less than 9';
+	} else {
+		echo '$a is greater than 9';
+	}</code></pre></div>
+								<ul>
+									<li class="fragment">Course convention: always place curly brackets</li>
+									<li class="fragment">Course convention: place the curly brackets on the same line</li>
+									<li class="fragment">Course convention: indent one <code>TAB</code> inside curly brackets</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								When possible, use the ternary operator
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+
+	$a = 7;
+	echo (($a < 9) ? '$a is less than 9' : '$a is greater than 9');</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Iterations (1)</h2>
+						<ul>
+							<li class="fragment">
+								Again, same as in Java
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+
+	while ($condition) {
+		// do something
+	}
+	
+	do {
+		// do something
+	} while ($condition);
+	
+	for ($x = 0; $x &lt; 5; $x++) {
+		// do something
+	}
+
+	foreach ($arr as $value) {
+		// do something
+	}
+
+	foreach ($arr as $key => $value) {
+		// do something
+	}</code></pre></div>
+								<ul>
+									<li class="fragment">Also possible to use <code>break;</code> and <code>continue;</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Iterations (2)</h2>
+						<ul>
+							<li class="fragment">
+								Example
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; for ($x = 1; $x &lt;= 5; $x++) {
+php { echo 'Hello 2ICT' . $x . PHP_EOL;
+php { }
+Hello 2ICT1
+Hello 2ICT2
+Hello 2ICT3
+Hello 2ICT4
+Hello 2ICT5</code></pre></div>
+							</li>
+							<li class="fragment">
+								Example
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $countries = array('BE' => 'Belgium', 'NL' => 'The Netherlands');
+php &gt; foreach ($countries as $key =&gt; $value) {
+php { echo $key . ' = ' . $value . PHP_EOL;
+php { }
+BE = Belgium
+NL = The Netherlands</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Operators</h2>
+						<ul>
+							<li class="fragment">
+								Same as in Java
+								<ul>
+									<li>Relational operators: <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code></li>
+									<li>Logical operators: <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, <code>&amp;</code>, <code>|</code></li>
+									<li>Post/pre- in/de-crement: <code>$var--</code>, <code>$var++</code>, <code>--$var</code>, <code>++$var</code></li>
+									<li>Math shorthands: <code>+=</code>, <code>*=</code>, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Since PHP4 support for identical operators: check for both type and value to be equal
+								<div><pre class="bigger"><code class="language-php">php &gt; $a = 13; // integer
+php &gt; $b = 13.0; // double
+php &gt; echo ($a == $b) ? 'equal' : 'not equal';
+equal
+php &gt; echo ($a === $b) ? 'equal' : 'not equal';
+not equal</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 				<!-- Functions: Built-in PHP Functions, Roll your own functions -->
