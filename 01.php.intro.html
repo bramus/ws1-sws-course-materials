@@ -651,6 +651,147 @@ not equal</code></pre></div>
 					<section>
 						<h2>PHP Functions</h2>
 					</section>
+
+					<section>
+						<h2>Built-in Functions (1)</h2>
+						<ul>
+							<li class="fragment">PHP has a lot of functions built-in</li>
+							<li class="fragment">
+								A few string-related functions
+								<ul>
+									<li><code>addslashes</code>/<code>stripslashes</code> &mdash; <em>see 04.forms</em></li>
+									<li><code>ltrim</code>/<code>rtrim</code>/<code>trim</code> &mdash; strips leading/trailing/enclosing whitespace</li>
+									<li><code>str_replace</code> &mdash; replaces a part of a string with an other value</li>
+									<li><code>strip_tags</code> &mdash; strips html from a string</li>
+									<li><code>strlen</code> &mdash; returns the length of a string</li>
+									<li><code>strtolower</code>/<code>strtotupper</code> &mdash; convert a string to uppercase/lowercase</li>
+									<li><code>substr</code> &mdash; extract a part of a string</li>
+									<li>...</li>
+								</ul>
+							</li>
+						</ul>
+						<footer class="fragment">How to use: see <code>http://php.net/<em>nameofthefunction</em></code></footer>
+					</section>
+
+					<section>
+						<h2>Built-in Functions (2)</h2>
+						<ul>
+							<li class="fragment">
+								A few math-related functions
+								<ul>
+									<li><code>ceil</code> &mdash; round fractions up</li>
+									<li><code>floor</code> &mdash; round fractions down</li>
+									<li><code>round</code> &mdash; round a float</li>
+									<li><code>round</code>/<code>mt_round</code> &mdash; generate a random number</li>
+									<li><code>sqrt</code> &mdash; calculate the square root of a number</li>
+									<li>...</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Built-in Functions (3)</h2>
+						<ul>
+							<li class="fragment">
+								A few array-related functions
+								<ul>
+									<li><code>sizeof</code>/<code>count</code> &mdash; get the size of an array</li>
+									<li><code>sort</code> &mdash; sort an array</li>
+									<li><code>asort</code> &mdash; sort an associative array</li>
+									<li><code>explode</code> &mdash; split a string on a given delimiter and get an array</li>
+									<li><code>implode</code> &mdash; opposite of <code>explode</code></li>
+									<li><code>array_push</code> &mdash; push an element onto an array</li>
+									<li><code>array_pop</code> &mdash; get an element off the end of an array</li>
+									<li><code>array_key_exists</code> &mdash; check if a key in an associative array exists</li>
+									<li>...</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Custom functions (1)</h2>
+						<ul>
+							<li class="fragment">
+								Same as in Java
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/functions-chopstringend1.php">&lt;?php
+
+	// Our chopStringEnd function
+	function chopStringEnd($str, $len, $ending) { 
+		if (strlen($str) &lt; $len)
+			return $str;
+		else
+			return substr($str, 0, $len - strlen($str)) . $ending;
+	}
+	
+	// Our variables
+	$origStr = '/Users/bramus/Dropbox/Kaho/Lesactiviteiten/Webscripting1';
+	$cutoffLength = 40;
+	$endStr	= '...';
+		
+	// Go!
+	echo chopStringEnd($origStr, $cutoffLength, $endStr);</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Custom functions (2)</h2>
+						<ul>
+							<li class="fragment">
+								Possible to define default values for function arguments
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/functions-chopstringend2.php">&lt;?php
+
+	// Our chopStringEnd function
+	function chopStringEnd($str, $len = 30, $ending = '---') { 
+		if (strlen($str) &lt; $len)
+			return $str;
+		else
+			return substr($str, 0, $len - strlen($str)) . $ending;
+	}
+	
+	// Our variables
+	$origStr = '/Users/bramus/Dropbox/Kaho/Lesactiviteiten/Webscripting1';
+	$cutoffLength = 40;
+	$endStr = '...';
+		
+	// Go!
+	echo chopStringEnd($origStr, $cutoffLength, $endStr) . '&lt;br /&gt;' . PHP_EOL;
+	echo chopStringEnd($origStr, $cutoffLength) . '&lt;br /&gt;' .PHP_EOL;
+	echo chopStringEnd($origStr);</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Custom functions (3)</h2>
+						<ul>
+							<li class="fragment">
+								Provide <a href="http://manual.phpdoc.org/HTMLSmartyConverter/PHP/phpDocumentor/tutorial_tags.pkg.html">PHPDoc</a>-style comments
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/functions-chopstringend3.php">&lt;?php
+
+	/**
+	 * Chops a string at the given length with the given ending
+	 * 
+	 * @param	string 	$str 	The initial String
+	 * @param	int 	$len 	The length to chop off at
+	 * @param	string 	$ending	The ending to add
+	 * 
+	 * @return	string 	The circumcised up string
+	 */
+	function chopStringEnd($str, $len = 30, $ending = '---') { 
+		if (strlen($str) &lt; $len)
+			return $str;
+		else
+			return substr($str, 0, $len - strlen($str)) . $ending;
+	}
+
+	...</code></pre></div>
+							</li>
+						</ul>
+							<footer class="fragment">This way your IDE will tell you which params are needed, what type they need to be, etc.</footer>
+					</section>
 				</section>
 				
 
