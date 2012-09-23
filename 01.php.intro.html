@@ -800,6 +800,100 @@ not equal</code></pre></div>
 					<section>
 						<h2>Scoping</h2>
 					</section>
+
+					<section>
+						<h2>Problem</h2>
+						<ul>
+							<li class="fragment">
+								This won't work
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping1.php">&lt;?php
+
+	$host = 'http://www.myhost.com/';
+
+	function absUrl($relUrl) {
+		return $host.$relUrl;
+	}
+
+	echo absUrl('files/uploads/me.jpg');</code></pre></div>
+							</li>
+							<li class="fragment">
+								Result
+								<div class="fragment"><pre class="bigger"><code class="language-php">Notice: Undefined variable: host in /Users/bramus/Dropbox/Kaho/Lesactiviteiten/.../assets/01/examples/scoping1.php on line 8
+files/uploads/me.jpg</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How we would've fixed this in 1995</h2>
+						<ul>
+							<li class="fragment">
+								The <code>global</code> keyword to the rescue
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping2.php">&lt;?php
+
+	$host = 'http://www.myhost.com/';
+
+	function absUrl($relUrl) {
+		global $host;
+		return $host . $relUrl;
+	}
+
+	echo absUrl('files/uploads/me.jpg');</code></pre></div>
+							</li>
+							<li class="fragment">
+								Don't ever do this; it's a bad programming style!
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How we would've fixed this in 1998</h2>
+						<ul>
+							<li class="fragment">
+								Extra function argument
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping3.php">&lt;?php
+
+	$host = 'http://www.myhost.com/';
+
+	function absUrl($relUrl, $host) {
+		return $host . $relUrl;
+	}
+
+	echo absUrl('files/uploads/me.jpg', $host);</code></pre></div>
+							</li>
+							<li class="fragment">
+								Extra function argument, revised
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping4.php">&lt;?php
+
+	function absUrl($relUrl, $host = 'http://www.myhost.com/') {
+		return $host . $relUrl;
+	}
+
+	echo absUrl('files/uploads/me.jpg');</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How to properly fix it</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>define()</code>
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping5.php">&lt;?php
+
+	define('HOST', 'http://www.myhost.com/');
+
+	function absUrl($relUrl) {
+		return HOST . $relUrl;
+	}
+
+	echo absUrl('files/uploads/me.jpg');</code></pre></div>
+							</li>
+							<li class="fragment">
+								Course convention: always use <code>define()</code>, never use <code>global</code>
+							</li>
+						</ul>
+					</section>
 				</section>
 				
 
