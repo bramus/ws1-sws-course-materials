@@ -28,6 +28,24 @@
 			.column-12 {
 				width: 50%;
 			}
+			code {
+				color: gainsboro;
+			}
+
+			li > code, li em > code, li del > code, li ins > code, p > code {
+				background: #3F3F3F;
+				padding: 2px 4px;
+				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+				font-size: 80%;
+			}
+			
+			del code, code.nok {
+				color: #C55;
+			}
+			
+			ins code, code.ok {
+				color: #5C5;
+			}
 		</style>
 	</head>
 	
@@ -57,11 +75,212 @@
 				</section>
 				
 
-				<!-- 1 : Slidedeck? -->
+				<!-- PHP & Running PHP -->
 				<section>
+					<section>
+						<h2>PHP Introduction</h2>
+					</section>
 
+					<section>
+						<h2>PHP</h2>
+						<ul>
+							<li class="fragment">
+								Short for <em>PHP: Hypertext Preprocessor</em>
+							</li>
+							<li class="fragment">
+								Scripting language
+								<ul>
+									<li>Loose syntax</li>
+									<li>
+										Not compiled for distribution (cfr. Java), but interpreted at runtime
+										<ul>
+											<li>Therefor it's slower than compiled languages</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Very popular on the internet
+								<ul>									
+									<li>One of the first Serverside Scripting Languages (° 1995)</li>
+									<li>PHP plugins exist for nearly all web servers and OSes</li>
+									<li>e.g. Wordpress, Facebook, Wikipedia, etc.</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Suffers from historical cruft &amp; syntax inconsistencies
+							</li>
+							<li class="fragment">
+								Current version: 5.4.7
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Obtaining PHP</h2>
+						<ul>
+							<li class="fragment">
+								A preconfigured PHP is included in <a href="http://www.wampserver.com/en/">Wampserver</a> / <a href="http://mamp.info/en">MAMP</a>
+								<ul>
+									<li>Install one of these for this course</li>
+									<li>Follow <a href="http://helpdesk.ikdoeict.be/index.php?/Knowledgebase/Article/View/11/0/howto-installatieconfiguratie-van-software-wamplamp-stack">these instructions</a> afer installation</li>
+									<li>On Windows, also add <code>C:\wamp\bin\php\<em>version</em>\php.exe</code> to the system's <code>PATH</code> variable</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Shipped with most Unix/Linux distributions
+							</li>
+							<li class="fragment">
+								PHP can be downloaded from <a href="http://php.net">http://php.net</a>.
+								<ul>
+									<li>Just extract the <code>.zip</code> onto your filesystem and you're good to go</li>
+									<li>Windows users must download from <a href="http://windows.php.net/">http://windows.php.net/</a></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Configuring PHP</h2>
+						<ul>
+							<li class="fragment">
+								PHP can be configured via a file named <code>php.ini</code>
+							</li>
+							<li class="fragment">We'll take a closer look at this file when it's needed</li>
+							<li class="fragment">The <code>php.ini</code> that is shipped with Wampserver/MAMP is configured correctly</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Running PHP (1)</h2>
+						<ul>
+							<li class="fragment">
+								From the shell
+								<ul>
+									<li class="fragment">Run <code>php -a</code> to get an interative shell at which you can type in PHP statements
+										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -a
+Interactive shell
+
+php &gt; echo 'hello';
+hello
+php &gt; quit
+bramus$</code></pre></div>
+										<ul class="fragment">
+											<li>cfr. the MySQL shell where you type in SQL statements (queries)</li>
+											<li>A <code>;</code> ends a statement</li>
+											<li>Type <code>quit</code> or <code>exit</code> to leave the shell</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</section>
+
+					<section>
+						<h2>Running PHP (2)</h2>
+						<ul>
+							<li>
+								From the shell <em>(continued)</em>
+								<ul>
+									<li class="fragment">
+										Run <code>php -r &quot;<em>one line of PHP code</em>&quot;</code> to run a single line of PHP code
+										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -r &quot;echo 'hello' . PHP_EOL;&quot;
+hello
+bramus$</code></pre></div>
+									</li>
+									<li class="fragment">
+										Run <code>php [-f] <em>file.php</em></code> to &ldquo;execute&rdquo; a file that contains PHP code
+										<ul class="fragment">
+											<li>You must wrap your PHP code between <code>&lt;?php</code> and <code>?&gt;</code></li>
+											<li>The closing <code>?&gt;</code> is optional</li>
+										</ul>
+										<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+	echo 'hello' . PHP_EOL;
+?&gt;</code></pre></div>
+<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php file.php
+hello
+bramus$</code></pre></div>
+									</li>
+								</ul>
+							</li>
+						</section>
+
+					<section>
+						<h2>Running PHP (3)</h2>
+						<ul>
+							<li class="fragment">
+								In a web context
+								<ul>
+									<li>Give your a file a <code>.php</code> extension and the PHP interpreter will interpret the file
+										<ul>
+											<li>The webserver must of course be configured to do so</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+				</section>
+				
+
+				<!-- PHP Syntax: Variables/Arrays/Casting, Selections/Iterations/Operators,  -->
+				<section>
+					<section>
+						<h2>PHP Syntax</h2>
+					</section>
+
+					<section>
+						<h2></h2>
+					</section>
+				</section>
+				
+
+				<!-- Functions: Built-in PHP Functions, Roll your own functions -->
+				<section>
+					<section>
+						<h2>PHP Functions</h2>
+					</section>
+				</section>
+				
+
+				<!-- Scoping: Problem, global keywoard, define() function -->
+				<section>
+					<section>
+						<h2>Scoping</h2>
+					</section>
+				</section>
+				
+
+				<!-- Errors and debugging: @, dump() -->
+				<section>
+					<section>
+						<h2>Errors and debugging</h2>
+					</section>
+				</section>
+				
+
+				<!-- Dates in PHP: epoch, time functions, params -->
+				<section>
+					<section>
+						<h2>Dates in PHP</h2>
+					</section>
+				</section>
+				
+
+				<!-- More CLI: Lint a file, check the config, arguments -->
+				<section>
+					<section>
+						<h2>More CLI goodness</h2>
+					</section>
 				</section>
 
+				
+
+				<!-- Conventions: code style -->
+				<section>
+					<section>
+						<h2>Conventions</h2>
+					</section>
+				</section>
 
 
 				<!-- The END -->
