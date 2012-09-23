@@ -757,8 +757,8 @@ not equal</code></pre></div>
 	$endStr = '...';
 		
 	// Go!
-	echo chopStringEnd($origStr, $cutoffLength, $endStr) . '&lt;br /&gt;' . PHP_EOL;
-	echo chopStringEnd($origStr, $cutoffLength) . '&lt;br /&gt;' .PHP_EOL;
+	echo chopStringEnd($origStr, $cutoffLength, $endStr) . PHP_EOL;
+	echo chopStringEnd($origStr, $cutoffLength) . PHP_EOL;
 	echo chopStringEnd($origStr);</code></pre></div>
 							</li>
 						</ul>
@@ -901,6 +901,75 @@ files/uploads/me.jpg</code></pre></div>
 				<section>
 					<section>
 						<h2>Errors and debugging</h2>
+					</section>
+
+					<section>
+						<h2>Suppress errors with <code>@</code></h2>
+						<ul>
+							<li class="fragment">
+								It's possible, but don't use it that often
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/errors1.php">&lt;?php
+
+	function divide($numerator, $denominator) {
+		return $numerator / $denominator;
+	}
+	
+	echo divide(1, 2) . PHP_EOL;	// 0.5
+	echo divide(1, 0) . PHP_EOL;	// "Warning: Division by zero"
+	echo @divide(1, 0) . PHP_EOL;	// (suppressed)
+	echo divide(1, 2) . PHP_EOL;	// 0.5</code></pre></div>
+							</li>
+							<li class="fragment">
+								Later on, we'll learn how to work with <code>Exception</code>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Debugging helper functions</h2>
+						<ul>
+							<li class="fragment">
+								This won't work
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $arr = array('one', 'two', 'three');
+php &gt; echo $arr;
+Array</code></pre></div>
+							</li>
+							<li class="fragment">
+								Use <code>print_r()</code> and <code>var_dump()</code> instead to inspect variables
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; print_r($arr);
+Array
+(
+    [0] => one
+    [1] => two
+    [2] => three
+)
+php &gt; var_dump($arr);
+array(3) {
+  [0]=>
+  string(3) "one"
+  [1]=>
+  string(3) "two"
+  [2]=>
+  string(5) "three"
+}</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Real debugging</h2>
+						<ul>
+							<li class="fragment">
+								Using <code>print_r()</code> and <code>var_dump()</code> is no real debugging
+							</li>
+							<li class="fragment">
+								Real debugging is possible with
+								<ul>
+									<li>Built-in IDE debugger (eg. Zend Studio has one, Aptana had one)</li>
+									<li>External debugger, linked to IDE (eg. XDebug + Netbeans/Aptana)</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 				</section>
 				
