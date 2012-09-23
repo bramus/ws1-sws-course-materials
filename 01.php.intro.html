@@ -1376,7 +1376,7 @@ Configure Command =>  '/private/var/tmp/apache_mod_php/apache_mod_php-79~4/php/c
 					</section>
 
 					<section>
-						<h2>Other tricks</h2>
+						<h2>Other command options</h2>
 						<ul>
 							<li class="fragment">
 								Know your PHP version by running <code>php -v</code>
@@ -1398,7 +1398,59 @@ Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 				<!-- Conventions: code style -->
 				<section>
 					<section>
-						<h2>Closing note: conventions</h2>
+						<h2>Closing note: course conventions</h2>
+					</section>
+					<section>
+						<h2>Course conventions (1)</h2>
+						<ul>
+							<li>Code in English</li>
+							<li>Use the full PHP open tag <code>&lt;?php</code>. The closing tag may be omitted</li>
+							<li>Develop with <code>error_reporting()</code> set to <code>E_ALL</code> and <code>display_errors()</code> set to <code>On</code></li>
+							<li>Develop without the XDebug extension (for now)</li>
+							<li>
+								Correctly indent code
+								<ul>
+									<li>Within <code>if-else</code>,<code>do-while</code>,<code>for/foreach</code>, <code>switch</code>,...</li>
+									<li>Indent with a <code>TAB</code>, not a few spaces</li>
+								</ul>
+							</li>
+							<li>
+								Comment your code properly
+								<ul>
+									<li>Think of the code checking your code afterwards</li>
+									<li>Use PHPDoc-compliant comments</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Course conventions (2)</h2>
+						<ul>
+							<li>Never use <code>global</code> but preferably use a constant/define</li>
+							<li>Use single quotes to delimit strings</li>
+							<li>
+								Give variables and functions a clear name and use camelCasing
+								<ul>
+									<li>e.g. $numArticles, $firstName, calculateDistance(), etc.</li>
+									<li>Exception: counters in loops such as $x, $y</li>
+								</ul>
+							</li>
+							<li>
+								Curly brackets always go on the same line as the keyword
+							</li>
+							<li>
+								Use <em>identical operatos</em> when comparing variables/values
+							</li>
+							<li>
+								Cast variables to prevent stupid errors
+							</li>
+							<li>
+								Never use <code>$_REQUEST</code> (see 04.forms)
+							</li>
+							<li>
+								In case of doubt: check the domestic conventions or ask your lecturer
+							</li>
+						</ul>
 					</section>
 				</section>
 
