@@ -1275,7 +1275,6 @@ Where to you live? Vinkt
 Hello Bramus from Vinkt</code></pre></div>
 							</li>
 						</ul>
-						<footer class="fragment">Note: the <code>readline()</code> function isn't available on Windows (<a href="http://php.net/manual/en/intro.readline.php">source</a>)!</footer>
 					</section>
 
 					<section>
@@ -1322,6 +1321,30 @@ hello world</code></pre></div>
 								Difference between <code>STDOUT</code> and <code>STDERR</code>?
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -r "fwrite(STDOUT, 'stdout world') . fwrite(STDERR, 'stderr world');" > /dev/null
 stderr world</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Interactive scripts, Revisited</h2>
+						<ul>
+							<li class="fragment">
+								Unfortunately <code>readline()</code> <a href="http://php.net/manual/en/intro.readline.php">isn't available on Windows</a></em>
+							</li>
+							<li class="fragment">
+								Fortunately we can knock up an alternative for that platform, using <code>STDIN</code>
+								<div class="fragment"><pre class="bigger"><code class="language-php">function getInput($question = '') {
+	if (!function_exists('readline')) {
+		echo $question . ' ';
+		return stream_get_line(STDIN, 1024, PHP_EOL);
+	} else {
+		return readline($question . ' ');
+	}
+}
+
+$name = getInput('What is your name?');
+$city = getInput('Where to you live?');
+echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 							</li>
 						</ul>
 					</section>
