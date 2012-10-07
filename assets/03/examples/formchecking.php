@@ -1,31 +1,6 @@
 <?php
 
 	/**
-	 * Helper functions
-	 */
-
-		/**
-		 * Guaranteed slashes (if magic_quotes is off, it adds the slashes)
-		 *
-		 * @param string $string The string to add the slashes to
-		 * @return string
-		 */
-		function addPostSlashes($string) {
-			return ((get_magic_quotes_gpc() == 1) || (get_magic_quotes_runtime() == 1)) ? $string : addslashes($string);
-		}
-
-		/**
-		 * Guaranteed no slashes (if magic_quot	es is on, it strips the slashes)
-		 *
-		 * @param string $string The string to remove the slashes from
-		 * @return string
-		 */
-		function stripPostSlashes($string) {
-			return ((get_magic_quotes_gpc() == 1) || (get_magic_quotes_runtime() == 1)) ? stripslashes($string) : $string;
-		}
-
-
-	/**
 	 * FORMCHECKING
 	 */
 
@@ -45,7 +20,7 @@
 
 			// end of form check. If $allOk still is true, then the form was sent in correctly
 			if ($allOk === true) {
-				header('location: formchecking_thanks.php?name=' . urlencode(stripPostSlashes($_POST['name'])));
+				header('Location: formchecking_thanks.php?name=' . urlencode($_POST['name']));
 			}
 
 		}
@@ -69,7 +44,7 @@
 
 				<dt><label for="name">Name</label></dt>
 				<dd class="text">
-					<input type="text" id="name" name="name" value="<?php echo isset($_POST['name']) ? htmlentities(stripPostSlashes($_POST['name'])) : '' ?>" class="input-text" />
+					<input type="text" id="name" name="name" value="<?php echo isset($_POST['name']) ? htmlentities($_POST['name']) : '' ?>" class="input-text" />
 					<span class="message error"><?php echo $msgName; ?></span>
 				</dd>
 

@@ -831,6 +831,66 @@ function stripPostSlashes($string) {
 				</section>
 
 
+				<!-- Formchecking -->
+				<section>
+
+					<section>
+						<h2>Formchecking</h2>
+					</section>
+
+					<section>
+						<h2>Formchecking</h2>
+						<ul>
+							<li class="fragment">
+								Don't ever trust user input
+								<ul>
+									<li class="fragment">Data might be in the wrong format (e.g. dates)</li>
+									<li class="fragment">Data might be crafted in a way to harm your server (think <code>htmlentities()</code>)</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Even if a user means no harm, he might just have forgotten to complete a field
+							</li>
+							<li class="fragment">
+								Therefor you must verify all incoming data
+								<ul>
+									<li>If any data is missing or malformed, inform the user with a proper message</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Tip: Always put your formchecking procedure at the very top of your script.
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Simple Example</h2>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking.php" data-overlay-height="600">&lt;?php
+
+	// initial values
+	$msgName = '*';
+
+	// form is sent
+	if (isset($_POST['btnSubmit'])) {
+
+		$allOk = true;
+
+		// name not set, or empty
+		if (!isset($_POST['name']) || ((string) $_POST['name'] === '')) {
+			$msgName = 'Please enter your name';
+			$allOk = false;
+		}
+
+		// end of form check. If $allOk still is true, then the form was sent in correctly
+		if ($allOk === true) {
+			header('Location: formchecking_thanks.php?name=' . urlencode($_POST['name']));
+		}
+
+	}</code></pre></div>
+					</section>
+				</section>
+
+
 
 				<!-- File Uploads -->
 				<section>
