@@ -139,6 +139,74 @@
 						<h2>Before we begin ...</h2>
 					</section>
 
+					<section>
+						<h2>Whitespace in the browser</h2>
+						<ul>
+							<li class="fragment"></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2><code>$_SERVER</code></h2>
+						<ul>
+							<li class="fragment"></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Headers (1)</h2>
+						<ul>
+							<li class="fragment">It's possible to manipulate the headers sent via the <strong>response head</strong> from within PHP</li>
+							<li class="fragment">
+								Just use the <code>header()</code> function
+								<pre class="bigger"><code class="language-php">&lt;?php
+
+	// Instruct the browser to redirect to ikdoeict.be
+	header('Location: http://www.ikdoeict.be');</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Headers (2)</h2>
+						<ul>
+							<li class="fragment">
+								It is recommened to stop the script executing further, as the client will ignore the <em>response body</em> when a redirect header is received.
+							</li>
+							<li class="fragment">
+								Scripts can be stopped prematurely via <code>exit()</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect.php">&lt;?php
+
+	// Instruct the browser to redirect to ikdoeict.be
+	header('Location: http://www.ikdoeict.be');
+	exit();
+
+	echo 'This line will be ingored';</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Headers (3)</h2>
+						<ul>
+							<li class="fragment">
+								As per protocol spec, the <em>response head</em> must be sent before <em>response body</em>
+							</li>
+							<li class="fragment">
+								Put differently: once you've startes sending the <em>response body</em>, it's impossible to manipulate the <em>response head</em>
+
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect_fail.php">&lt;?php
+
+	echo 'Will it blend?';
+
+	header('Location: http://www.ikdoeict.be');
+	exit();</code></pre></div>
+
+								<div class="fragment"><pre class="bigger"><code>Warning: Cannot modify header information - headers already sent by (output started at assets/03/examples/redirect_fail.php:3) in assets/03/examples/redirect_fail.php on line 5</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 

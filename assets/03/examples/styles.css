@@ -1,0 +1,173 @@
+/**
+ * Example Form Stylesheet
+ * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ */
+
+/**
+ * Smart CSS Reset, as used at Netlash
+ * Based on Netlog reset and Eric Meyer's reset
+ */
+
+	body, form, ol, ul, dl, li, dt, dd, td, th ,tr, h1, h2, h3, h4, h5, h6, p, pre, blockquote, address {
+		margin: 0;
+		padding: 0;
+	}
+
+	ol, ul {
+		list-style:none;
+	}
+
+	img {
+		border:0;
+	}
+
+	fieldset {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+
+	input, select, textarea {
+		font-size: 100%;
+		vertical-align: middle;
+	}
+
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		empty-cells: show;
+	}
+
+	th {
+		text-align: left;
+	}
+
+	a:focus {
+		/* outline:0; */
+		overflow: hidden;
+	}
+
+
+/**
+ * CSS Clearfix
+ * @see http://www.positioniseverything.net/easyclearing.html
+ */
+	.clearfix:after {
+		content: ".";
+		display: block;
+		height: 0;
+		clear: both;
+		visibility: hidden;
+		zoom: 1; /* trigger hasLayout (for IE7) */
+		_display: inline-block; /* IE6 ONLY */
+	}
+
+
+/**
+ * General Page stuff
+ */
+
+	body {
+		font-family: verdana, arial, sans-serif;
+		font-size:  11px;
+		line-height: 1.48;
+
+		background: #FFF;
+		color: #000;
+
+		padding: 10px 10px 181px 10px;
+	}
+
+/**
+ * The form
+ */
+
+	/* general form layout */
+	form {
+		width:  660px;
+		/* margin:  0 auto 0; */
+		border: 1px solid #999999;
+	}
+
+	form h2 {
+		width: 640px;
+		padding: 0 10px;
+
+		background: #efefef;
+		color:  #000;
+		height: 24px;
+
+		font: 700 12px/24px verdana, arial, sans-serif;
+
+		border-bottom: 1px solid #999999;
+	}
+
+	/* positioning the dl */
+	form, form dl {
+		width:  660px;
+	}
+
+	form dl dt {
+		float:  left;
+		width: 180px;
+		padding:  0 0 0 10px;
+		height:  24px;
+		line-height: 24px;
+
+		margin-top: 10px;
+	}
+
+	form dl dd {
+		float:  left;
+		width: 470px;
+		min-height: 24px;
+		_height: 24px; /* fake min-height in IE6 */
+		line-height: 24px;
+
+		margin-top: 10px;
+	}
+
+	form dl dd label {
+		display: block;
+		line-height: 24px;
+	}
+
+	form dl dt.full {
+		width: 660px;
+	}
+
+	form #lastrow {
+		width: 640px;
+		padding: 0 10px;
+
+		background: #efefef;
+		color:  #000;
+		height: 24px;
+		border-top: 1px solid #999999;
+
+		line-height: 24px;
+		text-align: right;
+	}
+
+	/* the messages */
+	.message {
+		font-style: italic;
+	}
+
+	.error {
+		color:  #F00;
+	}
+
+	/* debug */
+	#debug {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 150px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		border-top: 1px solid #999;
+		background: #EFEFEF;
+		padding: 10px;
+	}
