@@ -100,6 +100,22 @@
 			#reveal section .zoomable-20 img.noborder + figcaption {
 				margin-top: -20px;
 			}
+
+			table {
+				font-size: 15px;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			table td, table th {
+				line-height: 1.4;
+				border: 1px solid #ccc;
+				padding: 4px;
+			}
+
+			table th {
+				background: #333;
+			}
 		</style>
 	</head>
 	
@@ -271,11 +287,71 @@
 
 
 
-				<!-- basic form -->
+				<!-- form basics -->
 				<section>
 
 					<section>
-						<h2>Basic Form</h2>
+						<h2>Form Basics</h2>
+					</section>
+
+					<section>
+						<h2>Example form</h2>
+						<div class="fragment">
+							<figure>
+								<a href="assets/03/examples/form_01.php"><img src="assets/03/testform.jpg" alt="Our testform" title="Our testform" width="700" /></a>
+							</figure>
+						</div>
+						<footer class="fragment">Check the example's HTML code for now, don't send it yet</form>
+					</section>
+
+					<section>
+						<h2>A proper HTML Form (1)</h2>
+						<ul>
+							<li class="fragment">
+								If your form is built properly, it's easy to work with forms in PHP
+							</li>
+							<li class="fragment">
+								Important HTML <code>&lt;form&gt;</code> attributes
+								<ul>
+									<li>
+										<code>method</code> &mdash; HTTP method to use; <code>get</code> or <code>post</code> (default: <code>get</code>)
+									</li>
+									<li>
+										<code>action</code> &mdash; Where to send the form-data to when submitted
+									</li>
+									<li>
+										<code>enctype</code> &mdash; How the form-data should be encoded when using <code>post</code>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>A proper HTML Form (2)</h2>
+						<ul>
+							<li class="fragment">
+								Always give <code>&lt;input&gt;</code> and <code>&lt;textarea&gt;</code> elements a <code>name</code>
+								<ul>
+									<li>Radiobuttons: same <code>name</code> in same set</li>
+									<li>Checkboxes: same <code>name</code> with square brackets in same set</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Always give	<code>&lt;select&gt;</code> elements a <code>name</code>
+								<ul>
+									<li>Specify a <code>value</code> for each <code>&lt;option&gt;</code> of the <code>&lt;select&gt;</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								<code>id</code> attributes not mandatory for proper functioning
+								<ul>
+									<li>Webbrowsers &amp; servers use the <code>name</code> attributes</li>
+									<li>Only to be added for JS purposes</li>
+									<li>Remember an <code>id</code> must be unique</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 
 				</section>
@@ -286,29 +362,293 @@
 				<section>
 
 					<section>
-						<h2>Handling forms</h2>
+						<h2>Querystring</h2>
+					</section>
+
+					<section>
+						<h2>Querystring?</h2>
+						<ul>
+							<li class="fragment">
+								Upon submitting your form, the browser will collect all (*) form-data in one text string named the <strong>querystring</strong>
+								<ul>
+									<li><em>(*) Not all really, more on that later</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Querystring format: <code>key=value&amp;key=value&amp;key=value</code>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>GET vs POST (1)</h2>
+						<ul>
+							<li class="fragment">
+								With <code>GET</code> all values of the querystring are attached to the form's <code>target</code> URL
+								<ul>
+									<li>The entered values are visible in the URL of the browser</li>
+									<li>
+										In order to prevent conflicts the values are URL encoded before being attached
+										<ul>
+											<li>Think <code>&amp;</code> and <code>=</code> that could break the format of the querystring</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								With <code>POST</code> the querystring is sent in the <em>request body</em>
+								<ul>
+									<li>
+										The entered values are not visible in the URL of the browser, only via sniffing
+									</li>
+								</ul>
+							</li> 
+						</ul>
+					</section>
+
+					<section>
+						<h2>GET vs POST (2)</h2>
+						<div style="text-align: center;">
+							<figure class="zoomable-15 fragment">
+								<img src="assets/03/request-get.jpg" alt="Charles output of a form sent via GET" title="Charles output of a form sent via GET" width="650" />
+								<figcaption>Charles output of a form sent via GET</figcaption>
+							</figure>
+							<figure class="zoomable-15 fragment">
+								<img src="assets/03/request-post.jpg" alt="Charles output of a form sent via POST" title="Charles output of a form sent via POST" width="650" />
+								<figcaption>Charles output of a form sent via POST</figcaption>
+							</figure>
+						</div>
+					</section>
+
+
+					<section>
+						<h2>URL Encoding</h2>
+						<ul>
+							<li class="fragment">
+								A few frequently used characters
+								<table>
+									<thead>
+										<tr>
+											<th>Character</th>
+											<th>URL Encoded</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>$</td>
+											<td>%24</td>
+										</tr>
+										<tr>
+											<td>&amp;</td>
+											<td>%26</td>
+										</tr>
+										<tr>
+											<td>&lt;</td>
+											<td>%3C</td>
+										</tr>
+										<tr>
+											<td>&gt;</td>
+											<td>%3E</td>
+										</tr>
+										<tr>
+											<td>?</td>
+											<td>%3F</td>
+										</tr>
+										<tr>
+											<td>;</td>
+											<td>%3B</td>
+										</tr>
+										<tr>
+											<td>#</td>
+											<td>%23</td>
+										</tr>
+										<tr>
+											<td>/</td>
+											<td>%3A</td>
+										</tr>
+										<tr>
+											<td>=</td>
+											<td>%3D</td>
+										</tr>
+										<tr>
+											<td>,</td>
+											<td>%2C</td>
+										</tr>
+										<tr>
+											<td>&quot;</td>
+											<td>%22</td>
+										</tr>
+										<tr>
+											<td>'</td>
+											<td>%27</td>
+										</tr>
+										<tr>
+											<td>+</td>
+											<td>%2B</td>
+										</tr>
+										<tr>
+											<td>%</td>
+											<td>%25</td>
+										</tr>
+									</tbody>
+								</table>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>After sending</h2>
+						<ul>
+							<li class="fragment">
+								After sending, the receiving PHP script will decode the querystring and fill some associate arrays with the sent-in values
+								<ul>
+									<li class="fragment"><code>$_GET</code> &mdash; All values sent via <code>GET</code></li>
+									<li class="fragment"><code>$_POST</code> &mdash; All values sent via <code>POST</code></li>
+									<li class="fragment">
+										<code>$_REQUEST</code> &mdash; All values sent via <code>GET</code> and <code>POST</code>
+										<ul>
+											<li>Deprecated, don't ever use this!</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<footer class="fragment">These arrays are also known as <a href="http://php.net/manual/en/language.variables.superglobals.php">Superglobals</a></footer>
+					</section>
+
+					<section>
+						<h2>Querystring revisited</h2>
+						<ul>
+							<li class="fragment">
+								Upon submitting, all form fields are included in the <em>querystring</em>, except:
+								<ul>
+									<li class="fragment">Controls without a name attribute (<a href="assets/03/examples/form_02.php">demo</a>)</li>
+									<li class="fragment">Unchecked radiobuttons (<a href="assets/03/examples/form_03.php">demo</a>)</li>
+									<li class="fragment">Disabled controls (<a href="assets/03/examples/form_04.php">demo</a>)</li>
+									<li class="fragment">Buttons that were not clicked (<a href="assets/03/examples/form_04.php">demo</a>)</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Summarized example: our testform</h2>
+						<div class="fragment">
+							<figure>
+								<a href="assets/03/examples/form_05.php"><img src="assets/03/testform.jpg" alt="Our testform" title="Our testform" width="700" /></a>
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>Sidenote: combining GET and POST</h2>
+						<ul>
+							<li class="fragment">
+								Possible if you already have parameters added onto the <code>target</code> URL
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/get_and_post.php">&lt;form action=&quot;form_process.php?foo=getfoo&amp;amp;bar=getbar&quot; method=&quot;post&quot;&gt;
+
+	&lt;fieldset&gt;
+		&lt;h2&gt;Get and Post&lt;/h2&gt;
+		&lt;dl class=&quot;clearfix&quot;&gt;
+			&lt;dt&gt;&lt;label for=&quot;foo&quot;&gt;Foo?&lt;/label&gt;&lt;/dt&gt;
+			&lt;dd class=&quot;text&quot;&gt;
+				&lt;input type=&quot;text&quot; id=&quot;foo&quot; name=&quot;foo&quot; value=&quot;&quot; /&gt;
+			&lt;/dd&gt;
+
+			&lt;dt&gt;&lt;label for=&quot;baz&quot;&gt;Baz?&lt;/label&gt;&lt;/dt&gt;
+			&lt;dd class=&quot;text&quot;&gt;
+				&lt;input type=&quot;text&quot; id=&quot;baz&quot; name=&quot;baz&quot; value=&quot;&quot; /&gt;
+			&lt;/dd&gt;
+
+			&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+				&lt;input type=&quot;submit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+			&lt;/dt&gt;
+		&lt;/dl&gt;
+	&lt;/fieldset&gt;
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>When to use GET or POST (1)</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>POST</code> for sensitive actions
+								<ul>
+									<li class="fragment">
+										Consider these links
+										<ul>
+											<li><code>index.php?module=blog&amp;action=delete&amp;id=1</code></li>
+											<li><code>login.php?username=bramus&amp;password=Azerty123</code></li>
+										</ul>
+									</li>
+									<li class="fragment"><code>GET</code> can be cached by webspiders</li>
+									<li class="fragment"><code>GET</code> remains visible in the browser history</li>
+									<li class="fragment"><code>GET</code> can be bookmarked and distributed</li>
+									<li class="fragment"><code>GET</code> link can become invalid over time</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Use <code>POST</code> when sending files
+							</li>
+							<li class="fragment">
+								Use <code>POST</code> for lengthy data
+								<ul>
+									<li>(URLS are limited to 2048 characters!</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>When to use GET or POST (2)</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>GET</code> for read actions
+								<ul>
+									<li class="fragment"><code>showArticle()</code></li>
+									<li class="fragment"><code>showComments()</code></li>
+									<li class="fragment"><code>getSearchResults()</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Use <code>POST</code> for manipulative and sensitive actions
+								<ul>
+									<li class="fragment"><code>addComment()</code></li>
+									<li class="fragment"><code>registerUser()</code></li>
+									<li class="fragment"><code>deleteUser()</code></li>
+									<li class="fragment"><code>login()</code></li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 
 				</section>
 
 
 
-				<!-- Persisting Forms -->
+				<!-- Formchecking & Persistency -->
 				<section>
 
 					<section>
-						<h2>Persisting forms</h2>
+						<h2>Formchecking &amp; Persistency</h2>
 					</section>
 
-				</section>
+					<section>
+						<h2>Say what?</h2>
 
-
-
-				<!-- Formchecking -->
-				<section>
+						<ul>
+							<li class="fragment"></li>
+						</ul>
+					</section>
 
 					<section>
-						<h2>Formchekcing</h2>
+						<h2>Submitting a form to the same page</h2>
+
+						<ul>
+							<li class="fragment"></li>
+						</ul>
 					</section>
 
 				</section>

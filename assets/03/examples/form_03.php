@@ -23,9 +23,9 @@
 
 				<dt><label>Meals</label></dt>
 				<dd>
-					<label for="meal0"><input type="checkbox" class="option" name="meal0" id="meal0" value="breakfast" />breakfast</label>
-					<label for="meal1"><input type="checkbox" class="option" name="meal1" id="meal1" value="lunch" />lunch</label>
-					<label for="meal2"><input type="checkbox" class="option" name="meal2" id="meal2" value="dinner" />dinner</label>
+					<label for="meal0"><input type="checkbox" class="option" name="meals[]" id="meal0" value="breakfast" />breakfast</label>
+					<label for="meal1"><input type="checkbox" class="option" name="meals[]" id="meal1" value="lunch" />lunch</label>
+					<label for="meal2"><input type="checkbox" class="option" name="meals[]" id="meal2" value="dinner" />dinner</label>
 				</dd>
 
 				<dt class="full clearfix" id="lastrow">
