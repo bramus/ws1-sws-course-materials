@@ -628,27 +628,204 @@
 
 
 
-				<!-- Formchecking & Persistency -->
+				<!-- Persistency -->
 				<section>
 
 					<section>
-						<h2>Formchecking &amp; Persistency</h2>
+						<h2>Persistency</h2>
 					</section>
 
 					<section>
-						<h2>Say what?</h2>
+						<h2>Persistency</h2>
 
 						<ul>
-							<li class="fragment"></li>
+							<li class="fragment">
+								After having submitted the form to itself, make it show the values you entered
+							</li>
+							<li class="fragment">
+								You can let PHP automatically output the URL of the page itself instead of typing it manually
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	...
+&lt;/form&gt;</code></pre></div>
+							</li>
+							<li class="fragment">
+								Different types of inputs (text, checkbox, dropdown) require different persistency methods
+							</li>
 						</ul>
 					</section>
 
 					<section>
-						<h2>Submitting a form to the same page</h2>
+						<h2>Persisting text inputs</h2>
+						<ul>
+							<li class="fragment">
+								<code>&lt;input type=&quot;text|password&gt;&quot;</code> and <code>&lt;textarea&gt;</code>
+								<ul>
+									<li class="fragment">Just output the sent-in value</li>
+								</ul>
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_02.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
+		value=&quot;&lt;?php echo $_GET['name']; ?&gt;&quot; /&gt;
+
+	&lt;input type=&quot;password&quot; id=&quot;pass&quot; name=&quot;pass&quot;
+			value=&quot;&lt;?php echo $_GET['pass']; ?&gt;&quot; /&gt;
+
+	&lt;textarea name=&quot;remark&quot; id=&quot;remark&quot; rows=&quot;5&quot;
+		cols=&quot;40&quot;&gt;&lt;?php echo $_GET['remark']; ?&gt;&lt;/textarea&gt;
+
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Persisting dropdowns</h2>
+						<ul>
+							<li class="fragment">
+								<code>&lt;select&gt;</code>
+								<ul>
+									<li class="fragment">For each <code>&lt;option&gt;</code>, check if the value matches the sent-in value</em></li>
+									<li class="fragment">If so: set the <code>selected=&quot;selected&quot;</code> attribute</li>
+								</ul>
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
+		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_GET['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
+		&lt;option value=&quot;1&quot;&lt;?php if ((int) $_GET['cont'] === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
+		&lt;option value=&quot;2&quot;&lt;?php if ((int) $_GET['cont'] === 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
+		&lt;option value=&quot;3&quot;&lt;?php if ((int) $_GET['cont'] === 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
+		&lt;option value=&quot;4&quot;&lt;?php if ((int) $_GET['cont'] === 4) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Asia&lt;/option&gt;
+		&lt;option value=&quot;5&quot;&lt;?php if ((int) $_GET['cont'] === 5) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Europe&lt;/option&gt;
+		&lt;option value=&quot;6&quot;&lt;?php if ((int) $_GET['cont'] === 6) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Oceania&lt;/option&gt;
+	&lt;/select&gt;
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Persisting radiobtns &amp; checkboxes</h2>
+						<ul>
+							<li class="fragment">
+								<code>&lt;input type=&quot;radio|checkbox&gt;&quot;</code>
+								<ul>
+									<li class="fragment">For each radiobutton, check if the value matches the sent-in value</li>
+									<li class="fragment">If so: set the <code>checked=&quot;checked&quot;</code> attribute</li>
+								</ul>
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_05.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&lt;?php if ($_GET['gender']
+		 === 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;&lt;?php if ($_GET['gender']
+		 === 'female') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+						
+	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;breakfast&quot;&lt;?php if (in_array(
+		'breakfast', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;lunch&quot;&lt;?php if (in_array(
+		'lunch', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;dinner&quot;&lt;?php if (in_array(
+		'dinner', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>That's it?</h2>
 
 						<ul>
-							<li class="fragment"></li>
+							<li class="fragment">
+								Not really, as we've been cheating in the code examples by suppressing errors
+							</li>
+							<li class="fragment">
+								In reality there are a few pitfalls
+								<ul>
+									<li class="fragment">Undefined Index</li>
+									<li class="fragment"><code>htmlentities()</code></li>
+									<li class="fragment">Magic Quotes (pre PHP 5.4)</li>
+								</ul>
+							</li>
+					</section>
+
+					<section>
+						<h2>Pitfall: Undefined Index</h2>
+						<ul>
+							<li class="fragment">
+								When not suppressing errors, with exactly the same PHP code, we get a rather nasty result
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_05.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	(same HTML code as before)
+&lt;/form&gt;</code></pre></div>
+							</li>
+							<li class="fragment">
+								Problem: before submitting <code>$_GET</code> and <code>$_POST</code> are empty
+								<ul>
+									<li>
+										The code stumbles upon the fact that we want to use a variable such as <code>$_GET['name'];</code> when it in fact is non-existent
+									</li>
+									<li>
+										If we change all error texts with normal data it works fine
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Fix: check with <code>isset()</code> if a variable exists before using it
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
+	value=&quot;&lt;?php echo isset($_GET['name']) ? $_GET['name'] : ''; ?&gt;&quot; /&gt;
+&lt;/form&gt;</code></pre></div>
+							</li>
 						</ul>
+					</section>
+
+					<section>
+						<h2>Pitfall: htmlentities()</h2>
+						<ul>
+							<li class="fragment">
+								If we enter some HTML-looking text, we break the form
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	(same HTML code as before)
+&lt;/form&gt;</code></pre></div>
+							</li>
+							<li class="fragment">
+								Problem: quotes break the HTML code
+								<ul>
+									<li class="fragment">
+										When entering <code>hello &quot; /&gt; test</code> we get this HTML
+										<pre class="bigger"><code>&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;hello&quot; /&gt; test&quot; /&gt;</code></pre>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Fix: convert special characters with <code>htmlentites()</code> to their HTML safe / encoded version
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_07.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
+	value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; /&gt;
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Pitfall: Magic Quotes</h2>
+						<ul>
+							<li class="fragment">
+								In PHP pre 5.4, PHP would add backslashes before quotes in strings if the <em>magic_quotes</em> setting was enabled
+								<ul>
+									<li class="fragment">
+										Problem: If you'd persist such a value, and resubmit the form, you'd see the backslashes double exponentially per submit
+									</li>
+									<li class="fragment">
+										Fix: use <code>stripslashes()</code> but only if <em>magic_quotes</em> is enabled
+									</li>
+							</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_09.php" data-overlay-height="600">// Guaranteed no slashes (if magic_quotes is on, it strips the slashes)
+function stripPostSlashes($string) {
+	return (get_magic_quotes_gpc() || get_magic_quotes_runtime())
+		? stripslashes($string) : $string;
+}</code></pre></div>
+						<footer class="fragment"><em>We won't be using this function as we're using PHP 5.4</em></footer>
 					</section>
 
 				</section>

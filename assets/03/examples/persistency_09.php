@@ -1,4 +1,30 @@
-<!DOCTYPE html>
+<?php
+
+	/**
+	 * Helper functions
+	 */
+
+		/**
+		 * Guaranteed slashes (if magic_quotes is off, it adds the slashes)
+		 *
+		 * @param string $string The string to add the slashes to
+		 * @return string
+		 */
+		function addPostSlashes($string) {
+			return ((get_magic_quotes_gpc() == 1) || (get_magic_quotes_runtime() == 1)) ? $string : addslashes($string);
+		}
+
+		/**
+		 * Guaranteed no slashes (if magic_quot	es is on, it strips the slashes)
+		 *
+		 * @param string $string The string to remove the slashes from
+		 * @return string
+		 */
+		function stripPostSlashes($string) {
+			return ((get_magic_quotes_gpc() == 1) || (get_magic_quotes_runtime() == 1)) ? stripslashes($string) : $string;
+		}
+
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
@@ -16,10 +42,10 @@
 			<dl class="clearfix">
 
 				<dt><label for="name">Name</label></dt>
-				<dd class="text"><input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlentities(stripslashes($_GET['name'])) : ''; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlentities(stripPostSlashes($_GET['name'])) : ''; ?>" class="input-text" /></dd>
 
 				<dt><label for="pass">Password</label></dt>
-				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo isset($_GET['pass']) ? htmlentities(stripslashes($_GET['pass'])) : ''; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo isset($_GET['pass']) ? htmlentities(stripPostSlashes($_GET['pass'])) : ''; ?>" class="input-text" /></dd>
 
 				<dt><label>Gender</label></dt>
 				<dd>
@@ -48,7 +74,7 @@
 				</dd>
 
 				<dt><label for="remark">Remark</label></dt>
-				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo isset($_GET['remark']) ? htmlentities(stripslashes($_GET['remark'])) : ''; ?></textarea></dd>
+				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo isset($_GET['remark']) ? htmlentities(stripPostSlashes($_GET['remark'])) : ''; ?></textarea></dd>
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
