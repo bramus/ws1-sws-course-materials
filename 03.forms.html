@@ -598,7 +598,7 @@
 							<li class="fragment">
 								Use <code>POST</code> for lengthy data
 								<ul>
-									<li>(URLS are limited to 2048 characters!</li>
+									<li>URLS are limited to 2048 characters!</li>
 								</ul>
 							</li>
 						</ul>
@@ -690,7 +690,7 @@
 									<li class="fragment">For each <code>&lt;option&gt;</code>, check if the value matches the sent-in value</em></li>
 									<li class="fragment">If so: set the <code>selected=&quot;selected&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
 	&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
 		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_GET['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
 		&lt;option value=&quot;1&quot;&lt;?php if ((int) $_GET['cont'] === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
@@ -714,7 +714,7 @@
 									<li class="fragment">For each radiobutton, check if the value matches the sent-in value</li>
 									<li class="fragment">If so: set the <code>checked=&quot;checked&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_05.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
 
 	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&lt;?php if ($_GET['gender']
 		 === 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
@@ -800,7 +800,7 @@
 								</ul>
 							</li>
 							<li class="fragment">
-								Fix: convert special characters with <code>htmlentites()</code> to their HTML safe / encoded version
+								Fix: convert special characters with <code>htmlentities()</code> to their HTML safe / encoded version
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_07.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
 	value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; /&gt;
