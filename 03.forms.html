@@ -888,6 +888,31 @@ function stripPostSlashes($string) {
 
 	}</code></pre></div>
 					</section>
+
+					<section>
+						<h2>Sidenote: urlencode</h2>
+						<ul>
+							<li class="fragment">
+								When redirecting with a parameter in the URL, you must always <code>urlencode()</code> it manually
+								<ul>
+									<li>Again, never trust user submitted data</li>
+									<li>The browser does this for you when submitting a form, but as we're doing it on the server now &hellip;
+								</ul>
+							</li>
+							<li class="fragment">
+								Not encoded
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect_01.php" data-overlay-height="600">$gun = 'smith&amp;wesson';
+header('Location: redirect_process.php?gun=' . $gun);
+exit(0); // do not forget to exit after redirect</code></pre></div>
+							</li>
+							<li class="fragment">
+								Encoded
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect_02.php" data-overlay-height="600">$gun = 'smith&amp;wesson';
+header('Location: redirect_process.php?gun=' . urlencode($gun));
+exit(0); // do not forget to exit after redirect</code></pre></div>
+							</li>
+						</ul>
+					</section>
 				</section>
 
 
