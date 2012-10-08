@@ -1,0 +1,792 @@
+<!doctype html>  
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		
+		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 02.client.server</title>
+
+		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 02.client.server">
+		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
+		
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/main.css" media="screen">
+		<link rel="stylesheet" href="css/print.css" media="print">
+
+		<link rel="stylesheet" href="lib/zenburn.css">
+
+		<style>
+			.columns .column {
+				float: left;
+				list-style: none;
+				margin: 0 0 12px 0;
+				padding: 0;
+			}
+
+			.column-12 {
+				width: 50%;
+			}
+			code {
+				color: gainsboro;
+			}
+
+			li > code, li em > code, li del > code, li ins > code, p > code {
+				background: #3F3F3F;
+				padding: 2px 4px;
+				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+				font-size: 80%;
+			}
+			
+			del code, code.nok {
+				color: #C55;
+			}
+			
+			ins code, code.ok {
+				color: #5C5;
+			}
+
+			strong {
+				color: #553d00;
+				background: transparent url('assets/02/strong.png') no-repeat 50% 50%;
+				font-size: 80%;
+				padding: 0 4px;
+				font-family: palatino, times;
+				font-weight: 300;
+				font-style: italic;
+			}
+
+			figure.zoomable-12:hover {
+				-moz-transform: scale(1.2);
+				-o-transform: scale(1.2);
+				-webkit-transform: scale(1.2);
+				transform: scale(1.2);
+			}
+
+			figure.zoomable-15:hover {
+				-moz-transform: scale(1.5);
+				-o-transform: scale(1.5);
+				-webkit-transform: scale(1.5);
+				transform: scale(1.5);
+			}
+
+			figure.zoomable-20:hover {
+				-moz-transform: scale(2);
+				-o-transform: scale(2);
+				-webkit-transform: scale(2);
+				transform: scale(2);
+			}
+
+			#reveal section ul + p > img {
+				margin-top: 0;
+			}
+
+			#reveal section img.noborder {
+				background: transparent;
+				border: 0;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				-ms-box-shadow: none;
+				-o-box-shadow: none;
+				box-shadow: none;"
+			}
+
+			#reveal section img.noborder + figcaption {
+				margin-top: -40px;
+				text-align: center;
+			}
+
+			#reveal section .zoomable-20 img.noborder + figcaption {
+				margin-top: -20px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		
+		<div id="reveal">
+			
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+
+				<!-- 0 : Title -->
+				<section>
+
+					<section>
+						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
+						<h1>02.client.server</h1>
+					
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+						<script>
+							// Delicously hacky. Look away.
+							if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) )
+							document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
+						</script>
+					</section>
+
+				</section>
+				
+				
+
+				<!-- Client? Server? -->
+				<section>
+
+					<section>
+						<h2>Client - Server Model</h2>
+					</section>
+
+					<section>
+						<h2>Client?</h2>
+
+						<ul>
+							<li class="fragment">
+								A <em>client</em> is a piece of software, not hardware
+							</li>
+							<li class="fragment">
+								Web clients
+								<ul>
+									<li>Firefox, Internet Explorer, Chrome, Opera, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Mail clients
+								<ul>
+									<li>Outlook, Thunderbird, Mail.app, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								FTP-Clients
+								<ul>
+									<li>FileZilla, SmartFTP, FlashFXP, Transmit, Cyberduck, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Client Universalis: <code>telnet</code>
+							</li>
+						</ul>
+						<p>
+							<figure class="fragment">
+								<img src="assets/02/clients-logos.png" alt="Examples of clients" title="Examples of clients" height="102" width="800" />
+								<figcaption>Examples of clients</figcaption>
+							</figure>
+						</p>
+					</section>
+
+					<section>
+						<h2>Server?</h2>
+
+						<ul>
+							<li class="fragment">
+								A <em>server</em> is a piece of software, not hardware
+							</li>
+							<li class="fragment">
+								Web servers
+								<ul>
+									<li>Apache, Internet Information Services (IIS), Lighttpd, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Mail servers
+								<ul>
+									<li>Postfix, Kerio, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								FTP servers
+								<ul>
+									<li>PureFTPd, Serv-U, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Database servers
+								<ul>
+									<li>MySQL Server, MS SQL Server, &hellip;</li>
+								</ul>
+							</li>
+						</ul>
+						<p>
+							<figure class="fragment">
+								<img src="assets/02/servers-logos.png" alt="Examples of servers" title="Examples of servers" height="102" width="786" />
+								<figcaption>Examples of servers</figcaption>
+							</figure>
+						</p>
+					</section>
+
+					<section>
+						<h2>Client-Server Relation</h2>
+						<ul>
+							<li class="fragment">
+								A client asks a question to the server by sending a <strong>request</strong> to the server
+							</li>
+							<li class="fragment">
+								A server answsers incomings questions by sending a <strong>response</strong> back to the client
+							</li>
+						</ul>
+						<p>
+							<figure class="fragment zoomable-20">
+								<img src="assets/02/client-server-model.png" alt="Client-Server Relation" title="Client-Server Relation" height="200" width="293" />
+								<figcaption>Client-Server Relation</figcaption>
+							</figure>
+						</p>
+					</section>
+
+					<section>
+						<h2>Ports &amp; Protocols</h2>
+						<ul>
+							<li class="fragment">
+								A server <strong>listens</strong> onto a specific <strong>port</strong> for incoming requests
+								<ul>
+									<li>
+										Examples
+										<ul class="columns">
+											<li class="column column-12">
+												Web servers
+												<ul>
+													<li>Port 80 or 8080 (http)</li>
+													<li>Port 443 (https)</li>
+												</ul>
+											</li>
+											<li class="column column-12">
+												Mail servers
+												<ul>
+													<li>Port 25 (SMTP)</li>
+													<li>Port 100 or 995 (POP3)</li>
+												</ul>
+											</li>
+											<li class="column column-12">
+												FTP servers
+												<ul>
+													<li>Port 21</li>
+												</ul>
+											</li>
+											<li class="column column-12">
+												Database servers
+												<ul>
+													<li>Port 3306 (MySQL)</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment" style="clear: left;">
+								A <strong>protocol</strong> defines how questions should be asked and answered to.
+							</li>
+						</ul>
+						<footer class="fragment"><em>These ports are defaults, it's possible to change these via the configuration file of the server</em></footer>
+					</section>
+
+				</section>
+
+
+				<!-- the http protocol -->
+				<section>
+
+					<section>
+						<h2>The HTTP Protocol</h2>
+					</section>
+
+
+					<section>
+						<h2>Sniffers</h2>
+						<ul>
+							<li class="fragment">
+								A <strong>sniffer</strong> captures client-server traffic
+								<ul>
+									<li>Some allow you not only to view but also manipulate traffic</li>
+								</ul>
+							<li class="fragment">
+								General TCP sniffers
+								<ul>
+									<li>Wireshark, TCPDump, Microsoft Network Monitor, ...</li>
+								</ul>
+							<li class="fragment">
+								Specific HTTP sniffers
+								<ul>
+									<li>LiveHTTPHeaders, Wireshark, Fiddler HTTP Debugger, Charles Web Debugging Proxy, ...</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Demo time!</h2>
+						<ul>
+							<li class="fragment">
+								We'll use <a href="http://www.charlesproxy.com/">Charles</a> to analyze some traffic and study the HTTP protocol which is defined in <a href="http://www.w3.org/Protocols/rfc2616/rfc2616.html">RFC 2616</a>
+							</li>
+						</ul>
+						<p>
+							<figure class="fragment zoomable-15">
+								<img src="assets/02/charles.png" alt="Charles Web Debugging Proxy" title="Charles Web Debugging Proxy" height="342" width="600" class="noborder" />
+								<figcaption>Charles Web Debugging Proxy</figcaption>
+							</figure>
+						</p>
+						<ul>
+							<li class="fragment">
+								Let's visit <a href="http://www.google.be/">http://www.google.be/</a>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Request format (1)</h2>	
+						<div class="fragment" style="text-align: center;">
+							<figure>
+								<img src="assets/02/charles-get-google-request.png" alt="Charles example: google.be: Request" title="Charles example: google.be: Request" width="700" class="noborder" />
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>Request format (2)</h2>
+						<ul>
+							<li class="fragment">
+								Request consists of two parts: <strong>head</strong> and <strong>body</strong>
+								<ul>
+									<li class="fragment">Request head and body are separated by an empty line</li>
+									<li class="fragment">Request head always comes before the request body</li>
+									<li class="fragment">Request body is empty here <em>(more on that later)</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								First line of the <em>request head</em> is the <strong>request line</strong>
+
+								<div><pre class="bigger"><code>GET / HTTP/1.1</code></pre></div>
+								<ol>
+									<li class="fragment">Method: <code>OPTIONS</code>, <code>GET</code>, <code>POST</code>, <code>HEAD</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, or <code>CONNECT</code></li>
+									<li class="fragment">Request-URI: Requested page <em>(here <code>/</code>)</em></li>
+									<li class="fragment">HTTP version: always <code>HTTP/1.1</code>
+								</ol>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Request format (3)</h2>
+						<ul>
+							<li class="fragment">
+								Other lines of the <em>request head</em> are called <strong>headers</strong>
+
+								<div><pre class="bigger"><code>Host: www.google.be
+User-Agent: Mozilla/5.0 (Intel Mac OS X 10.8; rv:17.0) Gecko/17.0 Firefox/17.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Cookie: PREF=ID=39391363bc...xdN</code></pre></div>
+								<ul>
+									<li class="fragment">
+										Format is <code>Key: Value</code>
+										<ul>
+											<li class="fragment">Keys always start with capital letter</li>
+											<li class="fragment">Some predefined keys: <code>Accept</code>, <code>Accept-Charset</code>, <code>Accept-Encoding</code>, <code>Accept-Language</code>, <code>Authorization</code>, <code>Host</code>, <code>If-Match</code>, <code>Referer</code>, <code>User-Agent</code></li>
+											<li class="fragment">Custom keys allowed with <code>X-</code> prefix</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Response format (1)</h2>	
+						<div class="fragment" style="text-align: center;">
+							<figure>
+								<img src="assets/02/charles-get-google-response.png" alt="Charles example: google.be: Response" title="Charles example: google.be: Response" width="700" class="noborder" />
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>Response format (2)</h2>
+						<ul>
+							<li class="fragment">
+								Response consists of two parts: <strong>head</strong> and <strong>body</strong>
+								<ul>
+									<li class="fragment">Response head and body separated by an empty line</li>
+									<li class="fragment">Response head always comes before the request body</li>
+									<li class="fragment">
+										Response body is the actual content returned <em>(here a blob of HTML)</em>
+										<ul>
+											<li>Note: the <em>response body</em> contains both HTML <code>&lt;head&gt;</code> and <code>&lt;body&gt;</code> &mdash; not to be confused with the <em>response head</em>/<em>response body</em>!</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								First line of the <em>response head</em> is the <strong>status line</strong>
+
+								<div><pre class="bigger"><code>HTTP/1.1 200 OK</code></pre></div>
+								<ol>
+									<li class="fragment">HTTP version: always <code>HTTP/1.1</code>
+									<li class="fragment">Status-Code &amp; Reason Phrase: (see next slide)</li>
+								</ol>
+							</li>
+							<li class="fragment">
+								Other lines are headers returned by the server.
+								<ul>
+									<li>Some predefined keys: <code>Age</code>, <code>Location</code>, <code>Retry-After</code>, <code>Server</code></li>
+									<li class="fragment">Custom keys allowed with <code>X-</code> prefix</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Response format (3)</h2>
+						<ul>
+							<li class="fragment">
+								Status codes are grouped
+								<ul class="columns">
+									<li class="column column-12">
+										1xx: Informational
+									</li>
+									<li class="column column-12">
+										2xx: Success
+										<ul>
+											<li>e.g. <code>200 - OK</code></li>
+										</ul>
+									</li>
+									<li class="column column-12">
+										3xx: Redirection
+										<ul>
+											<li>e.g. <code>301 - Moved Permanently</code></li>
+											<li>e.g. <code>302 - Found</code></li>
+											<li>e.g. <code>304 - Not Modified</code></li>
+										</ul>
+									</li>
+									<li class="column column-12">
+										4xx: Client Error
+										<ul>
+											<li>e.g. <code>400 - Bad Request</code></li>
+											<li>e.g. <code>401 - Unauthorized</code></li>
+											<li>e.g. <code>403 - Forbidden</code></li>
+											<li>e.g. <code>404 - Not Found</code></li>
+										</ul>
+									</li>
+									<li class="column column-12">
+										5xx: Server Error
+										<ul>
+											<li>e.g. <code>500 - Internal Server Error</code></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment" style="clear: left;">Full overview: <a href="http://httpstatus.es/">http://httpstatus.es/</a> or <a href="http://httpstat.us/">http://httpstat.us/</a>
+						</ul>
+					</section>
+
+					<section>
+						<h2>The browser</h2>	
+						<ul>
+							<li class="fragment">When the HTML has arrived <em>(or parts of it if flushed prematurely)</em>  the browser will check the HTML for other files (such as CSS, JS, images, etc) to get
+								<ul>
+									<li>These files are requested separately</li>
+								</ul>
+							</li>
+						</ul>	
+						<div class="fragment" style="text-align: center;">
+							<figure class="zoomable-15">
+								<img src="assets/02/charles-get-google-request2.png" alt="Charles example: google.be: Requesting other files" title="Charles example: google.be: Requesting other files" width="500" class="noborder" />
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>If you're feeling geeky</h2>
+						<ul>
+							<li class="fragment">
+								As the HTTP protocol runs over TCP and is plaintext, it's possible to <code>telnet</code> to a webserver
+
+								<div class="fragment"><pre class="bigger"><code>bramus$ telnet www.bram.us 80
+Trying 178.18.22.176...
+Connected to bram.us.
+Escape character is '^]'.
+HEAD / HTTP/1.1
+Host: www.bram.us
+Content-Length: 8
+
+s=bramus</code></pre></div>
+								<div class="fragment"><pre class="bigger"><code>HTTP/1.1 200 OK
+Date: Sun, 07 Oct 2012 18:01:54 GMT
+Server: Apache/1.3.42 (Unix) mod_ssl/2.8.31 OpenSSL/0.9.7a
+X-Pingback: http://www.bram.us/wordpress/xmlrpc.php
+X-Powered-By: W3 Total Cache/0.9.2.4
+Vary: Accept-Encoding,Cookie
+Last-Modified: Sun, 07 Oct 2012 18:01:40 GMT
+Accept-Ranges: bytes
+Content-Length: 59364
+Content-Type: text/html; charset=UTF-8</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+				<!-- serverside scripts -->
+				<section>
+
+					<section>
+						<h2>Webservers: Serverside scripts</h2>
+					</section>
+
+					<section>
+						<h2>How to reach a server</h2>
+
+						<ul>
+							<li class="fragment">
+								Use its IP address or network/netbios name
+								<ul>
+									<li><code>192.168.0.2</code> or <code>brm.local</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Server running on your own machine?
+								<ul>
+									<li>Use the local loop: <code>127.0.0.1</code> or <code>localhost</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Access a web server by using a web client (web browser)
+								<ul>
+									<li>Type in any of the addresses/names above in the address bar</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								By default, the http protocol is used
+								<ul>
+									<li>Typing in <code>www.ikdoeict.be/</code> is the same as <code>http://www.ikdoeict.be/</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								By default, port <code>80</code> (http) or <code>443</code> (https) is used
+								<ul>
+									<li>If the server is running on a different port, speficy it after the hostname separated by a colon <code>http://www.ikdoeict.be:8080/</code></li>
+								<ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Tasks of a webserver</h2>
+
+						<ul>
+							<li class="fragment">
+								In short:
+								<ul>
+									<li>Listen for incoming requests and serve the requested file</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								In depth:
+								<ul>
+									<li>Serve files for a multitude of hosts/domains</li>
+									<li>Inform the client about redirects</li>
+									<li>Virtual Directories</li>
+									<li>Timeouts</li>
+									<li>Logging</li>
+									<li>...</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Serving files</h2>
+
+						<ul>
+							<li class="fragment">
+								Files can be served directly
+								<ul>
+									<li>e.g. HTML, CSS, images, video, &hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Files can be processed at runtime:
+								<ul>
+									<li class="fragment">Based on the extension, the server will process the file before sending it to the client</li>
+									<li class="fragment">
+										PHP has plugins to have a webserver parse a file ending in <code>.php</code> before sending it's output to the client
+										<ul>
+											<li>That way, we can use PHP to generate HTML based on some conditions calculated on the server</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Other serverside scripting languages: ASP, .NET, ColdFusion, etc.
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<footer class="fragment"><em>(If you want, you can have other file extensions to be run through the PHP interpreter)</em></footer>
+					</section>
+
+					<section>
+						<h2>Example: ASP Page (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Consider this code
+								<div class="fragment"><pre class="bigger"><code class="language-asp">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Sample ASP Page&lt;/title&gt;
+    &lt;meta charset=&quot;UTF-8&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;% 
+
+    Response.Write &quot;&lt;Hello, I am an ASP script!&quot;; 
+
+%&gt;
+&lt;/body&gt; 
+&lt;/html&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Example: ASP Page (2)</h2>
+
+						<ul>
+							<li class="fragment">
+								Opened directly in browser via <em>File &gt; Open...</em>
+							</li>
+						</ul>
+						<div class="fragment" style="text-align: center;">
+							<figure class="zoomable-15">
+								<img src="assets/02/asp-filesystem.png" alt="A .asp file opened directly by the browser" title="A .asp file opened directly by the browser" width="500" />
+								<figcaption>If you open a file directly, it remains unparsed</figcaption>
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>Example: ASP Page (3)</h2>
+
+						<ul>
+							<li class="fragment">
+								Opened via a webserver
+							</li>
+						</ul>
+						<div class="fragment" style="text-align: center;">
+							<figure class="zoomable-15">
+								<img src="assets/02/asp-webserver.png" alt="A .asp file served by the webserver to the browser" title="A .asp file served by the webserver to the browser" width="500" />
+								<figcaption>A file served by the webserver is parsed before being sent to the client</figcaption>
+							</figure>
+						</div>
+					</section>
+
+					<section>
+						<h2>Parsing Files (1)</h2>
+						<div style="text-align: center;">
+							<figure class="zoomable-20">
+								<img src="assets/02/parsing.png" alt="Parsing schematic" title="Parsing schematic" width="400" style="background: #fff;" />
+								<figcaption>Parsing schematic</figcaption>
+							</figure>
+						</div>
+						<ul>
+							<li class="fragment">
+								The webserver is configured to have an ASP <strong>interpreter</strong> (<em>asp.dll</em>) <strong>parse</strong> any files ending in <code>.asp</code>.
+							</li>
+							<li class="fragment">
+								The interpreter converts the ASP code to text, which is then served to the client.
+								<ul>
+									<li>And if that text happens to be anything HTML-like &hellip;</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Parsing Files (2)</h2>
+
+						<ul>
+							<li class="fragment">
+								Every language has its own interpreter and syntax
+								<div>
+									<pre><code class="language-asp">&lt;% Response.Write &quot;I am ASP&quot;; %&gt;</code></pre>
+									<pre><code class="language-php">&lt;?php echo 'I am PHP'; ?&gt;</code></pre>
+									<pre><code class="language-jsp">&lt;% out.println(&quot;I am JSP&quot;); %&gt;</code></pre>
+									<pre><code class="language-coldfusion">&lt;cfoutput&gt;#&quot;I am ColdFusion&quot;#&lt;/cfoutput&gt;</code></pre>
+									<pre><code class="language-perl">print &quot;I am Perl&quot;;</code></pre>
+								</div>
+							</li>
+							<li class="fragment">
+								Which language to choose?
+							</li>
+						</ul>
+						<div class="fragment" style="text-align: center;">
+							<figure>
+								<img src="assets/02/candy.jpg" title="" alt="" width="300" />
+							</figure>
+						</div>
+					</section>
+
+				</section>
+
+
+
+				<!-- The END -->
+				<section>
+					<section>
+						<h2>Questions?</h2>
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+					</section>
+				</section>
+
+
+
+				<!-- Sources -->
+				<section id="sources">
+					<section>
+						<h2>Sources</h2>
+						<ul>
+							<li><a href="http://www.w3.org/Protocols/rfc2616/rfc2616.html">http://www.w3.org/Protocols/rfc2616/rfc2616.html</a></li>
+							<li><a href="http://www.123rf.com/photo_3469538_coloured-candy-choice.html">http://www.123rf.com/photo_3469538_coloured-candy-choice.html</a></li>
+						</ul>
+					</section>
+				</section>
+				
+			</div>
+
+			<!-- The navigational controls UI -->
+			<aside class="controls">
+				<a class="left" href="#">&#x25C4;</a>
+				<a class="right" href="#">&#x25BA;</a>
+				<a class="up" href="#">&#x25B2;</a>
+				<a class="down" href="#">&#x25BC;</a>
+				<span id="revealIndex">/</span>
+			</aside>
+			
+			<!-- Index Link -->
+			<aside class="back">
+				<a href="index.html">&larr; Back to index</a>
+			</aside>
+
+			<!-- ikdoeict.be Link -->
+			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
+			
+			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
+			<div class="progress"><span></span></div>
+			
+		</div>
+		
+		<script src="js/reveal.js"></script>
+		<script src="lib/highlight.js"></script>
+		<script src="lib/prefixfree.js"></script>
+		<script src="lib/css-snippets.js"></script>
+		<script src="lib/css-edit.js"></script>
+		<script src="lib/incrementable.js"></script>
+		<script src="js/main.js"></script>
+
+	</body>
+</html>
