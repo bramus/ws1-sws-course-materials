@@ -810,25 +810,55 @@
 					</section>
 
 					<section>
-						<h2>Pitfall: Magic Quotes</h2>
+						<h2>Pitfall: Magic Quotes (1)</h2>
 						<ul>
 							<li class="fragment">
 								In PHP pre 5.4, PHP would add backslashes before quotes in strings if the <em>magic_quotes</em> setting was enabled
 								<ul>
 									<li class="fragment">
-										Problem: If you'd persist such a value, and resubmit the form, you'd see the backslashes double exponentially per submit
+										Problem: When persisting the backslashes double per submit
 									</li>
 									<li class="fragment">
 										Fix: use <code>stripslashes()</code> but only if <em>magic_quotes</em> is enabled
 									</li>
 							</li>
 						</ul>
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_09.php" data-overlay-height="600">// Guaranteed no slashes (if magic_quotes is on, it strips the slashes)
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_09.php" data-overlay-height="600">&lt;?php
+// Strips automatically added slashes if magic_quotes is enabled
 function stripPostSlashes($string) {
 	return (get_magic_quotes_gpc() || get_magic_quotes_runtime())
 		? stripslashes($string) : $string;
-}</code></pre></div>
-						<footer class="fragment"><em>We won't be using this function as we're using PHP 5.4</em></footer>
+}
+?&gt;&lt;!doctype html&gt;
+...
+&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities(stripPostSlashes($_GET['name'])) : ''; ?&gt;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+...</code></pre></div>
+						<footer class="fragment"><em>We won't be needing this as we're using PHP 5.4</em></footer>
+					</section>
+
+					<section>
+						<h2>Pitfall: Magic Quotes (2)</h2>
+						<ul>
+							<li class="fragment">
+								Let's improve our code, as running each var through <code>stripPostSlashes()</code> is quite cumbersome
+							</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_10.php" data-overlay-height="600">&lt;?php
+function stripPostSlashes($string) {
+	return (get_magic_quotes_gpc() || get_magic_quotes_runtime())
+		? stripslashes($string) : $string;
+}
+
+// Run each superglobal that can be affected by magic quotes through the stripPostSlashes before we get a chance of using them
+$_POST = array_map('stripPostSlashes', $_POST);
+$_GET = array_map('stripPostSlashes', $_GET);
+$_REQUEST = array_map('stripPostSlashes', $_REQUEST);
+$_COOKIE = array_map('stripPostSlashes', $_COOKIE);
+
+?&gt;&lt;!doctype html&gt;
+...
+&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+...</code></pre></div>
 					</section>
 
 				</section>
