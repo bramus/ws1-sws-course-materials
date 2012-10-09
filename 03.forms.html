@@ -782,7 +782,7 @@
 					</section>
 
 					<section>
-						<h2>Pitfall: htmlentities()</h2>
+						<h2>Pitfall: htmlentities() (1)</h2>
 						<ul>
 							<li class="fragment">
 								If we enter some HTML-looking text, we break the form
@@ -805,6 +805,26 @@
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
 	value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; /&gt;
 &lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Pitfall: htmlentities() (2)</h2>
+						<ul>
+							<li class="fragment">
+								You must <strong>always</strong> use <code>htmlentities()</code> if you some user input on screen
+								<ul>
+									<li class="fragment">If you don't, users can inject custom HTML into your site</li>
+									<li class="fragment">Not a big problem if it's <code>&lt;b&gt;&lt;/b&gt;</code>, but what if we refer to a custom javascript file via <code>&lt;script src=&quot;http://mysite.com/pwnd.js&quot;&gt;&lt;/script&gt;</code>?</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								This kind of attack is known as <strong>cross-site scripting</strong> or <strong>XSS</strong>
+								<ul>
+									<li class="fragment">XSS is <a href="http://blogs.msdn.com/b/ie/archive/2012/09/10/xss-trends-and-internet-explorer.aspx">the most common vulnerability of websites</a>!</li>
+									<li class="fragment">Example: <a href="http://blog.twitter.com/2010/09/all-about-onmouseover-incident.html">Twitter onMouseOver incident</a></li>
+								</ul>
 							</li>
 						</ul>
 					</section>
