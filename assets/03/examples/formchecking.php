@@ -25,7 +25,7 @@
 
 		}
 
-?><<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
