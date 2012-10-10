@@ -827,10 +827,11 @@
 						<h2>Pitfall: htmlentities() (2)</h2>
 						<ul>
 							<li class="fragment">
-								You must <strong>always</strong> use <code>htmlentities()</code> if you some user input on screen
+								You must <strong>always</strong> use <code>htmlentities()</code> if you output/show user input in an HTML page
 								<ul>
 									<li class="fragment">If you don't, users can inject custom HTML into your site</li>
-									<li class="fragment">Not a big problem if it's <code>&lt;b&gt;&lt;/b&gt;</code>, but what if we refer to a custom javascript file via <code>&lt;script src=&quot;http://mysite.com/pwnd.js&quot;&gt;&lt;/script&gt;</code>?</li>
+									<li class="fragment">Not a big security threat if it's <code>&lt;b&gt;&lt;/b&gt;</code></li>
+									<li class="fragment">But what if we inject a custom javascript file via <code>&lt;script src=&quot;http://mysite.com/pwnd.js&quot;&gt;&lt;/script&gt;</code>?</li>
 								</ul>
 							</li>
 							<li class="fragment">
@@ -841,6 +842,7 @@
 								</ul>
 							</li>
 						</ul>
+						<footer class="fragment"><em>!! If you don't prevent XSS in the assignments, or your exam you will fail them !!</em></footer>
 					</section>
 
 					<section>
