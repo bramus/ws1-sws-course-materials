@@ -1,26 +1,27 @@
 <?php
 
 	/**
-	 * FORMCHECKING
+	 * Main Code
 	 */
 
 		// initial values
+		$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
 		$msgName = '*';
 
-		// form is sent
+		// form is sent: perform formchecking!
 		if (isset($_POST['btnSubmit'])) {
 
 			$allOk = true;
 
-			// name not set, or empty
-			if (!isset($_POST['name']) || ((string) $_POST['name'] === '')) {
+			// name not empty
+			if (trim($name) === '') {
 				$msgName = 'Please enter your name';
 				$allOk = false;
 			}
 
 			// end of form check. If $allOk still is true, then the form was sent in correctly
 			if ($allOk === true) {
-				header('Location: formchecking_thanks.php?name=' . urlencode($_POST['name']));
+				header('Location: formchecking_thanks.php?name=' . urlencode($name));
 			}
 
 		}
@@ -44,7 +45,7 @@
 
 				<dt><label for="name">Name</label></dt>
 				<dd class="text">
-					<input type="text" id="name" name="name" value="<?php echo isset($_POST['name']) ? htmlentities($_POST['name']) : '' ?>" class="input-text" />
+					<input type="text" id="name" name="name" value="<?php echo htmlentities($name); ?>" class="input-text" />
 					<span class="message error"><?php echo $msgName; ?></span>
 				</dd>
 

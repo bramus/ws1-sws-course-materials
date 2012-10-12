@@ -26,6 +26,14 @@
 			return (get_magic_quotes_gpc() || get_magic_quotes_runtime()) ? stripslashes($string) : $string;
 		}
 
+
+	/**
+	 * Main code
+	 */
+
+		// Disable Magic Quotes
+		disableMagicQuotes();
+
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -44,10 +52,10 @@
 			<dl class="clearfix">
 
 				<dt><label for="name">Name</label></dt>
-				<dd class="text"><input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlentities(stripPostSlashes($_GET['name'])) : ''; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="text" id="name" name="name" value="<?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?>" class="input-text" /></dd>
 
 				<dt><label for="pass">Password</label></dt>
-				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo isset($_GET['pass']) ? htmlentities(stripPostSlashes($_GET['pass'])) : ''; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo isset($_GET['pass']) ? htmlentities($_GET['pass']) : ''; ?>" class="input-text" /></dd>
 
 				<dt><label>Gender</label></dt>
 				<dd>
@@ -76,7 +84,7 @@
 				</dd>
 
 				<dt><label for="remark">Remark</label></dt>
-				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo isset($_GET['remark']) ? htmlentities(stripPostSlashes($_GET['remark'])) : ''; ?></textarea></dd>
+				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo isset($_GET['remark']) ? htmlentities($_GET['remark']) : ''; ?></textarea></dd>
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
