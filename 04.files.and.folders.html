@@ -27,6 +27,7 @@
 
 			.column-12 {
 				width: 50%;
+				text-align: center;
 			}
 			code {
 				color: gainsboro;
@@ -37,14 +38,6 @@
 				padding: 2px 4px;
 				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 				font-size: 80%;
-			}
-			
-			del code, code.nok {
-				color: #C55;
-			}
-			
-			ins code, code.ok {
-				color: #5C5;
 			}
 
 			strong {
@@ -57,31 +50,6 @@
 				font-style: italic;
 			}
 
-			figure.zoomable-12:hover {
-				-moz-transform: scale(1.2);
-				-o-transform: scale(1.2);
-				-webkit-transform: scale(1.2);
-				transform: scale(1.2);
-			}
-
-			figure.zoomable-15:hover {
-				-moz-transform: scale(1.5);
-				-o-transform: scale(1.5);
-				-webkit-transform: scale(1.5);
-				transform: scale(1.5);
-			}
-
-			figure.zoomable-20:hover {
-				-moz-transform: scale(2);
-				-o-transform: scale(2);
-				-webkit-transform: scale(2);
-				transform: scale(2);
-			}
-
-			#reveal section ul + p > img {
-				margin-top: 0;
-			}
-
 			#reveal section img.noborder {
 				background: transparent;
 				border: 0;
@@ -90,31 +58,6 @@
 				-ms-box-shadow: none;
 				-o-box-shadow: none;
 				box-shadow: none;"
-			}
-
-			#reveal section img.noborder + figcaption {
-				margin-top: -40px;
-				text-align: center;
-			}
-
-			#reveal section .zoomable-20 img.noborder + figcaption {
-				margin-top: -20px;
-			}
-
-			table {
-				font-size: 15px;
-				border-collapse: collapse;
-				width: 100%;
-			}
-
-			table td, table th {
-				line-height: 1.4;
-				border: 1px solid #ccc;
-				padding: 4px;
-			}
-
-			table th {
-				background: #333;
 			}
 		</style>
 	</head>
@@ -147,6 +90,506 @@
 				</section>
 
 
+				<section>
+
+					<section>
+						<h2>Before we jump in...</h2>
+					</section>
+
+					<section>
+						<h2>Permissions</h2>
+						<ul>
+							<li class="fragment">
+								In order to manipulate files/folders, the webserver needs permission to do so
+								<ul>
+									<li class="fragment">Windows: NTFS permissions</li>
+									<li class="fragment">Linux and the like: <code>chmod</code></li>
+								</ul>
+							</li>
+							<div class="columns clearfix fragment" style="width: 520px; margin: 0 auto;">
+								<div class="column column-12"><img src="assets/04/windows-permissions.png" width="240" alt="" title="" class="noborder" /></div>
+								<div class="column column-12"><img src="assets/04/windows-permissions.png" width="240" alt="" title="" class="noborder" /></div>
+							</div>
+						</ul>
+					</section>
+
+					<section>
+						<h2>open_basedir</h2>
+						<ul>
+							<li class="fragment">
+								PHP can restrict which directories you can access
+								<ul>
+									<li class="fragment">E.g. Websites residing in <code>C:\wamp\www</code> have no business in <code>C:\</code>
+								</ul>
+							</li>
+							<li class="fragment">In <code>php.ini</code> the <code>open_basedir</code> setting limits this</li>
+							<li class="fragment">
+								If you try to read in a non-allowed path, PHP will tell you:
+								<pre class="bigger"><code>warning: file_get_contents() [function.file-get-contents]: open_basedir restriction in effect. File(/tmp/../a) is not within the allowed path(s): (/home/:/usr/lib/php:/usr/local/lib/php:/tmp) in /home/public_html/test.php on line 14.</code></pre>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+
+
+				<section>
+
+					<section>
+						<h2>Kicking it oldskool</h2>
+					</section>
+
+					<section>
+						<h2>Reading Files (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Available PHP functions
+								<ul>
+									<li><code>fopen()</code> &mdash; Opens file or URL, returns a file pointer on success</li>
+									<li><code>fread()</code> &mdash; Binary-safe file read</li>
+									<li><code>fwrite()</code> &mdash; Binary-safe file write</li>
+									<li><code>fgets()</code> &mdash; Gets line from file pointer</li>
+									<li><code>fseek()</code> &mdash; Seeks on a file pointer</li>
+									<li><code>feof()</code> &mdash; Tests for end-of-file on a file pointer</li>
+									<li><code>rewind()</code> &mdash; Rewind the position of a file pointer</li>
+									<li><code>fclose()</code> &mdash; Closes an open file pointer</li>
+									<li>&hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Combination of these needed to actually reading in a file
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Reading Files (2)</h2>
+
+						<ul>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/fileread_01.php">&lt;?php
+
+	// path to file (relative from this PHP file)
+	$filename = './testfile.txt';
+
+	// open the file in read mode
+	$handle = fopen($filename, 'r');
+
+	// file was opened, read in the contents
+	if ($handle) {
+		$contents = fread($handle, filesize($filename));
+	} else { // file not opened
+		$conents = 'Error while opening file!';
+	}
+
+	// close the filehandle
+	fclose($handle);
+		
+	// output the fetched contents
+	echo $contents;
+
+// EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Reading Files (3)</h2>
+
+						<ul>
+							<li class="fragment">
+								Example 2
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/fileread_02.php">&lt;?php
+
+	$handle = fopen('./testfile.txt', 'r');
+
+	if ($handle) {
+		while (!feof($handle)) {
+			$buffer = fgets($handle, 20);
+			echo $buffer . '&lt;br /&gt;' . PHP_EOL;
+		}
+		fclose($handle);
+	}
+
+// EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>More filereading</h2>
+
+						<ul>
+							<li class="fragment">
+								Get all lines of a file in an array using <code>file()</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/fileread_03.php">&lt;?php
+
+	$lines = file('./testfile.txt');
+	
+	// Loop through our array, show line and line numbers too.
+	foreach ($lines as $line_num =&gt; $line) {
+		echo '&lt;strong&gt;#' . $line_num . ':&lt;/strong&gt; ' . $line . '&lt;br /&gt;';
+	}</code></pre>
+							</li>
+							<li class="fragment">
+								Get the entire file contens using 1 command
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/fileread_04.php">&lt;?php
+	echo file_get_contents('./testfile.txt');</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Writing files</h2>
+
+						<ul>
+							<li class="fragment">
+								Again a combination of <code>fopen()</code> and a few other functions
+							</li>
+							<li class="fragment">
+								Or just use <code>file_put_contents()</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/filewrite_01.php">&lt;?php
+
+	file_put_contents('./testfile2.txt', 'hello!' . PHP_EOL);</code></pre>
+								<ul>
+									<li class="fragment">
+										To update a file combine <code>file_get_contents()</code> and <code>file_put_contents()</code>
+										<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/filewrite_02.php">&lt;?php
+
+	file_put_contents(
+		'./testfile2.txt', 
+		file_get_contents('./otherfile.txt') . 'hello!' . PHP_EOL
+	);</code></pre>
+									</li>
+								</ul>
+							</li>
+							
+						</ul>
+					</section>
+
+					<section>
+						<h2>File properties</h2>
+
+						<ul>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/fileproperties.php">&lt;?php
+
+	$filename = './testfile.txt';
+	
+	echo '&lt;p&gt;The file ' . $filename . (file_exists($filename) ? 'exists' : 'does not exist') . '&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' was last modified on ' . date('Y-m-d H:i:s', filemtime($filename)) . '&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . (is_dir($filename) ? '' : 'not') . ' a directory&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . (is_file($filename) ? '' : 'not') . ' a file&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . (is_link($filename) ? '' : 'not') . ' a shortcut&lt;/p&gt;' . PHP_EOL;</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>File maninipulation</h2>
+
+						<ul>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/filemanipulation.php">&lt;?php
+	
+	// Copy file
+	copy('./testfile.txt', './copiedfile.txt');
+
+	// Rename file
+	// @note if the path differs you can move a file with this function!
+	rename('./copiedfile.txt', './testfile2.txt');
+
+	// Delete file
+	unlink('./testfile2.txt');</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Listing directories</h2>
+
+						<ul>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/dirread.php">&lt;?php
+
+	$myBaseDir	= './';
+	$dp = opendir($myBaseDir);
+	
+	// read base directory
+	while (($file = readdir($dp)) !== false) {
+		
+		// exclude . and ..
+		if ($file == '.') continue;
+		if ($file == '..') continue;
+		
+		// we don't want directories
+		if (is_dir($myBaseDir . '/' . $file)) continue;
+		
+		// output the filename
+		echo $file . '&lt;br /&gt;' . PHP_EOL;
+		
+	}
+			
+	// close base directory pointer
+	closedir($dp);</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Dealing with errors</h2>
+
+						<ul>
+							<li class="fragment">
+								Suppress errors with <code>@</code> and stop the process when neccessary
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/dirread.php">&lt;?php
+
+	$myBaseDir	= './';
+	$dp = @opendir($myBaseDir) or die('Error reading ' . $myBaseDir);
+	
+	...</code></pre>
+							</li>
+						</ul>
+						<footer class="fragment">Best practice: always place an <code>@</code> before functions that deal with files/folders</footer>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
+						<h2>Out with the old, in with the new</h2>
+					</section>
+
+					<section>
+						<h2>SPL</h2>
+						<ul>
+							<li class="fragment">SPL = Standard PHP Library</li>
+							<li class="fragment">A collection of interfaces and classes that are meant to solve standard problems</li>
+							<li class="fragment">
+								Designed to traverse aggregate structures (anything you want to loop over)
+								<ul>
+									<li>... such as the lines of a file or directories</li>
+								</ul>
+							</li>
+							<li class="fragment">Inluded in PHP since PHP 5.0</li>
+							<li class="fragment">Enabled by default since 5.3</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Classes in PHP</h2>
+						<ul>
+							<li class="fragment">
+								We'll touch these in detail later, but you should know this
+								<ul>
+									<li class="fragment">
+										Create an instance with the <code>new</code> keyword
+										<pre class="bigger"><code class="language-php">$car = new Car();</code></pre>
+									</li>
+									<li class="fragment">
+										Access a datamember/function with <code>-&gt;</code>
+										<pre class="bigger"><code class="language-php">$car-&gt;start();
+echo $car-&gt;state; // 'egine running'
+$car-&gt;stop();</code></pre>
+									</li>
+									<li class="fragment">
+										Access a static datamember/function or class constant with <code>::</code>
+										<pre class="bigger"><code class="language-php">echo Car::NUMBEROFWHEELS; // 4</code></pre>
+										<ul>
+											<li><em>Note: Class constants are defined in ALLCAPS, not camelCase</em></li>
+										</ul>
+									</li>
+									<li class="fragment">
+										PHP supports inheritance
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>SPL and files (1)</h2>
+						<ul>
+							<li class="fragment">SPL contains a <code>SPLFileInfo</code> class, an object oriented interface to information for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileinfo.php">phpdocs</a>)</em></li>
+							<li class="fragment">SPL contains a <code>SplFileObject</code> class &mdash; which extends <code>SPLFileInfo</code> &mdash; and object oriented interface for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileobject.php">phpdocs</a>)</em></li>
+						</ul>
+						<p class="fragment" style="text-align: left">&rarr; Instead of using the oldskool functions, create an instance of this class and access the datamembers/ functions on it</p>
+					</section>
+
+					<section>
+						<h2>SPL and files (2)</h2>
+						<ul>
+							<li class="fragment">Example (file info)
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/spl_fileproperties.php">&lt;?php
+
+	$filename = './testfile.txt';
+	$fi = new SplFileInfo($filename);
+	
+	echo '&lt;p&gt;The file ' . $filename . ' was last modified on ' . date('Y-m-d H:i:s', $fi-&gt;getMTime()) . '&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isDir() ? '' : 'not') . ' a directory&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isFile() ? '' : 'not') . ' a file&lt;/p&gt;' . PHP_EOL;
+
+	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isLink() ? '' : 'not') . ' a shortcut&lt;/p&gt;' . PHP_EOL;
+
+// EOF</code></pre></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>SPL and files (3)</h2>
+						<ul>
+							<li class="fragment">Example (file read)
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/spl_fileread.php">&lt;?php
+
+	$lines = new SPLFileObject('./testfile.txt');
+	
+	// Loop through our array, show line and line numbers too.
+	foreach ($lines as $line_num =&gt; $line) {
+		echo '&lt;strong&gt;#' . $line_num . ':&lt;/strong&gt; ' . $line . '&lt;br /&gt;' . PHP_EOL;
+	}
+
+// EOF</code></pre></li>
+							<li class="fragment">Downside of <code>SplFileObject</code>: it's line-oriented
+								<ul>
+									<li class="fragment">&rarr; There's no <code>SplFileObject</code>-version of <code>file_get_contents()</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>SPL and directories</h2>
+						<ul>
+							<li class="fragment">SPL contains a <code>DirectoryIterator</code> class &mdash; which extends <code>SPLFileInfo</code> (!) &mdash; a simple interface for viewing the contents of filesystem directories <em>(<a href="http://www.php.net/manual/en/class.directoryiterator.php">phpdocs</a>)</em></li>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/spl_dirread.php">&lt;?php
+
+	$myBaseDir = './'; 
+	$di = new DirectoryIterator($myBaseDir);
+	
+	foreach ($di as $file) {
+		// exclude . and .. + we don't want directories
+		if (!$file-&gt;isDot() &amp;&amp; !$file-&gt;isDir()) {
+			echo $file . '&lt;br /&gt;' . PHP_EOL;
+		}
+	}
+
+// EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Dealing with errors</h2>
+						<ul>
+							<li class="fragment">
+								If you try to access a file/folder that doesn't exist using the SPL classes, PHP will throw an <code>Exception</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/spl_exception_01.php">&lt;?php
+
+	$di = new DirectoryIterator('/this/path/does/not/exist');
+	
+// EOF</code></pre>
+							</li>
+							<li class="fragment">
+								Use a <code>try</code>/<code>catch</code> to properly handle it
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/spl_exception_02.php">&lt;?php
+
+	try {
+		$di = new DirectoryIterator('/this/path/does/not/exist');
+	} catch (Exception $e) {
+		echo 'There was an error: &lt;br /&gt;' . $e->getMessage();
+	}
+	
+// EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Magic Constants</h2>
+						<ul>
+							<li class="fragment">
+								Oldskool: <code>./</code> = current directory (of the PHP file)
+								<pre class="bigger"><code class="language-php">$myBaseDir = './';</code></pre>
+							</li>
+							<li class="fragment">
+								Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
+								<pre class="bigger"><code class="language-php">$myBaseDir = dirname(__FILE__);</code></pre>
+							</li>
+							<li class="fragment">
+								Since PHP 5.3: <code>__DIR__</code> = The directory of the PHP file.
+								<pre class="bigger"><code class="language-php">$myBaseDir = __DIR__;</code></pre>
+							</li>
+						</ul>
+						<footer class="fragment">All three syntaxes have the same result. The third syntax is preferred though.</footer>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
+						<h2>File Uploads</h2>
+					</section>
+
+					<section>
+						<h2>Handling file uploads (1)</h2>
+						<ul>
+							<li class="fragment">
+								Files are uploaded into a temp folder. You'll need to move them manually using <code>move_uploaded_file()</code>
+							</li>
+							<li class="fragment">
+								PHP will populate a <em>superglobal</em> named <code>$_FILES</code>
+							</li>
+						</ul>
+						<footer class="fragment">Don't forget: make sure your webserver has the proper permissions!</footer>
+					</section>
+
+					<section>
+						<h2>Handling file uploads (2)</h2>
+						<ul>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/upload.php">&lt;?php
+if (isset($_FILES['avatar'])) {
+	
+	echo '&lt;p&gt;Uploaded file: ' . $_FILES['avatar']['name'] . '&lt;/p&gt;';
+	echo '&lt;p&gt;Temp location: ' . $_FILES['avatar']['tmp_name'] . '&lt;/p&gt;';
+	echo '&lt;p&gt;Size: ' . $_FILES['avatar']['size'] . '&lt;/p&gt;';
+
+	if (!in_array(substr($_FILES['avatar']['name'], -4), array('.jpg', '.png', '.gif'))) {
+		exit('&lt;p&gt;Invalid extension. Only .jpg, .png or .gif allowed&lt;/p&gt;');
+	}
+	
+	@move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . DIRECTORY_SEPARATOR . $_FILES['avatar']['name']) or die('&lt;p&gt;Error while saving file in the uploads folder&lt;/p&gt;');
+	
+	echo '&lt;p&gt;&lt;img src=' . $_FILES['avatar']['name'] . ' alt=&quot;&quot; /&gt;&lt;p&gt;';
+}
+
+?&gt;
+&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF'];?&gt;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot; &gt;
+	&lt;input type=&quot;file&quot; name=&quot;avatar&quot; id=&quot;avatar&quot; /&gt;&lt;input type=&quot;submit&quot; /&gt;
+&lt;/form&gt;</code></pre>
+							</li>
+						</ul>
+					</section>
+					
+				</section>
+
 				<!-- The END -->
 				<section>
 					<section>
@@ -164,7 +607,11 @@
 					<section>
 						<h2>Sources</h2>
 						<ul>
-							<li>...</li>
+							<li><a href="http://php.net/manual/en/book.spl.php">http://php.net/manual/en/book.spl.php</a></li>
+							<li><a href="http://www.php.net/manual/en/class.splfileinfo.php">http://www.php.net/manual/en/class.splfileinfo.php</a></li>
+							<li><a href="http://www.php.net/manual/en/class.splfileobject.php">http://www.php.net/manual/en/class.splfileobject.php</a></li>
+							<li><a href="http://www.php.net/manual/en/class.directoryiterator.php">http://www.php.net/manual/en/class.directoryiterator.php</a></li>
+							<li><a href="http://php.net/manual/en/language.constants.predefined.php">http://php.net/manual/en/language.constants.predefined.php</a></li>
 						</ul>
 					</section>
 				</section>
