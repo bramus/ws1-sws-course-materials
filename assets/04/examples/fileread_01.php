@@ -19,7 +19,7 @@
 
 	// file not opened (file might not exist, or no permissions to open it)
 	else {
-		$conents = 'Error while opening file!';
+		$contents = 'Error while opening file!';
 	}
 
 	// close the filehandle
