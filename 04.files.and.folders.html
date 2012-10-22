@@ -102,14 +102,16 @@
 							<li class="fragment">
 								In order to manipulate files/folders, the webserver needs permission to do so
 								<ul>
-									<li class="fragment">Windows: NTFS permissions</li>
 									<li class="fragment">Linux and the like: <code>chmod</code></li>
+									<li class="fragment clearfix">
+										Windows: NTFS permissions <em>(disable simple file sharing!)</em>
+										<div class="columns clearfix fragment" style="width: 520px; margin: 0 auto;">
+											<div class="column column-12"><img src="assets/04/windows-simplefilesharing.png" width="240" alt="" title="" class="noborder" /></div>
+											<div class="column column-12"><img src="assets/04/windows-permissions.png" width="240" alt="" title="" class="noborder" /></div>
+										</div>
+									</li>
 								</ul>
 							</li>
-							<div class="columns clearfix fragment" style="width: 520px; margin: 0 auto;">
-								<div class="column column-12"><img src="assets/04/windows-permissions.png" width="240" alt="" title="" class="noborder" /></div>
-								<div class="column column-12"><img src="assets/04/windows-permissions.png" width="240" alt="" title="" class="noborder" /></div>
-							</div>
 						</ul>
 					</section>
 
@@ -261,7 +263,7 @@
 
 	file_put_contents(
 		'./testfile2.txt', 
-		file_get_contents('./otherfile.txt') . 'hello!' . PHP_EOL
+		file_get_contents('./testfile2.txt') . 'hello!' . PHP_EOL
 	);</code></pre>
 									</li>
 								</ul>
@@ -294,7 +296,7 @@
 					</section>
 
 					<section>
-						<h2>File maninipulation</h2>
+						<h2>File manipulation</h2>
 
 						<ul>
 							<li class="fragment">
@@ -523,19 +525,21 @@ $car-&gt;stop();</code></pre>
 						<h2>Magic Constants</h2>
 						<ul>
 							<li class="fragment">
-								Oldskool: <code>./</code> = current directory (of the PHP file)
-								<pre class="bigger"><code class="language-php">$myBaseDir = './';</code></pre>
+								Oldskool: <code>./</code> = current working directory <small>(*)</small>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/magic_constants.php">$myBaseDir = './';</code></pre>
 							</li>
 							<li class="fragment">
 								Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
-								<pre class="bigger"><code class="language-php">$myBaseDir = dirname(__FILE__);</code></pre>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/magic_constants.php">$myBaseDir = dirname(__FILE__);</code></pre>
 							</li>
 							<li class="fragment">
-								Since PHP 5.3: <code>__DIR__</code> = The directory of the PHP file.
-								<pre class="bigger"><code class="language-php">$myBaseDir = __DIR__;</code></pre>
+								Since PHP 5.3: <code>__DIR__</code> = The full path of the PHP file.
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/04/examples/magic_constants.php">$myBaseDir = __DIR__;</code></pre>
 							</li>
 						</ul>
-						<footer class="fragment">All three syntaxes have the same result. The third syntax is preferred though.</footer>
+						<footer class="fragment">
+							(*) For now consider this to the relative path of the PHP file <em>(but that's not always true)</em>
+						</footer>
 					</section>
 
 				</section>
