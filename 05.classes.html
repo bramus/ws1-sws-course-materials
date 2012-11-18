@@ -1,0 +1,435 @@
+<!doctype html>  
+<html lang="en">
+	
+	<head>
+		<meta charset="utf-8">
+		
+		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 05.classes</title>
+
+		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 05.clases">
+		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
+		
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/main.css" media="screen">
+		<link rel="stylesheet" href="css/print.css" media="print">
+
+		<link rel="stylesheet" href="lib/zenburn.css">
+
+		<style>
+			.columns .column {
+				float: left;
+				list-style: none;
+				margin: 0 0 12px 0;
+				padding: 0;
+			}
+
+			.column-12 {
+				width: 50%;
+				text-align: center;
+			}
+			code {
+				color: gainsboro;
+			}
+
+			li > code, li em > code, li del > code, li ins > code, p > code {
+				background: #3F3F3F;
+				padding: 2px 4px;
+				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+				font-size: 80%;
+			}
+
+			strong {
+				color: #553d00;
+				background: transparent url('assets/02/strong.png') no-repeat 50% 50%;
+				font-size: 80%;
+				padding: 0 4px;
+				font-family: palatino, times;
+				font-weight: 300;
+				font-style: italic;
+			}
+
+			#reveal section img.noborder {
+				background: transparent;
+				border: 0;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				-ms-box-shadow: none;
+				-o-box-shadow: none;
+				box-shadow: none;"
+			}
+		</style>
+	</head>
+	
+	<body>
+		
+		<div id="reveal">
+			
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+
+				<!-- 0 : Title -->
+				<section>
+
+					<section>
+						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
+						<h1>05.classes</h1>
+					
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+						<script>
+							// Delicously hacky. Look away.
+							if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) )
+							document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
+						</script>
+					</section>
+
+				</section>
+
+
+				<section>
+
+					<section>
+						<h2>Examples</h2>
+
+						<footer>Watch and learn ...</footer>
+					</section>
+
+					<section>
+						<h2>Basic Class</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/01.php">&lt;?php
+
+class BasicClass {
+
+	private $var1;
+	protected $var2;
+	public $var3;
+
+	public function __construct($var) {
+		$this->var1 = $var;
+		$this->var2 = $var;
+		$this->var3 = $var;
+	}
+
+	public function doubleVar3() {
+		$this->var3 = $this->var3 . ' ' . $this->var3;
+	}
+
+	public function getVar1() {
+		return $this->var1;
+	}
+
+}
+
+$inst = new BasicClass('foo');
+echo $inst->getVar1() . PHP_EOL;
+$inst->doubleVar3();
+echo $inst->var3;</code></pre>
+					</section>
+
+					<section>
+						<h2>Constants and static functions</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/02.php">&lt;?php
+
+class BasicClass {
+	
+	const CLASS_CONSTANT = 12.7;
+	
+	public static function staticFunction($ohai) {
+		echo $ohai;
+	}
+
+	public function multiply($x) {
+		return $x * self::CLASS_CONSTANT;
+	}
+
+}
+
+$inst = new BasicClass('foo');
+echo $inst->multiply(3) . PHP_EOL;
+echo BasicClass::CLASS_CONSTANT . PHP_EOL;
+BasicClass::staticFunction('O Hi');</code></pre>
+					</section>
+
+					<section>
+						<h2>Inheritance (1)</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/03.php">&lt;?php
+
+class Animal {
+
+	private $name;
+
+	public function __construct($name) {
+		$this->name = $name;
+	}
+
+	protected function say($what) {
+		return $what;
+	}
+
+}
+
+class Dog extends Animal {
+
+	public function bark() {
+		echo $this->say('WOOF!');
+	}
+
+}
+
+$dog = new Dog('Sparky');
+$dog->bark();</code></pre>
+					</section>
+
+					<section>
+						<h2>Inheritance (2)</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/04.php">&lt;?php
+
+class Animal {
+
+	private $name;
+
+	public function __construct($name) {
+		$this->name = $name;
+	}
+
+	final function getName() { // cannot be overridden!
+		echo $this->name;
+	}
+}
+
+class Dog extends Animal {
+
+	public function __construct($name) {
+		echo 'Yo dawg!' . PHP_EOL;
+		parent::__construct($name); // call parent function
+	}
+
+}
+
+$dog = new Dog('Sparky');
+echo $dog->getName() . PHP_EOL;</code></pre>
+					</section>
+
+					<section>
+						<h2>Inheritance (3)</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/05.php">&lt;?php
+
+abstract class Animal {
+
+	private $name;
+
+	public function __construct($name) {
+		$this->name = $name;
+	}
+
+	abstract public function doTrick();
+
+}
+
+class Dog extends Animal {
+	
+	private $tricks = array('jump', 'lay down', 'roll over', 'play dead');
+	
+	public function doTrick() {
+		return $this->tricks[rand(0, sizeof($this->tricks) - 1)];
+	}
+
+}
+
+
+$dog = new Dog('Sparky');
+echo $dog->doTrick();</code></pre>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
+						<h2>Summary</h2>
+
+						<footer>The examples in words</footer>
+					</section>
+
+					<section>
+						<h2>Classes Summary (1)</h2>
+						<ul>
+							<li class="fragment">
+								Class basics
+								<ul class="fragment">
+									<li>Define a class with the <code>class</code> keyword</li>
+									<li>Create an instance with the <code>new</code> keyword</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Variables / methods
+								<ul class="fragment">
+									<li>Define a method with the <code>function</code> keyword</li>
+									<li>Defining a variable requires no specific keyword</li>
+									<li>Scope is <code>public</code>, <code>protected</code>, or <code>private</code></li>
+									<li>Accessible/Callable via <code>$this->dataMember</code> <em>(internal)</em> or <br /><code>$instance->dataMember</code> <em>(external, if scope allows it)</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Constructor and destructor are <em>Magic Methods</em>
+								<ul class="fragment">
+									<li><code>__construct()</code> and <code>__destruct()</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Classes Summary (2)</h2>
+						<ul>
+							<li class="fragment">
+								Static variables and methods
+								<ul class="fragment">
+									<li>Use the (extra) <code>static</code> keyword</li>
+									<li>Accessible/Callable via <code>ClassName::$someStaticVariable</code> / <code>ClassName::someStaticMethod()</code></li> 
+								</ul>
+							</li>
+							<li class="fragment">
+								Class constants
+								<ul class="fragment">
+									<li>Use the <code>const</code> keyword and immediately assign a value</li>
+									<li>No <code>$</code> for name and ALLCAPS</li>
+									<li>Accessible via <code>self::SOME_CONSTANT</code> (internal) or <code>ClassName::SOME_CONSTANT</code> (external)</li>
+									<li>Value cannot be changed at runtime</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Classes Summary (3)</h2>
+						<ul>
+							<li class="fragment">
+								Inheritance
+								<ul class="fragment">
+									<li>Defined with the <code>extends</code> keyword</li>
+									<li>Overriding methods must have the same, or a less restrictive scope</li>
+									<li>Call parent class methods with <code>parent::nameOfTheMethod()</code> <em>(even if it's a non-static method!)</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Final classes and methods
+								<ul class="fragment">
+									<li>Cannot be extended / overridden</li>
+									<li>Defined with the (extra) <code>final</code> keyword</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Abstract classes and methods
+								<ul class="fragment">
+									<li>Defined with the (extra) <code>abstract</code> keyword</li>
+									<li>Cannot be instantiated / called; Must be implemented in the derivative class / methods</li>
+									<li>If a class contains an abstract method, the class itself must be abstract too</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+				<section>
+
+					<section>
+						<h2>Want more?</h2>
+					</section>
+
+					<section>
+						<h2>Not talked about</h2>
+						<ul>
+							<li class="fragment">
+								Interfaces
+								<ul class="fragment">
+									<li>Define an interface with the <code>interface</code> keyword</li>
+									<li>A class can implement an interface via the <code>implements</code> keyword</li>
+									<li>A class can implement multiple interfaces</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Multiple Inheritance
+								<ul class="fragment">
+									<li>Not supported by PHP</li>
+									<li>Use <a href="http://php.net/manual/en/language.oop5.traits.php">traits</a> to reduce some limitations of single inheritance</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								<a href="http://php.net/manual/en/language.namespaces.php">Namespaces</a>
+								<ul class="fragment">
+									<li>Available since PHP 5.3.0</li>
+									<li>Provides a way to group related classes, interfaces, functions and constants</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+				<!-- The END -->
+				<section>
+					<section>
+						<h2>Questions?</h2>
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+					</section>
+				</section>
+
+
+
+				<!-- Sources -->
+				<section id="sources">
+					<section>
+						<h2>Sources</h2>
+						<ul>
+							<li><a href="http://php.net/manual/en/language.oop5.static.php">http://php.net/manual/en/language.oop5.static.php</a></li>
+						</ul>
+					</section>
+				</section>
+				
+			</div>
+
+			<!-- The navigational controls UI -->
+			<aside class="controls">
+				<a class="left" href="#">&#x25C4;</a>
+				<a class="right" href="#">&#x25BA;</a>
+				<a class="up" href="#">&#x25B2;</a>
+				<a class="down" href="#">&#x25BC;</a>
+				<span id="revealIndex">/</span>
+			</aside>
+			
+			<!-- Index Link -->
+			<aside class="back">
+				<a href="index.html">&larr; Back to index</a>
+			</aside>
+
+			<!-- ikdoeict.be Link -->
+			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
+			
+			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
+			<div class="progress"><span></span></div>
+			
+		</div>
+		
+		<script src="js/reveal.js"></script>
+		<script src="lib/highlight.js"></script>
+		<script src="lib/prefixfree.js"></script>
+		<script src="lib/css-snippets.js"></script>
+		<script src="lib/css-edit.js"></script>
+		<script src="lib/incrementable.js"></script>
+		<script src="js/main.js"></script>
+
+	</body>
+</html>
