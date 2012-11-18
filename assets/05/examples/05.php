@@ -1,6 +1,6 @@
 <?php
 
-abstract class Animal {
+class Animal {
 
 	private $name;
 
@@ -8,20 +8,21 @@ abstract class Animal {
 		$this->name = $name;
 	}
 
-	abstract public function doTrick();
+	final function getName() {
+		echo $this->name;
+	}
 
 }
 
 class Dog extends Animal {
 	
-	private $tricks = array('jump', 'lay down', 'roll over', 'play dead');
-	
-	public function doTrick() {
-		return $this->tricks[rand(0, sizeof($this->tricks) - 1)];
+	public function __construct($name) {
+		echo 'Yo dawg!' . '<br />' . PHP_EOL;
+		parent::__construct($name);
 	}
 
 }
 
 
 $dog = new Dog('Sparky');
-echo $dog->doTrick();
+echo $dog->getName() . '<br />' . PHP_EOL;

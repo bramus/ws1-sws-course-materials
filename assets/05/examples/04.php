@@ -8,21 +8,19 @@ class Animal {
 		$this->name = $name;
 	}
 
-	final function getName() {
-		echo $this->name;
+	protected function say($what) {
+		return $what;
 	}
 
 }
 
 class Dog extends Animal {
-	
-	public function __construct($name) {
-		echo 'Yo dawg!' . '<br />' . PHP_EOL;
-		parent::__construct($name);
+		
+	public function bark() {
+		echo $this->say('WOOF!');
 	}
 
 }
 
-
 $dog = new Dog('Sparky');
-echo $dog->getName() . '<br />' . PHP_EOL;
+$dog->bark();
