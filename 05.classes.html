@@ -146,17 +146,13 @@ echo $inst->var3;</code></pre>
 					</section>
 
 					<section>
-						<h2>Constants and static functions</h2>
+						<h2>Constants</h2>
 
 						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/02.php">&lt;?php
 
 class BasicClass {
 	
 	const CLASS_CONSTANT = 12.7;
-	
-	public static function staticFunction($ohai) {
-		echo $ohai;
-	}
 
 	public function multiply($x) {
 		return $x * self::CLASS_CONSTANT;
@@ -164,16 +160,44 @@ class BasicClass {
 
 }
 
-$inst = new BasicClass('foo');
-echo $inst->multiply(3) . PHP_EOL;
 echo BasicClass::CLASS_CONSTANT . PHP_EOL;
-BasicClass::staticFunction('O Hi');</code></pre>
+
+$inst = new BasicClass();
+echo $inst->multiply(3) . PHP_EOL;</code></pre>
+					</section>
+
+					<section>
+						<h2>Static Variables &amp; Static Methods</h2>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/03.php">&lt;?php
+
+class BasicClass {
+	
+	static $staticVariable;
+	
+	public function __construct($name) {
+		self::$staticVariable = $name;
+	}
+	
+	public static function staticFunction($ohai) {
+		echo $ohai . PHP_EOL;
+	}
+
+}
+
+BasicClass::staticFunction('O Hi');
+
+$inst = new BasicClass('foo');
+$inst2 = new BasicClass('bar');
+
+echo $inst::$staticVariable . PHP_EOL;
+echo $inst2::$staticVariable . PHP_EOL;</code></pre>
 					</section>
 
 					<section>
 						<h2>Inheritance (1)</h2>
 
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/03.php">&lt;?php
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/04.php">&lt;?php
 
 class Animal {
 
@@ -204,7 +228,7 @@ $dog->bark();</code></pre>
 					<section>
 						<h2>Inheritance (2)</h2>
 
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/04.php">&lt;?php
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/05.php">&lt;?php
 
 class Animal {
 
@@ -235,7 +259,7 @@ echo $dog->getName() . PHP_EOL;</code></pre>
 					<section>
 						<h2>Inheritance (3)</h2>
 
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/05.php">&lt;?php
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/06.php">&lt;?php
 
 abstract class Animal {
 
@@ -306,19 +330,21 @@ echo $dog->doTrick();</code></pre>
 						<h2>Classes Summary (2)</h2>
 						<ul>
 							<li class="fragment">
-								Static variables and methods
-								<ul class="fragment">
-									<li>Use the (extra) <code>static</code> keyword</li>
-									<li>Accessible/Callable via <code>ClassName::$someStaticVariable</code> / <code>ClassName::someStaticMethod()</code></li> 
-								</ul>
-							</li>
-							<li class="fragment">
 								Class constants
 								<ul class="fragment">
 									<li>Use the <code>const</code> keyword and immediately assign a value</li>
 									<li>No <code>$</code> for name and ALLCAPS</li>
 									<li>Accessible via <code>self::SOME_CONSTANT</code> (internal) or <code>ClassName::SOME_CONSTANT</code> (external)</li>
 									<li>Value cannot be changed at runtime</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Static variables and methods
+								<ul class="fragment">
+									<li>Use the (extra) <code>static</code> keyword</li>
+									<li>Static variables' value shared amongst instances</li>
+									<li>Static methods callable without an instance</li>
+									<li>Accessible/Callable via <code>ClassName::$someStaticVariable</code> / <code>ClassName::someStaticMethod()</code></li> 
 								</ul>
 							</li>
 						</ul>

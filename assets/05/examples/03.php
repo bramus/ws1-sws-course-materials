@@ -1,26 +1,23 @@
 <?php
 
-class Animal {
-
-	private $name;
-
+class BasicClass {
+	
+	static $staticVariable;
+	
 	public function __construct($name) {
-		$this->name = $name;
+		self::$staticVariable = $name;
 	}
-
-	protected function say($what) {
-		return $what;
-	}
-
-}
-
-class Dog extends Animal {
-		
-	public function bark() {
-		echo $this->say('WOOF!');
+	
+	public static function staticFunction($ohai) {
+		echo $ohai . '<br />' . PHP_EOL;
 	}
 
 }
 
-$dog = new Dog('Sparky');
-$dog->bark();
+BasicClass::staticFunction('O Hi');
+
+$inst = new BasicClass('foo');
+$inst2 = new BasicClass('bar');
+
+echo $inst::$staticVariable . '<br />' . PHP_EOL;
+echo $inst2::$staticVariable . '<br />' . PHP_EOL;
