@@ -59,6 +59,13 @@
 				-o-box-shadow: none;
 				box-shadow: none;"
 			}
+
+			figure.zoomable-20:hover {
+				-moz-transform: scale(2);
+				-o-transform: scale(2);
+				-webkit-transform: scale(2);
+				transform: scale(2);
+			}
 		</style>
 	</head>
 	
@@ -316,6 +323,140 @@
 
 					<section>
 						<h2>Catching Errors</h2>
+					</section>
+
+					<section>
+						<h2>Let's break things</h2>
+
+						<ul>
+							<li class="fragment">PHP will tell you if something went wrong</li>
+						</ul>
+
+						<div class="fragment">
+
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02.php">&lt;?php
+
+	require_once 'config.php';
+
+	$dbhandler = mysqli_connect(DB_HOST, DB_USER, 'wrongpass');
+
+//EOF</code></pre>
+						
+							<pre class="bigger"><code>Warning: mysqli_connect() [function.mysqli-connect]: (28000/1045): Access denied for user 'root'@'localhost' (using password: YES) in /Users/bramus/Dropbox/Kaho/../assets/07/examples/02.php on line 5</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Showing errors on screen</h2>
+						<ul>
+							<li class="fragment">
+								Is a huge security issue!
+								<ul>
+									<li class="fragment">Users can get a glimpse of your DB layout</li>
+									<li class="fragment">Users know the physical location of your website</li>
+								</ul>
+							</li>
+						</ul>
+						<div class="fragment"><figure class="zoomable-20"><img src="assets/07/tomorrowland.jpg" alt="" title="" width="400" /><figcaption>Example: Tomorrowland website</figcaption></figure></div>
+					</section>
+
+					<section>
+						<h2>Catching Errors</h2>
+						<ul>
+							<li class="fragment">
+								Suppress errors with <code>@</code> and catch 'm yourself
+
+								<div class="fragment">
+
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02b.php">&lt;?php
+
+	require_once 'config.php';
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, 'wrongpass', DB_NAME_FF)
+		or die ('Could not connect to database server or access database');
+
+//EOF</code></pre>
+						
+							<pre class="bigger"><code>Could not connect to database server or access database</code></pre>
+						</div>
+
+							</li>
+							<li class="fragment">
+								Safer, as we don't expose our DB credentials to potential hackers anymore
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Userfriendly error messages</h2>
+						<ul>
+							<li class="fragment">
+								Better is to show the user a user-friendly error message, in a nice layout
+
+								<div class="fragment">
+
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02c.php">&lt;?php
+
+	function showDbError($type) {
+		header('location: error.php?type=db&amp;detail=' . $type);
+		exit();
+	}
+
+	require_once 'config.php';
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, 'wrongpass', DB_NAME_FF)
+		or showDbError('connect');
+
+//EOF</code></pre>
+
+								</div>
+
+							</li>
+							<li class="fragment">
+								The referrenced error page will show a proper error message based on the <code>$_GET</code> parameters, in the layout of the website
+							</li>
+					</section>
+
+					<section>
+						<h2>Logging errors</h2>
+						<ul>
+							<li class="fragment">
+								As a developer I'm not interested in a userfriendly error message, I want to see the actual error
+								<ul class="fragment">
+									<li>Use <code>mysqli_connect_error()</code> to get the error while connecting</li>
+									<li>Use <code>mysqli_error()</code> to get all other errors</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Log the errors in <code>showDbError()</code> before jumping to the error page
+
+								<div class="fragment">
+
+									<pre class="bigger"><code class="language-php">&lt;?php
+
+	function showDbError($type) {
+		// @TODO: Log errors to a file
+		header('location: error.php?type=db&amp;detail=' . $type);
+		exit();
+	}
+
+	// ...</code></pre>
+
+								</div>
+
+							</li>
+					</section>
+
+					<section>
+						<h2>Course Convention</h2>
+						<ul>
+							<li class="fragment">
+								Never ever show errors on screen on a published site
+								<ul class="fragment">
+									<li>Log them for the developer</li>
+									<li>Present the user a userfriendly error message, in an understandable language and prerably in the layout of the site</li>
+								</ul>
+							</li>
 					</section>
 
 				</section>
