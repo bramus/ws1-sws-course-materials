@@ -492,6 +492,377 @@
 						<h2>Best Practices</h2>
 					</section>
 
+
+					<section>
+						<h2>Best Practices?</h2>
+
+						<ul>
+							<li class="fragment">
+								A set of often used methods / tips to help you working with databases
+								<ol>
+									<li class="fragment">Working with dates and time</li>
+									<li class="fragment">Use of <code>sprintf()</code> / prepared statements</li>
+									<li class="fragment">Joins over loops</li>
+									<li class="fragment">Passwords</li>
+								</ol>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Dates in PHP</h2>
+
+						<ul>
+							<li class="fragment">
+								Current timestamp accessible with <code>time()</code>
+							</li>
+							<li class="fragment">
+								Convert a timestamp to a readable format with <code>date()</code>
+								<ul>
+									<li class="fragment">
+										Examples
+										<pre class="bigger"><code class="language-php">date('Y-m-d H:i:s', $someDate); // 1983-05-26 23:45:00
+date('j/n/y h:i:s A', $someDate); // 26/5/83 11:45:00 PM
+date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
+									</li>
+									<li class="fragment">If no timestamp is given, the current time is taken</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Convert a datestring to a timestamp with <code>strtotime()</code>
+								<ul>
+									<li class="fragment">Does not only accept fixed dates such as <code>26/12/1983</code> but also accepts relative dates such as <code>tomorrow</code>, <code>+1 week</code>,  <code>next monday</code>, etc.</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Dates in MySQL</h2>
+
+						<ul>
+							<li class="fragment">
+								Current timestamp accessible with <code>NOW()</code>
+							</li>
+							<li class="fragment">
+								From timestamp to a readable format with <code>date_format()</code>
+								<ul>
+									<li class="fragment">
+										Example
+										<pre class="bigger"><code class="language-php">SELECT date_format(&quot;%Y-%m-%d&quot;, publishTimestamp) AS readabledate FROM ...</code></pre>
+									</li>
+									<li class="fragment">Most format directives the same as in PHP but with leading <code>%</code></li>
+									<li class="fragment">See <a href="http://dev.mysql.com/doc/refman/5.1/en/date-and-time-functions.html #function_date-format">mysql docs</a> for more info</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								From datestring to timestamp with <code>unix_timestamp()</code>
+								<ul>
+									<li class="fragment">
+										Example
+										<pre class="bigger"><code class="language-php">SELECT unix_timestamp(publishDateTime) AS timestamp FROM ...</code></pre>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Date best practices (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Never combine PHP and MySQL time
+								<ul class="fragment">
+									<li>Funky situations where mysql server clock is ahead of webserver</li>
+									<li>Our choice: let webserver (thus PHP) decide what time it is</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Store dates in a readable format in your database
+								<ul>
+									<li class="fragment">
+										Timestamps are not that readable when looking at raw dumps
+									</li>
+									<li class="fragment">
+										Use <code>datetime</code> as the field type
+										<ul>
+											<li>Beware: does not contain timezone information!</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Convert dates in PHP, not in your queries (unless necessary)
+								<ul>
+									<li class="fragment">
+										Prevents complex queries
+									</li>
+									<li class="fragment">
+										Examples
+										<ul>
+											<li>When storing dates: <code>$data['publish_date'] = date('Y-m-d H:i:s');</code></li>
+											<li>When displaying (parts of) dates: <code>$month = date('m', strtottime($dbResult['publish_date']));</code></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Date best practices (2)</h2>
+						<ul>
+							<li class="fragment">
+								Don't be too specific when retrieving items after/before a given date
+								<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler, 'SELECT * FROM blogposts WHERE publish_date &gt; &quot;'. date('Y-m-d H:i:s'). '&quot;') or showDbError('query');</code></pre>
+								<ul>
+									<li>Very specific example</li>
+								</ul>
+							</li>
+							<li class="fragment">Reason: MySQL Query Cache</li>
+							<li class="fragment">Fix: Round your dates to the minute or 5 minutes if the script allows it</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Best Practice: Use sprintf()</h2>
+
+						<ul>
+							<li class="fragment">
+								Cast query parameters to their proper type
+								<ul>
+									<li>If you expect an integer, you must cast it to being one</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								When using <code>sprintf()</code> the parameter will be casted automatically
+								<ul>
+									<li><code>sprintf()</code> allows you to tuck strings into another, in a certain type</li>
+									<li>Usage: <code>sprintf($stringWithDirectives, $param1, $param 2, &hellip;)</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Bonus advantages of <code>sprintf()</code>
+								<ul>
+									<li>Code is less prone to syntax errors</li>
+									<li>Code is more readable</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Even better <em>(but not mandatory for this course)</em>: Prepared Statements
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Sprintf example (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Sans <code>sprintf()</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04.php">$name = 'bramus';
+$status = 'Just received the trophy "Marksman of the year"';
+$date = time();
+
+$query 	= 'INSERT INTO statuses (name, status, datum) '
+. 'VALUES ('
+. '&quot;' . 	mysqli_real_escape_string($dbhandler, $name) . '&quot;, '
+. '&quot;' . 	mysqli_real_escape_string($dbhandler, $status) . '&quot;, '
+. 'FROM_UNIXTIME(' . mysqli_real_escape_string($dbhandler, $date) . ')'
+.')';
+
+@mysqli_query($dbhandler, $query) or showDbError('query');
+
+$query = 'SELECT * FROM statuses '
+. 'WHERE name = &quot;' . mysqli_real_escape_string($dbhandler,  $name) . '&quot;'
+. 'AND datum &lt;= FROM_UNIXTIME(' . mysqli_real_escape_string($dbhandler,  $date) . ')'
+.' ORDER BY id DESC';
+
+// ...</code></pre>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Sprintf example (2)</h2>
+
+						<ul>
+							<li class="fragment">
+								With <code>sprintf()</code>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$name = 'bramus';
+$status = 'Just received the trophy "Marksman of the year"';
+$date = time();
+
+$query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
+	mysqli_real_escape_string($dbhandler, $name),
+	mysqli_real_escape_string($dbhandler, $status),
+	mysqli_real_escape_string($dbhandler, (int) $datetime)
+);
+
+@mysqli_query($dbhandler, $query) or showDbError('query');
+
+$query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNIXTIME(%d) ORDER BY id DESC',
+	mysqli_real_escape_string($dbhandler, $name),
+	mysqli_real_escape_string($dbhandler, (int) $datetime)
+);
+
+// ...</code></pre>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>sprintf directives</h2>
+
+						<ul>
+							<li class="fragment">
+								Only 3 importants ones
+								<ul>
+									<li><code>%s</code> &mdash; string</li>
+									<li><code>%d</code> &mdash; integer</li>
+									<li><code>%f</code> &mdash; float</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Full directive reference: <a href="http://php.net/sprintf">http://php.net/sprintf</a>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Best Practice: Joins over Loops</h2>
+
+						<ul>
+							<li class="fragment">
+								Example: Detailpage of a blogpost
+								<ul>
+									<li>Show blogpost</li>
+									<li>Allow comments on blogpost</li>
+									<li>Authorinformation stored separately</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Joins over Loops example (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Bad execution: run queries inside a loop
+								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
+$dbHandler = &hellip;;
+
+$blog = 'SELECT id, title, content FROM blogs WHERE id = &quot;' . $id . '&quot;';
+
+// &hellip; fetch and show blogpost
+
+$comments = 'SELECT id, blog_id, comment, publishdate, author_id 
+FROM comments WHERE blog_id = &quot;' . $id . '&quot;';
+
+// &hellip; fetch comments into array
+
+foreach ($comments as $c) {
+
+	$authorInfo = 'SELECT * FROM authors WHERE id = &quot;' . $c['author_id'] . '&quot;';
+
+	// &hellip; show comment + author info 
+
+}</code></pre>
+								<ul>
+									<li>
+										With 50 comments, 52 queries are executed
+										<ul>
+											<li>1 x get blogpost, 1 x get comments, 50 x get authorinfo</li>
+										</ul>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Joins over Loops example (1)</h2>
+
+						<ul>
+							<li class="fragment">
+								Proper execution: use a database JOIN
+								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
+$dbHandler = &hellip;;
+
+$blog = 'SELECT id, title, content FROM blogs WHERE id = &quot;' . $id . '&quot;';
+
+// &hellip; fetch and show blogpost
+
+$comments = 'SELECT c.id, c.blog_id, c.comment, c.publishdate, c.author_id, a.name, a.email, a.url FROM comments AS c INNER JOIN authors AS a ON c.author_id = a.id WHERE c.blog_id = &quot;' . $id . '&quot;';
+
+// &hellip; fetch comments into array
+
+foreach ($comments as $c) {
+
+	// &hellip; show comment + author info 
+
+}</code></pre>
+								<ul>
+									<li>
+										With 50 comments, 2 queries are executed
+										<ul>
+											<li>1 x get blogpost, 1 x get comments with authorinfo</li>
+										</ul>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Best Practice: Encrypt passwords</h2>
+
+						<ul>
+							<li class="fragment">
+								Never store passwords as plaintext but encrypt them
+								<ul>
+									<li>If you don't, it's very easy for a hacker to steal lots of passwords</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Basic encryption: Use <code>md5()</code> or <code>sha1()</code>
+								<ul>
+									<li>
+										Problem: encryption is always the same
+										<ul>
+											<li>e.g. <code>md5('test')</code> is always <code>098f6bcd4621d373cade4e832627b4f6</code></li>
+											<li>Can easily be decrypted, or searched for with Google! (see <a href="https://github.com/juuso/BozoCrack">BozoCrack</a>)</li>
+										</ul>
+									</li>
+									<li>
+										Fix: add an extra <em>salt</em> (a secret, long, and complex string) to the string before encrypting
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Better encryption: Use <code>crypt()</code> or <code>hash()</code>
+								<ul>
+									<li>
+										Unlike the methods above, the salt can be different per encrypted password
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">To validate a password, encrypt it and compare it to the stored hash</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -596,13 +967,13 @@
 								Learn to work with the OO based version of <code>mysqli</code>
 							</li>
 							<li class="fragment">
-								Use Prepared Statements with <code>mysqli</code>
+								Use <a href="http://mattbango.com/notebook/web-development/prepared-statements-in-php-and-mysqli/">Prepared Statements with <code>mysqli</code></a>
 								<ul>
 									<li>If used properly this will automatically protect against SQL Injection</li>
 								</ul>
 							</li>
 							<li class="fragment">
-								Learn to work with <code>pdo_mysql</code>
+								<a href="http://www.kitebird.com/articles/php-pdo.html">Learn to work with <code>pdo_mysql</code></a>
 								<ul>
 									<li>Don't forget to call <code>$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code> to make sure your prepared statements are real <em>(<a href="http://stackoverflow.com/a/60496">source</a>)</em></li>
 								</ul>
