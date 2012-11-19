@@ -181,6 +181,134 @@
 
 				</section>
 
+
+
+
+				<section>
+
+					<section>
+						<h2>Connecting &amp; Disconnecting</h2>
+					</section>
+
+					<section>
+						<h2>First of all</h2>
+
+						<ul>
+							<li class="fragment">
+								We use a <code>config.php</code> to store our credentials in
+
+								<pre class="bigger"><code class="language-php">&lt;?php
+	
+		define('DB_HOST', 'localhost');
+		define('DB_USER', 'root');
+		define('DB_PASS', 'Azerty123');
+	
+		define('DB_NAME_FF', 'fotofactory');
+		define('DB_NAME_STATUS', 'status');
+
+//EOF</code></pre>
+							</li>
+							<li class="fragment">Edit the file if needed (location: <code>/assets/07/examples</code>)</li>
+							<li class="fragment">SQL Dumps of the used databases can also be found in that folder</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Connecting (1)</h2>
+
+						<ul>
+							<li class="fragment">Connect using <code>mysqli_connect()</code></li>
+							<li class="fragment">Select database using <code>mysqli_select_db()</code></li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01.php">&lt;?php
+
+	require_once 'config.php';
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS)
+		or die ('Could not connect to database server');
+		
+	// If connection succeeded, we end up here.
+	// If not, the die() above gets interpreted
+	echo 'Connected';
+	
+	// Select database &quot;fotofactory&quot;
+	@mysqli_select_db($dbhandler, DB_NAME_FF)
+		or die ('Could not select database');
+	
+	echo ' and selected the DB';
+	
+	// ... your query magic here
+
+//EOF</code></pre></div>
+					</section>
+
+					<section>
+						<h2>Connecting (2)</h2>
+
+						<ul>
+							<li class="fragment">Connect and selecting database in one line is possible</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01b.php">&lt;?php
+
+	require_once 'config.php';
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
+		or die ('Could not connect to database server or access database');
+		
+	echo 'Connected and selected the DB (in one go)';
+	
+	// ... your query magic here
+
+//EOF</code></pre></div>
+					</section>
+
+					<section>
+						<h2>Connecting (3)</h2>
+
+						<ul>
+							<li class="fragment">
+								Why store the connection in a variable?
+								<ul>
+									<li class="fragment">Needed to run queries on</li>
+									<li class="fragment">Needed to catch errors</li>
+									<li class="fragment">Needed to disconnect</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Practical use case?
+								<ul>
+									<li class="fragment">A setup where multiple MySQL servers are used: you write on one connection, and read from an other connection</li>
+									<li class="fragment">Example: Wikipedia uses a Master-Slave MySQL setup: writes happen on the master, reads on the slaves</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Disconnecting</h2>
+
+						<ul>
+							<li class="fragment">use <code>mysqli_close()</code></li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01c.php">&lt;?php
+
+	require_once 'config.php';
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
+		or die ('Could not connect to database server or access database');
+		
+	echo 'Connected and selected the DB (in one go)';
+	
+	// ... your query magic here
+	
+	@mysqli_close($dbhandler);
+
+//EOF</code></pre></div>
+						<footer class="fragment">Note: If you don't, the connection gets closed automatically when the script has finished</footer>
+					</section>
+
+				</section>
+
 				<!-- The END -->
 				<section>
 					<section>
