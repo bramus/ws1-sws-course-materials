@@ -1,0 +1,36 @@
+<?php
+
+	/**
+	 * Redirects to the error handling page
+	 * @param string $type
+	 * @return void
+	 */
+	function showDbError($type) {
+		// The referrerd page will show a proper error based on the $_GET parameters
+		header('location: error.php?type=db&detail=' . $type);
+		exit();
+	}
+
+	// Include config
+	require_once 'config.php';
+	
+	// Connect to database server "localhost" with username "root" and password "Azerty123" + select the DB "fotofactory"
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF) or showDbError('connect');
+	
+	// A simple insert
+	$query = 'INSERT INTO collections (name, user_id) VALUES ("TestColl", 2)';
+	
+	// Execute query
+	$result = @mysqli_query($dbhandler, $query) or showDbError('query');
+	
+	// Process result
+	if ($result !== false) { // Yes, the query succeeded
+		
+		echo '<p>The collection was inserted with the ID ' . mysqli_insert_id($dbhandler) . '</p>';
+		
+	}
+	
+	// Close connection
+	@mysqli_close($dbhandler);
+
+//EOF
