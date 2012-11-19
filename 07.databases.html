@@ -309,6 +309,174 @@
 
 				</section>
 
+
+
+
+				<section>
+
+					<section>
+						<h2>Catching Errors</h2>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Executing Queries</h2>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Securing Queries</h2>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Best Practices</h2>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>And now?</h2>
+					</section>
+
+
+					<section>
+						<h2>Now: Practice!</h2>
+						<ul>
+							<li class="fragment">See lab assignment</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Advanced Webscripting: DBAL</h2>
+						<ul>
+							<li class="fragment">
+								Later on we'll evolve towards a Database Access Layer
+								<ul>
+									<li class="fragment">
+										Class that handles most for us, including the basic CRUD actions
+										<ul class="fragment">
+											<li>CRUD = Create, Read, Update, Delete</li>
+											<li>Some specific functions such as <code>getNumRows()</code>, <code>getPairsAsArray()</code></li>
+											<li>What this means to us: Write less queries!</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Depending on the type of query, we'll get a different result
+										<ul class="fragment">
+											<li><code>SELECT</code>: Resultset, as an array</li>
+											<li><code>INSERT</code>: The inserted ID</li>
+											<li><code>UPDATE</code>/<code>DELETE</code>: The number of affected rows</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Debugging, error handling, and code performance
+										<ul class="fragment">
+											<li>Keep track of executed queries</li>
+											<li>Use of exceptions</li>
+											<li>Singleton Pattern</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Extra: PhpMyAdmin</h2>
+					</section>
+
+					<section>
+						<h2>Demo time!</h2>
+
+						<figure><img src="assets/07/phpmyadmin.png" alt="" title="" width="600" /></figure>
+
+					</section>
+
+					<section>
+						<h2>Demo Recap</h2>
+
+						<ul>
+							<li class="fragment">Import/Export databases</li>
+							<li class="fragment">Create tables</li>
+							<li class="fragment">Insert/Update data</li>
+							<li class="fragment">Run Queries</li>
+							<li class="fragment">Add users and set privileges</li>
+						</ul>
+						
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Want more?</h2>
+					</section>
+
+					<section>
+						<h2 style="font-size: 180%">There's always room for improvement</h2>
+
+						<ul>
+							<li class="fragment">
+								Learn to work with the OO based version of <code>mysqli</code>
+							</li>
+							<li class="fragment">
+								Use Prepared Statements with <code>mysqli</code>
+								<ul>
+									<li>If used properly this will automatically protect against SQL Injection</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Learn to work with <code>pdo_mysql</code>
+								<ul>
+									<li>Don't forget to call <code>$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code> to make sure your prepared statements are real <em>(<a href="http://stackoverflow.com/a/60496">source</a>)</em></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Use a Database Abstraction Layer (DAL), or take it a step further and use an Object Relational Mapper (ORM)
+								<ul>
+									<li>Example: <a href="http://www.doctrine-project.org/">Doctrine</a></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
 				<!-- The END -->
 				<section>
 					<section>
