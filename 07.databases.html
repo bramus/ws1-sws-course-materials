@@ -484,6 +484,293 @@
 						<h2>Executing Queries</h2>
 					</section>
 
+					<section>
+						<h2>Executing Queries</h2>
+
+						<ul>
+							<li class="fragment">Via <code>mysqli_query()</code></li>
+							<li class="fragment">
+								Parameters
+								<ul>
+									<li>The connection <code>$dbhandler</code></li>
+									<li>An SQL <code>$query</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Example
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+	
+	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
+	
+	$result = @mysqli_query($dbhandler, $query);
+	
+	echo '&lt;p&gt;This example outputs nothing&lt;/p&gt;';
+	
+	@mysqli_close($dbhandler);
+
+//EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Types of Queries</h2>
+
+						<ul>
+							<li class="fragment">
+								Two types of queries. Queries that:
+								<ol>
+									<li>Yield a resultset (e.g. <code>SELECT</code>, <code>SHOW</code>, <code>DESCRIBE</code>, <code>EXPLAIN</code>, &hellip;)</li>
+									<li>Yield no resultset (e.g. <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>DROP</code>, &hellip;)</li>
+								</ol>
+							</li>
+							<li class="fragment">
+								Result of <code>mysqli_query()</code>
+								<ul>
+									<li class="fragment">
+										If a query fails <em>(faulty query)</em>, PHP will return <code>false</code>
+									</li>
+									<li class="fragment">
+										If a query succeeds, PHP will return
+										<ul>
+											<li>A <em>resultset</em> if the query yields a resultset</li>
+											<li><code>true</code> if the query yields no resultset</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								The returned resultset may contain 0 rows, and the returned <code>true</code> only indicates that the query was executed
+								<ul>
+									<li class="fragment">Based on the type of query you'll need to post-process it to get the actual rows or to see what was changed/inserted
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Processing a returned resultset</h2>
+
+						<ul>
+							<li class="fragment">
+								Extra fetch function is needed to iterate the resultset
+							</li>
+							<li class="fragment">
+								Four possible functions to walk the result
+								<ol>
+									<li><code>mysqli_fetch_row()</code> &mdash; fetches the current row as a <strong>numeric array</strong> and moves the pointer forward</li>
+									<li><code>mysqli_fetch_assoc()</code> &mdash; fetches the current row as <strong>an associative array</strong> and moves the pointer forward</li>
+									<li><code>mysqli_fetch_array()</code> &mdash; fetches the current row as both a <strong>numeric array</strong> and <strong>an associative array</strong> and moves the pointer forward</li>
+									<li><code>mysqli_fetch_object()</code> &mdash; fetches the current row as an <strong>object</strong> and moves the pointer forward</li>
+								</ol>
+							</li>
+							<li class="fragment">
+								Use <code>mysqli_num_rows()</code> to get to know the number of rows returned
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>mysqli_fetch_row() example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03b.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
+		
+		while ($row = mysqli_fetch_row($result)) {
+			// Outputs &lt;p&gt;id - name&lt;/p&gt;
+			echo '&lt;p&gt;' . $row[0] . '-' . $row[1] . '&lt;/p&gt;';
+		}
+		
+	}
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>mysqli_fetch_assoc() example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03c.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
+		
+		while ($row = mysqli_fetch_row($result)) {
+			// Outputs &lt;p&gt;id - name&lt;/p&gt;
+			echo '&lt;p&gt;' . $row['id'] . '-' . $row['name'] . '&lt;/p&gt;';
+		}
+		
+	}
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>mysqli_fetch_object() example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03d.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
+		
+		while ($row = mysqli_fetch_row($result)) {
+			// Outputs &lt;p&gt;id - name&lt;/p&gt;
+			echo '&lt;p&gt;' . $row-&gt;id . '-' . $row-&gt;name . '&lt;/p&gt;';
+		}
+		
+	}
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>What to choose</h2>
+
+						<ul>
+							<li class="fragment">
+								Preference goes to <code>mysqli_fetch_assoc()</code>
+								<ul>
+									<li class="fragment">
+										Result is more readable than <code>mysqli_fetch_row()</code>
+										<ul>
+											<li><code>$row[1]</code> vs. <code>$row['name']</code></li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Faster than <code>mysqli_fetch_array()</code>
+										<ul>
+											<li>At 1000 selects <code>mysqli_fetch_assoc()</code> is 10% faster</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Code easily adjustable when query changes
+										<ul>
+											<li>If you select an extra field, you don't need to chang the indices in <code>$row</code></li>
+											<li><code>$row[1]</code> might need to change to <code>$row[2]</code> where <code>$row['name']</code> remains unchanged</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Processing a query with no resultset</h2>
+
+						<ul>
+							<li class="fragment">
+								Extra functions are needed to get extra information
+								<ul>
+									<li class="fragment">Use <code>mysqli_affected_rows()</code> to get to know how many rows were affected by the query</li>
+									<li class="fragment">Use <code>mysqli_insert_id()</code> to get the know the last auto_increment value</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>mysqli_affected_rows() example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03e.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'UPDATE collections SET user_id = ROUND(RAND()*10) WHERE id != 2';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		echo '&lt;p&gt;' . mysqli_affected_rows($dbhandler) . ' were affected&lt;/p&gt;';
+		
+	}
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>mysqli_insert_id() example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03f.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'INSERT INTO collections (name, user_id) VALUES ("TestColl", 2)';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		echo '&lt;p&gt;Row inserted with ID' . mysqli_insert_id($dbhandler) . '&lt;/p&gt;';
+		
+	}
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Free up memory with mysqli_free_result()</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03g.php">&lt;?php
+
+	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
+		
+	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
+		
+	$result = @mysqli_query($dbhandler, $query);
+	
+	if ($result !== false) { // Yes, we have one or more rows returned
+		
+		// &hellip; process rows here
+		
+	}
+	
+	// Free up some memory (and tell how much memory is used before and after)
+	echo memory_get_usage() . PHP_EOL;
+	mysqli_free_result($result);
+	echo memory_get_usage() . PHP_EOL;
+	
+	// &hellip; your other code here
+	
+	@mysqli_close($dbhandler);</code></pre>
+						</div>
+					</section>
+
 				</section>
 
 
@@ -521,6 +808,10 @@
 								</ol>
 							</li>
 						</ul>
+					</section>
+
+					<section>
+						<h2>Best Practice #1<br /><br />Working with dates and time</h2>
 					</section>
 
 
@@ -585,7 +876,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 
 
 					<section>
-						<h2>Date best practices (1)</h2>
+						<h2>Date &amp; time best practices (1)</h2>
 
 						<ul>
 							<li class="fragment">
@@ -629,7 +920,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 
 
 					<section>
-						<h2>Date best practices (2)</h2>
+						<h2>Date &amp; time best practices (2)</h2>
 						<ul>
 							<li class="fragment">
 								Don't be too specific when retrieving items after/before a given date
@@ -643,9 +934,13 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #2<br /><br />Use sprintf()<br />or<br />prepared statements</h2>
+					</section>
+
 
 					<section>
-						<h2>Best Practice: Use sprintf()</h2>
+						<h2>The why and how of sprintf()</h2>
 
 						<ul>
 							<li class="fragment">
@@ -669,7 +964,10 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 								</ul>
 							</li>
 							<li class="fragment">
-								Even better <em>(but not mandatory for this course)</em>: Prepared Statements
+								Better <small style="vertical-align: baseline;">(but not mandatory for this course)</small>: Prepared Statements
+								<ul>
+									<li>Added bonus: Automatically protects you against SQL Injection</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -682,7 +980,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 							<li class="fragment">
 								Sans <code>sprintf()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04.php">$name = 'bramus';
-$status = 'Just received the trophy "Marksman of the year"';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
 $query 	= 'INSERT INTO statuses (name, status, datum) '
@@ -712,7 +1010,7 @@ $query = 'SELECT * FROM statuses '
 							<li class="fragment">
 								With <code>sprintf()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$name = 'bramus';
-$status = 'Just received the trophy "Marksman of the year"';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
 $query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
@@ -754,15 +1052,52 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 
 
 					<section>
-						<h2>Best Practice: Joins over Loops</h2>
+						<h2>Prepared Statement example</h2>
+
+						<div>
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04c.php">$name = 'bramus';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
+$date = time();
+
+$query 	= @mysqli_prepare($dbhandler, 'INSERT INTO statuses (name, status, datum) VALUES (?, ?, FROM_UNIXTIME(?))');
+@mysqli_stmt_bind_param($query, 'ssi', $name, $status, $datetime);
+
+@mysqli_stmt_execute($query) or showDbError('query');
+@mysqli_stmt_close($query);
+
+$query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND datum &lt;= FROM_UNIXTIME(?) ORDER BY id DESC');
+@mysqli_stmt_bind_param($query, 'si', $name, $datetime);
+	
+@mysqli_stmt_execute($query) or showDbError('query');
+@mysqli_stmt_bind_result($query, $r_id, $r_name, $r_status, $r_datum);
+@mysqli_stmt_store_result($query);
+
+echo '&lt;p&gt;Got ' . mysqli_stmt_num_rows($query) . ' rows:&lt;/p&gt;';
+
+while ($row = mysqli_stmt_fetch($query)) {
+	echo '&lt;p&gt;' . $r_id . ' - ' . $r_name . ' - ' . 
+		 date('d/m/Y H:i:s', strtotime($r_datum)) . ': ' . $r_status . '&lt;/p&gt;';
+}	
+
+@mysqli_stmt_close($query);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Best Practice #3<br /><br />Joins over loops</h2>
+					</section>
+
+
+					<section>
+						<h2>Example</h2>
 
 						<ul>
 							<li class="fragment">
-								Example: Detailpage of a blogpost
+								Detailpage of a blogpost
 								<ul>
-									<li>Show blogpost</li>
+									<li>Shows blogpost</li>
 									<li>Allow comments on blogpost</li>
-									<li>Authorinformation stored separately</li>
+									<li>Authorinformation stored separately in database</li>
 								</ul>
 							</li>
 						</ul>
@@ -770,11 +1105,11 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 
 
 					<section>
-						<h2>Joins over Loops example (1)</h2>
+						<h2>Bad execution</h2>
 
 						<ul>
 							<li class="fragment">
-								Bad execution: run queries inside a loop
+								Execute queries inside a loop
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
 $dbHandler = &hellip;;
 
@@ -807,11 +1142,11 @@ foreach ($comments as $c) {
 
 
 					<section>
-						<h2>Joins over Loops example (1)</h2>
+						<h2>Proper execution</h2>
 
 						<ul>
 							<li class="fragment">
-								Proper execution: use a database JOIN
+								Use a database JOIN to minimize the number of executed queries
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
 $dbHandler = &hellip;;
 
@@ -839,9 +1174,13 @@ foreach ($comments as $c) {
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #4<br /><br />Encrypt passwords</h2>
+					</section>
+
 
 					<section>
-						<h2>Best Practice: Encrypt passwords</h2>
+						<h2>Encrypt passwords</h2>
 
 						<ul>
 							<li class="fragment">

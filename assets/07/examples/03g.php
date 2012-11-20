@@ -34,8 +34,12 @@
 		
 	}
 	
+	echo memory_get_usage() . '<br />' . PHP_EOL;
+	
 	// Free up some memory
 	mysqli_free_result($result);
+	
+	echo memory_get_usage() . '<br />' . PHP_EOL;
 	
 	// ... our other code here
 	
