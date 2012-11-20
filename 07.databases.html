@@ -39,6 +39,14 @@
 				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 				font-size: 80%;
 			}
+			
+			del code, code.nok {
+				color: #C55;
+			}
+			
+			ins code, code.ok {
+				color: #5C5;
+			}
 
 			strong {
 				color: #553d00;
@@ -782,6 +790,202 @@
 						<h2>Securing Queries</h2>
 					</section>
 
+					<section>
+						<h2>Securing Queries?</h2>
+
+						<ul>
+							<li class="fragment">Never pass user input directly into a query, <strong>always</strong> secure the passed in data</li>
+							<li class="fragment">
+								If you don't, users can perform SQL Injection
+								<ul>
+									<li>Just as XSS, <a href="http://blogs.msdn.com/b/ie/archive/2012/09/10/xss-trends-and-internet-explorer.aspx">SQL Injection is a real world and big problem</a>!</li>
+									<li><em>&ldquo;SQL injection is the most pernicious vulnerability in human computer history&rdquo;</em> (<a href="http://blog.imperva.com/2011/09/sql-injection-by-the-numbers.html">source</a>)</li>
+								</ul>
+							</li>
+						</ul>
+
+						<footer class="fragment">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</footer>
+
+					</section>
+
+					<section>
+						<h2>(insecure) example</h2>
+
+						<ul>
+							<li class="fragment">
+								Detailpage of a product. Url: <code>detail.php?id=X</code>
+
+								<pre class="bigger"><code class="language-php">&lt;?php
+
+&hellip;
+
+	$id = $_GET['id']; // get ID from URL
+	$dbhandler = &hellip;; // open database connection
+	
+	// get product from DB
+	$result = @mysqli_query($dbhandler, 
+		'SELECT * FROM products WHERE id = ' . $id
+	) or showDbError('query');
+
+	// product found, show it
+	&hellip;
+
+&hellip;
+	
+// EOF</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Problem #1</h2>
+
+						<ul>
+							<li class="fragment">Omitting the id from the URL results in a error</li>
+							<li class="fragment">Fix: check with <code>isset()</code> if a param is set!</li>
+						</ul>
+
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php">&lt;?php
+
+&hellip;
+
+	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
+	$dbhandler = &hellip;; // open database connection
+	
+	$result = @mysqli_query($dbhandler, 
+		'SELECT * FROM products WHERE id = ' . $id
+	) or showDbError('query');
+
+&hellip;
+	
+// EOF</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Problem #2</h2>
+
+						<ul>
+							<li class="fragment">
+								Changing the URL param to a string will break the query
+								<ul>
+									<li>When visiting <code>detail.php?id=test</code> the query will become <code class="nok">SELECT * FROM products WHERE id = test</code>, which is not a valid query</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Fix: add quotes in your query
+								<ul>
+									<li><code class="ok">SELECT * FROM products WHERE id = &quot;test&quot;</code> is a valid query</li>
+								</ul>
+							</li>
+						</ul>
+
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php">&lt;?php
+
+&hellip;
+
+	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
+	$dbhandler = &hellip;; // open database connection
+	
+	$result = @mysqli_query($dbhandler, 
+		'SELECT * FROM products WHERE id = &quot;' . $id . '&quot;'
+	) or showDbError('query');
+
+&hellip;
+	
+// EOF</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Problem #3</h2>
+
+						<ul>
+							<li class="fragment">
+								Changing the URL param to a string with a quote in break the query
+								<ul>
+									<li>When visiting <code>detail.php?id=te&quot;st</code> the query will become <code class="nok">SELECT * FROM products WHERE id = &quot;te&quot;st&quot;</code>, which is not a valid query</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Fix: use <code>addslashes()</code>
+								<ul>
+									<li><code class="ok">SELECT * FROM products WHERE id = &quot;te\&quot;st&quot;</code> is a valid query</li>
+								</ul>
+							</li>
+						</ul>
+
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php">&lt;?php
+
+&hellip;
+	
+	$result = @mysqli_query($dbhandler, 
+		'SELECT * FROM products WHERE id = &quot;' . addslashes($id) . '&quot;'
+	) or showDbError('query');
+
+&hellip;
+	
+// EOF</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Problem #3 (variant)</h2>
+
+						<ul>
+							<li class="fragment">
+								Changing the URL param to a <em>dangerous</em> string that resembles SQL allows SQL injection
+								<div class="fragment" style="text-align: center; padding-top: 20px">
+									<figure>
+										<img src="assets/07/littlebobbytables.jpg" alt="" title="" />
+										<figcaption><a href="http://xkcd.com/327/">XKCD: Exploits of a mom</a></figcaption>
+									</figure>
+								</div>
+							</li>
+							<li class="fragment">
+								Fix: use <code>addslashes()</code>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Problem #4</h2>
+
+						<ul>
+							<li class="fragment">
+								Turns out, <code>addslashes()</code> isn't sufficient enough to prevent SQL Injection
+								<ul>
+									<li>Multibyte character used with certain DB encodings break stuff</li>
+									<li>See <a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a> for detailed explanation</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Fix: use <code>mysqli_real_escape_string()</code> instead of <code>addslashes()</code>
+							</li>
+						</ul>
+
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler, 
+	'SELECT * FROM products WHERE id = &quot;' . mysqli_real_escape_string($dbhandler, $id) . '&quot;'
+) or showDbError('query');</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Summary</h2>
+
+						<ul>
+							<li class="fragment">
+								<strong>Always</strong> use <code>mysqli_real_escape_string()</code> to sanitize user input and thus prevent SQL Injection
+							</li>
+						</ul>
+
+						<footer class="fragment">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</footer>
+					</section>
+
 				</section>
 
 
@@ -1180,15 +1384,23 @@ foreach ($comments as $c) {
 
 
 					<section>
-						<h2>Encrypt passwords</h2>
+						<h2>Encrypt passwords (1)</h2>
 
 						<ul>
 							<li class="fragment">
-								Never store passwords as plaintext but encrypt them
+								You must <strong>always</strong> encrypt stored passwords. Never store them as plaintext 
 								<ul>
-									<li>If you don't, it's very easy for a hacker to steal lots of passwords</li>
+									<li>If you don't, it's very easy for a hacker to steal lots of passwords if he ever got access to your database</li>
 								</ul>
 							</li>
+						</ul>
+
+						<footer class="fragment">!! If you don't encrypt your passwords in the assignments or your exam, you will fail them !!</footer>
+					</section>
+
+					<section>
+						<h2>Encrypt passwords (2)</h2>
+						<ul>
 							<li class="fragment">
 								Basic encryption: Use <code>md5()</code> or <code>sha1()</code>
 								<ul>
