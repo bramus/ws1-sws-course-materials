@@ -509,6 +509,10 @@
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #1<br />Working with dates and time</h2>
+					</section>
+
 
 					<section>
 						<h2>Dates in PHP</h2>
@@ -571,7 +575,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 
 
 					<section>
-						<h2>Date best practices (1)</h2>
+						<h2>Date &amp; time best practices (1)</h2>
 
 						<ul>
 							<li class="fragment">
@@ -615,7 +619,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 
 
 					<section>
-						<h2>Date best practices (2)</h2>
+						<h2>Date &amp; time best practices (2)</h2>
 						<ul>
 							<li class="fragment">
 								Don't be too specific when retrieving items after/before a given date
@@ -629,9 +633,13 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #2<br /><br />Use sprintf()<br />or<br />prepared statements</h2>
+					</section>
+
 
 					<section>
-						<h2>Best Practice: Use sprintf()</h2>
+						<h2>The why and how of sprintf()</h2>
 
 						<ul>
 							<li class="fragment">
@@ -655,7 +663,10 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 								</ul>
 							</li>
 							<li class="fragment">
-								Even better <em>(but not mandatory for this course)</em>: Prepared Statements
+								Even better: Prepared Statements
+								<ul>
+									<li>Added bonus: Automatically protects you against SQL Injection</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -668,7 +679,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 							<li class="fragment">
 								Sans <code>sprintf()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04.php">$name = 'bramus';
-$status = 'Just received the trophy "Marksman of the year"';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
 $query 	= 'INSERT INTO statuses (name, status, datum) '
@@ -698,7 +709,7 @@ $query = 'SELECT * FROM statuses '
 							<li class="fragment">
 								With <code>sprintf()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$name = 'bramus';
-$status = 'Just received the trophy "Marksman of the year"';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
 $query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
@@ -738,17 +749,21 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #3<br />Joins over loops</h2>
+					</section>
+
 
 					<section>
-						<h2>Best Practice: Joins over Loops</h2>
+						<h2>Example</h2>
 
 						<ul>
 							<li class="fragment">
-								Example: Detailpage of a blogpost
+								Detailpage of a blogpost
 								<ul>
-									<li>Show blogpost</li>
+									<li>Shows blogpost</li>
 									<li>Allow comments on blogpost</li>
-									<li>Authorinformation stored separately</li>
+									<li>Authorinformation stored separately in database</li>
 								</ul>
 							</li>
 						</ul>
@@ -756,11 +771,11 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 
 
 					<section>
-						<h2>Joins over Loops example (1)</h2>
+						<h2>Bad execution</h2>
 
 						<ul>
 							<li class="fragment">
-								Bad execution: run queries inside a loop
+								Execute queries inside a loop
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
 $dbHandler = &hellip;;
 
@@ -793,11 +808,11 @@ foreach ($comments as $c) {
 
 
 					<section>
-						<h2>Joins over Loops example (1)</h2>
+						<h2>Proper execution</h2>
 
 						<ul>
 							<li class="fragment">
-								Proper execution: use a database JOIN
+								Use a database JOIN to minimize the number of executed queries
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
 $dbHandler = &hellip;;
 
@@ -825,9 +840,13 @@ foreach ($comments as $c) {
 						</ul>
 					</section>
 
+					<section>
+						<h2>Best Practice #4<br />Encrypt passwords</h2>
+					</section>
+
 
 					<section>
-						<h2>Best Practice: Encrypt passwords</h2>
+						<h2>Encrypt passwords</h2>
 
 						<ul>
 							<li class="fragment">
