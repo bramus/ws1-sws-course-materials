@@ -510,7 +510,7 @@
 					</section>
 
 					<section>
-						<h2>Best Practice #1<br />Working with dates and time</h2>
+						<h2>Best Practice #1<br /><br />Working with dates and time</h2>
 					</section>
 
 
@@ -663,7 +663,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 								</ul>
 							</li>
 							<li class="fragment">
-								Even better: Prepared Statements
+								Better <small style="vertical-align: baseline;">(but not mandatory for this course)</small>: Prepared Statements
 								<ul>
 									<li>Added bonus: Automatically protects you against SQL Injection</li>
 								</ul>
@@ -749,8 +749,40 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 						</ul>
 					</section>
 
+
 					<section>
-						<h2>Best Practice #3<br />Joins over loops</h2>
+						<h2>Prepared Statement example</h2>
+
+						<div><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04c.php">$name = 'bramus';
+$status = 'Just received the trophy &quot;Marksman of the year&quot;';
+$date = time();
+
+$query 	= @mysqli_prepare($dbhandler, 'INSERT INTO statuses (name, status, datum) VALUES (?, ?, FROM_UNIXTIME(?))');
+@mysqli_stmt_bind_param($query, 'ssi', $name, $status, $datetime);
+
+@mysqli_stmt_execute($query) or showDbError('query');
+@mysqli_stmt_close($query);
+
+$query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND datum &lt;= FROM_UNIXTIME(?) ORDER BY id DESC');
+@mysqli_stmt_bind_param($query, 'si', $name, $datetime);
+	
+@mysqli_stmt_execute($query) or showDbError('query');
+@mysqli_stmt_bind_result($query, $r_id, $r_name, $r_status, $r_datum);
+@mysqli_stmt_store_result($query);
+
+echo '&lt;p&gt;Got ' . mysqli_stmt_num_rows($query) . ' rows:&lt;/p&gt;';
+
+while ($row = mysqli_stmt_fetch($query)) {
+	echo '&lt;p&gt;' . $r_id . ' - ' . $r_name . ' - ' . 
+		 date('d/m/Y H:i:s', strtotime($r_datum)) . ': ' . $r_status . '&lt;/p&gt;';
+}	
+
+@mysqli_stmt_close($query);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Best Practice #3<br /><br />Joins over loops</h2>
 					</section>
 
 
@@ -841,7 +873,7 @@ foreach ($comments as $c) {
 					</section>
 
 					<section>
-						<h2>Best Practice #4<br />Encrypt passwords</h2>
+						<h2>Best Practice #4<br /><br />Encrypt passwords</h2>
 					</section>
 
 
