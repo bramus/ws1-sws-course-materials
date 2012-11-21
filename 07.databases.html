@@ -1206,14 +1206,14 @@ $date = time();
 $query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
 	mysqli_real_escape_string($dbhandler, $name),
 	mysqli_real_escape_string($dbhandler, $status),
-	mysqli_real_escape_string($dbhandler, (int) $datetime)
+	mysqli_real_escape_string($dbhandler, (int) $date)
 );
 
 @mysqli_query($dbhandler, $query) or showDbError('query');
 
 $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNIXTIME(%d) ORDER BY id DESC',
 	mysqli_real_escape_string($dbhandler, $name),
-	mysqli_real_escape_string($dbhandler, (int) $datetime)
+	mysqli_real_escape_string($dbhandler, (int) $date)
 );
 
 // ...</code></pre>
