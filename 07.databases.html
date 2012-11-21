@@ -74,7 +74,32 @@
 				-webkit-transform: scale(2);
 				transform: scale(2);
 			}
+
+			#statementwarning {
+				position: absolute;
+				top: 0;
+				left: 44px;
+				right: 44px;
+				bottom: 0;
+				background: #1c1e20;
+				opacity: 0.9;
+				z-index: 99999;
+				padding: 100px;
+				font-family: 'League Gothic', sans-serif;
+				text-shadow: 0px 0px 6px rgba(0,0,0,0.2);
+				cursor: pointer;
+			}
+
 		</style>
+
+		<script>
+			window.addEventListener('load', function(e) {
+				$statement = document.getElementById('statementwarning');
+				$statement.addEventListener('click', function(e) {
+					$statement.style.display = 'none';
+				});
+			});
+		</script>
 	</head>
 	
 	<body>
@@ -1244,7 +1269,12 @@ $query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNI
 					<section>
 						<h2>Prepared Statement example</h2>
 
-						<div>
+						<div style="position: relative;">
+							<div id="statementwarning">
+								<h2>BE WARNED</h2>
+								<p>Code is overwhelming and beyond the scope of this course.<br />Watch at your own risk ;-)</p>
+								<p><span>(click to dismiss)</span></p>
+							</div>
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04c.php">$name = 'bramus';
 $status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
