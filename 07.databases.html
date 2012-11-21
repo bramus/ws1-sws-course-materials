@@ -1280,13 +1280,13 @@ $status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
 $query 	= @mysqli_prepare($dbhandler, 'INSERT INTO statuses (name, status, datum) VALUES (?, ?, FROM_UNIXTIME(?))');
-@mysqli_stmt_bind_param($query, 'ssi', $name, $status, $datetime);
+@mysqli_stmt_bind_param($query, 'ssi', $name, $status, $date);
 
 @mysqli_stmt_execute($query) or showDbError('query');
 @mysqli_stmt_close($query);
 
 $query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND datum &lt;= FROM_UNIXTIME(?) ORDER BY id DESC');
-@mysqli_stmt_bind_param($query, 'si', $name, $datetime);
+@mysqli_stmt_bind_param($query, 'si', $name, $date);
 	
 @mysqli_stmt_execute($query) or showDbError('query');
 @mysqli_stmt_bind_result($query, $r_id, $r_name, $r_status, $r_datum);
