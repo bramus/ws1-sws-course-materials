@@ -623,7 +623,7 @@
 		
 		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
 		
-		while ($row = mysqli_fetch_row($result)) {
+		while ($row = mysqli_fetch_assoc($result)) {
 			// Outputs &lt;p&gt;id - name&lt;/p&gt;
 			echo '&lt;p&gt;' . $row['id'] . '-' . $row['name'] . '&lt;/p&gt;';
 		}
@@ -650,7 +650,7 @@
 		
 		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
 		
-		while ($row = mysqli_fetch_row($result)) {
+		while ($row = mysqli_fetch_object($result)) {
 			// Outputs &lt;p&gt;id - name&lt;/p&gt;
 			echo '&lt;p&gt;' . $row-&gt;id . '-' . $row-&gt;name . '&lt;/p&gt;';
 		}
