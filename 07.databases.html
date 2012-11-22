@@ -915,7 +915,7 @@
 
 						<ul>
 							<li class="fragment">
-								Changing the URL param to a string with a quote in break the query
+								Changing the URL param to a string with a quote in breaks the query
 								<ul>
 									<li>When visiting <code>detail.php?id=te&quot;st</code> the query will become <code class="nok">SELECT * FROM products WHERE id = &quot;te&quot;st&quot;</code>, which is not a valid query</li>
 								</ul>
@@ -1366,7 +1366,7 @@ foreach ($comments as $c) {
 
 						<ul>
 							<li class="fragment">
-								Use a database JOIN to minimize the number of executed queries
+								Use a JOIN to minimize the number of executed queries
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
 $dbHandler = &hellip;;
 
