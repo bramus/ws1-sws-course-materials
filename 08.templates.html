@@ -58,6 +58,71 @@
 				font-style: italic;
 			}
 
+			#reveal section img.noborder {
+				background: transparent;
+				border: 0;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				-ms-box-shadow: none;
+				-o-box-shadow: none;
+				box-shadow: none;"
+			}
+
+			#reveal .hastooltip {
+				position: relative;
+			}
+
+			#reveal .hastooltip .tooltip {
+				position: absolute;
+				bottom: 5px;
+				right: 5px;
+				background-image: url('assets/comments.png');
+				background-position: bottom right;
+				background-repeat: no-repeat;
+				width: 60px;
+				height: 60px;
+				z-index: 110;
+			}
+
+			#reveal .tooltip div {
+				display: none;
+				position: absolute;
+				bottom: 30px;
+				right: 40px;
+				font-size: 50%;
+				line-height: 1.48;
+				min-width: 420px;
+				opacity: 0.9;
+				border: 2px solid #ccc;
+				padding: 20px;
+				background-color: #ffc;
+				background-image: -webkit-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -moz-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -ms-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -o-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				border-radius: 4px;
+				box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
+				text-shadow: 0 1px 0 rgba(255,255,255,.4);
+				color: #333;
+			}
+
+			#reveal .tooltip:hover div {
+				display: block;
+			}
+
+			#reveal .tooltip ul {
+				margin: 5px 5px 5px 15px;
+			}
+
+			#reveal .tooltip ul li {
+				margin-left: 10px;
+			}
+
+			#reveal .tooltip div *:last-child {
+				margin-bottom: 0;
+			}
+
 		</style>
 
 	</head>
@@ -210,6 +275,100 @@
 						<h2>Basic Template Class</h2>
 					</section>
 
+					<section>
+						<h2>Usage Goal</h2>
+
+						<ul>
+							<li class="fragment">
+								Have a class that takes care or our assignments
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/03/03.php">&lt;?php
+
+	require_once 'template.php'; // our template class
+
+	$title = 'testpage';
+	$userName = 'bramus';
+	$weatherToday = 'cloudy';
+
+	$tpl = new Template('03.tpl');
+
+	$tpl-&gt;assign('title', $title);
+	$tpl-&gt;assign('user', $userName);
+	$tpl-&gt;assign('weather', $weatherToday);
+
+	$tpl-&gt;display();
+
+// EOF</code></pre>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Class Functionality</h2>
+						<ul>
+							<li class="fragment">Load in a given <code>.tpl</code> file and store the raw content</li>
+							<li class="fragment">Keep track of the assigned values on an internal array</li>
+							<li class="fragment">When <code>display()</code> is called, perform all string replaces (viz. <em>parse the template</em>) and output the content with <code>echo</code></li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Class Inner workings</h2>
+						<ul>
+							<li class="fragment">
+								A debug session
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/08/debug-03.png" class="noborder" width="810" height="487" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>Start a debug session and step into the code. Take a close look at the <code>$replacements</code> datamember as <code>assign()</code> is called, and at <code>$content</code> as <code>parseReplacements()</code> is looping over <code>$replacements</code></p>
+<!--
+											<ul>
+												<li>
+													Datamembers
+													<ul>
+														<li><code>$content</code> &mdash; the content of the template</li>
+														<li><code>$loaded</code> &amp; <code>$parsed</code> &mdash; status vars tracking if a tpl is loaded/parsed</li>
+														<li><code>$replacements</code> &mdash; array containing all values to parse in the template</li>
+													</ul>
+												</li>
+												<li>
+													Functions
+													<ul>
+														<li><code>__construct()</code> &amp; <code>setTemplate()</code> &mdash; loads in the template</li>
+														<li><code>assign()</code> &mdash; stores an assignment on <code>$replacements</code></li>
+														<li><code>display()</code> &amp; <code>echo</code>s the parsed content</li>
+														<li><code>getContent()</code> &mdash; Returns <code>$content</code>. Invokes <code>parse()</code> if not parsed yet</li>
+														<li><code>parse()</code> &mdash; performs the parsing. Calls <code>parseReplacements()</code></li>
+														<li><code>parseReplacements()</code> &mdash; Loops <code>$replacements</code> and performs the string replaces</li>
+													</ul>
+												</li>
+											</ul>
+-->
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>That's basically it!</h2>
+						<ul>
+							<li class="fragment">
+								Successful rewrite to a class based system
+							</li>
+							<li class="fragment">
+								No new functionality added
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -283,12 +442,10 @@
 								</ul>
 							</li>
 							<li class="fragment">
-								Examples
+								Worth checking out
 								<ul>
-									<li class="fragment"><a href="http://www.smarty.net/">Smarty</a></li>
-									<li class="fragment"><a href="https://github.com/Spoon/Template">Spoon Template Component</a></li>
-									<li class="fragment"><a href="http://twig.sensiolabs.org/">Twig</a> <em>&larr; recommended!</em></li>
-									<li class="fragment">&hellip; the template engine / views included in frameworks such as <a href="http://framework.zend.com/">Zend Framework</a>, <a href="http://cakephp.org/">CakePHP</a>, <a href="http://www.yiiframework.com/">YII</a>, etc.</li>
+									<li class="fragment">Standalone template engines: <a href="http://www.smarty.net/">Smarty</a>, <a href="https://github.com/Spoon/Template">Spoon Template Component</a>, <a href="http://twig.sensiolabs.org/">Twig</a> (<em>recommended!</em>), &hellip;</li>
+									<li class="fragment">The template engine / views engine included in frameworks such as <a href="http://framework.zend.com/">Zend Framework</a>, <a href="http://cakephp.org/">CakePHP</a>, <a href="http://www.yiiframework.com/">YII</a>, etc.</li>
 								</ul>
 							</li>
 						</ul>
