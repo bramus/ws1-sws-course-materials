@@ -403,7 +403,7 @@
 					<section>
 						<h2>Template option example</h2>
 						<div class="fragment">
-							<pre class="bigger"><code class="language-html">Hi there {$user}, the weather today is {$weather}.
+							<pre class="bigger"><code class="language-html dontrun">Hi there {$user}, the weather today is {$weather}.
 
 {option:oCloudy}
 &lt;img src=&quot;weather/cloudy.png&quot; alt=&quot;&quot; title=&quot;&quot; /&gt;&lt;br /&gt;
@@ -499,7 +499,7 @@ if ($weatherToday == 'cloudy') {
 					<section>
 						<h2>Template iteration example</h2>
 						<div class="fragment">
-							<pre class="bigger"><code class="language-html">&lt;ul&gt;
+							<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
 	{iteration:iLecturers}
 	&lt;li&gt;{$lecturer} {option:oItsme}-- Oh, that's me!{/option:oItsme}&lt;/li&gt;
 	{/iteration:iLecturers}
@@ -583,6 +583,102 @@ if ($weatherToday == 'cloudy') {
 						<h2>Nested Iterations</h2>
 					</section>
 
+					<section>
+						<h2>Template nested iteration example</h2>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iLecturers}
+	&lt;li&gt;
+		{$lecturer}
+		&lt;ul&gt;
+			{iteration:iCourses}
+			&lt;li&gt;{$course}&lt;/li&gt;
+			{/iteration:iCourses}
+		&lt;/ul&gt;
+	&lt;/li&gt;
+	{/iteration:iLecturers}
+&lt;/ul&gt;</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Template nested iteration example</h2>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/06/06.php">$lecturers = array(
+	'rogier.vanderlinde' =&gt; array('WT','WS1','WS2','WP'),
+	'bramus.vandamme' =&gt; array('WT','WS1','WS2','WMD'),
+	&hellip;
+);
+
+$tpl-&gt;setIteration('iLecturers');
+
+foreach($lecturers as $lecturer =&gt; $courses) {
+
+	$tpl-&gt;assignIteration('lecturer', $lecturer);
+
+	// iteration iCourse inside the iteration iLecturers
+	$tpl-&gt;setIteration('iCourses','iLecturers');
+	foreach ($courses as $course) {
+		$tpl-&gt;assignIteration('course', $course);
+		$tpl-&gt;refillIteration('iCourses');
+	}
+	$tpl-&gt;parseIteration('iCourses');
+
+	// back to outer iteration
+	$tpl-&gt;refillIteration('iLecturers');
+
+}
+
+$tpl-&gt;parseIteration('iLecturers');
+
+$tpl-&gt;display();</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Extended Class Functionality</h2>
+						<ul>
+							<li class="fragment">
+								Code to control loops remains the same
+								<ul>
+									<li class="fragment">Only difference is that <code>setIteration()</code> now accepts an extra parameter to tell the parent iteration it is contained in</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Class Inner workings</h2>
+						<ul>
+							<li class="fragment">
+								A debug session
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/08/debug-06.png" class="noborder" width="810" height="487" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>In the class, nested iterations are stored on the same level as iterations. Because iterations are parsed immediately this is possible</p>
+											<p>Extra code is added to check if the parent iteration is known in the Template instance.</p>
+											<p><code>parseIteration()</code> checks if a parent is set: if there is it is pared in the parent, if not, it's parsed in the template content.</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Double Phew!</h2>
+						<ul>
+							<li class="fragment">
+								Yeah!
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -593,6 +689,73 @@ if ($weatherToday == 'cloudy') {
 						<h2>Extras</h2>
 					</section>
 
+					<section>
+						<h2>Modifiers</h2>
+						<ul>
+							<li class="fragment">
+								Modifiers allow manipulation of assigned variables from within the template
+								<ul>
+									<li class="fragment">Assign a variable once, and show it in various ways in the template</li>
+									<li class="fragment">Add multiple modifiers in your template, separated by <code>|</code>, example: <code>{$var|htmlentities}</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Accepted modifiers
+								<ul>
+									<li>htmlentities, urlencode</li>
+									<li>ucfirst, ucwords</li>
+									<li>uppercase, lowercase</li>
+									<li>addslashes, stripslashes</li>
+									<li>ltrim, rtrim, shuffle</li>
+									<li>nl2br</li>
+									<li>repeat, truncate, truncateHtml</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Modifiers example</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucfirst}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucwords}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+						<pre class="bigger"><code class="language-php">$tpl-&gt;assign('var', 'i am a variable which has been set');</code></pre>
+					</section>
+
+					<section>
+						<h2>Comments</h2>
+						<ul>
+							<li class="fragment">Comments are also allowed in templates.
+								<ul>
+									<li>Place comments between <code>{*</code> and <code>*}</code></li>
+									<li>Multiline comments allowed</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								When the content is parsed, the comments are stripped out in the same manner unassigned options are stripped
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Helper Functions</h2>
+						<ul>
+							<li class="fragment">
+								Also included in the final <code>Template</code> class are some extra helper functions
+								<ul>
+									<li class="fragment"><code>deAssignOption()</code> &mdash; undo an assignment of an option</li>
+									<li class="fragment"><code>iterationExists()</code> &mdash; checks if an iteration exists in the <code>.tpl</code></li>
+									<li class="fragment"><code>optionExists()</code> &mdash; checks if an option exists in the <code>.tpl</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -601,6 +764,219 @@ if ($weatherToday == 'cloudy') {
 
 					<section>
 						<h2>Templates Recap</h2>
+					</section>
+
+					<section>
+						<h2>Template Creation</h2>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' 
+             . DIRECTORY_SEPARATOR . 'classes' 
+             . DIRECTORY_SEPARATOR . 'template.php';
+
+$tpl = new Template(__DIR__  . DIRECTORY_SEPARATOR . '07.tpl');
+
+// Your magic code here
+
+$tpl->display();</code></pre>
+					</section>
+
+					<section>
+						<h2>Variable assigment &amp; Modifiers</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucfirst}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucwords}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$tpl-&gt;assign('var', 'i am a variable which has been set');</code></pre>
+					</section>
+
+					<section>
+						<h2>Option</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;p&gt;
+	Option assigned?: {option:oAssigned}Yes, I am assigned{/option:oAssigned}
+&lt;/p&gt;</code></pre>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$tpl-&gt;assignOption('oAssigned');</code></pre>
+					</section>
+
+					<section>
+						<h2>Single Iteration</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iSingle}
+	&lt;li&gt;I've been spawned by an iteration!&lt;/li&gt;
+	{/iteration:iSingle}
+&lt;/ul&gt;</code></pre>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$tpl-&gt;setIteration('iSingle');
+
+for ($i = 0; $i &lt; 10; $i++) {
+	$tpl-&gt;refillIteration('iSingle');
+}
+
+$tpl-&gt;parseIteration('iSingle');</code></pre>
+					</section>
+
+					<section>
+						<h2>Single Iteration with values</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iSingleWithValue}
+	&lt;li&gt;
+		I've been spawned by an iteration and I have a local variable:
+		&lt;em&gt;{$varInIteration}&lt;/em&gt; and also can access a global variable, 
+		such as $var: &lt;em&gt;{$var}&lt;/em&gt;
+	&lt;/li&gt;
+	{/iteration:iSingleWithValue}
+&lt;/ul&gt;</code></pre>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$aSingleValues = array('one', 'two', 'three', 'four');
+
+$tpl-&gt;setIteration('iSingleWithValue');
+
+foreach ($aSingleValues as $singleValue) {
+
+	$tpl-&gt;assignIteration('varInIteration', $singleValue);
+	$tpl-&gt;refillIteration();
+
+}
+
+$tpl-&gt;parseIteration();</code></pre>
+					</section>
+
+					<section>
+						<h2>Nested Iteration with values (1)</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iNestedOuter}
+	&lt;li&gt;
+		{$varInNestedOuter}
+		&lt;ul&gt;
+			{iteration:iNestedInner}
+			&lt;li&gt;{$varInNestedInner}&lt;/li&gt;
+			{/iteration:iNestedInner}
+		&lt;/ul&gt;
+	&lt;/li&gt;
+	{/iteration:iNestedOuter}
+&lt;/ul&gt;</code></pre>
+					</section>
+
+					<section>
+						<h2>Nested Iteration with values (2)</h2>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$aNestedValues = array(
+	'first' =&gt; array('1.1', '1.2', '1.3'),
+	'second' =&gt; array('2.1', '2.2'),
+	'third' =&gt; array('3.1', '3.2', '3.3', '3.4')
+);
+
+$tpl-&gt;setIteration('iNestedOuter');
+
+foreach ($aNestedValues as $nestedKey =&gt; $nestedValue) {
+
+	$tpl-&gt;assignIteration('varInNestedOuter', $nestedKey);
+
+	$tpl-&gt;setIteration('iNestedInner', 'iNestedOuter');
+	foreach ($nestedValue as $innerValue) {
+		$tpl-&gt;assignIteration('varInNestedInner', $innerValue);
+		$tpl-&gt;refillIteration();
+	}
+	$tpl-&gt;parseIteration();
+
+	$tpl-&gt;refillIteration('iNestedOuter');
+
+}
+
+$tpl-&gt;parseIteration('iNestedOuter');</code></pre>
+					</section>
+
+					<section>
+						<h2>Option in iteration</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iSingleWithValueAndOption}
+	&lt;li&gt;
+		I've been spawned by an iteration and I am
+		&lt;i&gt;{option:oOdd}odd{/option:oOdd}{option:oEven}even{/option:oEven}&lt;/i&gt;
+		($i = &lt;i&gt;{$i}&lt;/i&gt;)
+	&lt;/li&gt;
+	{/iteration:iSingleWithValueAndOption}
+&lt;/ul&gt;</code></pre>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+
+$tpl-&gt;setIteration('iSingleWithValueAndOption');
+
+for ($i = 0; $i &lt; 10; $i++) {
+
+	if ($i%2 == 1) $tpl-&gt;assignIterationOption('oOdd');
+	else $tpl-&gt;assignIterationOption('oEven');
+
+	$tpl-&gt;assignIteration('i', $i);
+	$tpl-&gt;refillIteration('');
+
+}
+
+$tpl-&gt;parseIteration('');</code></pre>
+					</section>
+
+					<section>
+						<h2>Option in nested iteration (1)</h2>
+						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
+	{iteration:iNestedOuterWithOption}
+	&lt;li&gt;
+		{$varInNestedOuter}
+		{option:oHasSecondLevel}
+			&lt;ul&gt;
+				{iteration:iNestedInnerWithOption}
+				&lt;li&gt;
+					{$varInNestedInner}
+					{option:oHasExtraInSecondLevel}
+						with option assigned
+					{/option:oHasExtraInSecondLevel}!
+				&lt;/li&gt;
+				{/iteration:iNestedInnerWithOption}
+			&lt;/ul&gt;
+		{/option:oHasSecondLevel}
+	&lt;/li&gt;
+	{/iteration:iNestedOuterWithOption}
+&lt;/ul&gt;</code></pre>
+					</section>
+
+					<section>
+						<h2>Option in nested iteration (2)</h2>
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
+$aNestedValues = array(
+	'first' =&gt; array('1.1', '1.2', '1.3'),
+	'second' =&gt; array(),
+	'third' =&gt; array('3.1', '3.2', '3.3', '3.4')
+);
+
+$tpl-&gt;setIteration('iNestedOuterWithOption');
+
+foreach ($aNestedValues as $nestedKey =&gt; $nestedValue) {
+	$tpl-&gt;assignIteration('varInNestedOuter', $nestedKey);
+	if (sizeof((array) $nestedValue) &gt; 0) {
+		$tpl-&gt;assignIterationOption('oHasSecondLevel');
+
+		$tpl-&gt;setIteration('iNestedInnerWithOption', 'iNestedOuterWithOption');
+		foreach ($nestedValue as $innerValue) {
+			$tpl-&gt;assignIteration('varInNestedInner', $innerValue);
+			if (strpos($innerValue, '2') !== false)
+				$tpl-&gt;assignIterationOption('oHasExtraInSecondLevel');
+			$tpl-&gt;refillIteration();
+		}
+		$tpl-&gt;parseIteration();
+	}
+	$tpl-&gt;refillIteration('iNestedOuterWithOption');
+}
+
+$tpl-&gt;parseIteration('iNestedOuterWithOption');</code></pre>
 					</section>
 
 				</section>
