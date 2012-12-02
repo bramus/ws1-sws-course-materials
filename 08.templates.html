@@ -98,6 +98,108 @@
 						<h2>Introduction</h2>
 					</section>
 
+					<section>
+						<h2>Basic PHP page</h2>
+
+						<ul>
+							<li class="fragment">
+								Follows a certain structure
+								<ul class="fragment">
+									<li>Logic at the top</li>
+									<li>Display at the bottom</li>
+								</ul>
+							</li>
+						</ul>
+
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/01/01.php">&lt;?php
+
+	// define our vars (fixed or via calculations)
+	$title = 'testpage';
+	$userName = 'bramus';
+	$weatherToday = 'cloudy';
+
+?&gt;&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;&lt;?php echo $title; ?&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  Hi there &lt;?php echo $userName; ?&gt;, the weather today is &lt;?php echo $weatherToday; ?&gt;.
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Introducing Templates (1)</h2>
+						<ul>
+							<li class="fragment">
+								Pretty straightforward to split out the HTML from our PHP logic:
+								<ol>
+									<li class="fragment">Put all the HTML into a separate file and provide <em>locations</em> where to show variables</li>
+									<li class="fragment">In the remaining PHP code, keep the logic in place. Add code to load in the template and <em>assign</em> values to the template variables</li>
+								</ol>
+							</li>
+							<li class="fragment">
+								Naming conventions:
+								<ul>
+									<li class="fragment">
+										Give the template file a <code>.tpl</code> extension
+									</li>
+									<li class="fragment">
+										Put variables between <code>{}</code> in the template, e.g. <code>{$firstName}</code>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Example</h2>
+
+						<pre class="bigger"><code class="language-html dontrun">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;{$title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  Hi there {$user}, the weather today is {$weather}.
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/02/02.php">&lt;?php
+
+	$title = 'testpage';
+	$userName = 'bramus';
+	$weatherToday = 'cloudy';
+
+	$tplContent = file_get_contents('02.tpl');
+
+	$tplContent = str_replace('{$title}', $title, $tplContent);
+	$tplContent = str_replace('{$user}', $userName, $tplContent);
+	$tplContent = str_replace('{$weather}', $weatherToday, $tplContent);
+
+	echo $tplContent;</code></pre>
+
+					</section>
+
+					<section>
+						<h2>That's basically it!</h2>
+						<ul>
+							<li class="fragment">
+								Successful separation of a template and PHP logic
+							</li>
+							<li class="fragment">
+								Of course we can and will improve things
+								<ul>
+									<li class="fragment">Introduction of a <code>Template</code> class, to work in a more modern way</li>
+									<li class="fragment">Introduction of conditional blocks <em>(options)</em>, to let our templates show X or Y depending on a condition (think <code>if</code>)</li>
+									<li class="fragment">Introduction of (nested) iterations, to work with loops in our templates (think <code>for</code> and <code>foreach</code>)</li>
+									<li class="fragment">Introduction of modifiers, to manipulate assigned variables from within our template (think <code>htmlentities</code>)</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -115,7 +217,7 @@
 				<section>
 
 					<section>
-						<h2>Dynamic blocks</h2>
+						<h2>Conditional blocks</h2>
 					</section>
 
 				</section>
@@ -156,6 +258,40 @@
 
 					<section>
 						<h2>Templates Recap</h2>
+					</section>
+
+				</section>
+
+
+
+				<section>
+
+					<section>
+						<h2>Want more?</h2>
+					</section>
+
+					<section>
+						<h2>Want more?</h2>
+						<ul>
+							<li class="fragment">
+								Many template engines exists, all have some outstanding features that fall outside the scope of this course
+								<ul>
+									<li class="fragment">Control structures in the template itself (<code>if</code>/<code>else</code>/<code>for</code>/...)</li>
+									<li class="fragment">Caching <em>(final HTML and/or optimized PHP code)</em></li>
+									<li class="fragment">Includes &amp; Inheritance/blocks</li>
+									<li class="fragment">&hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Examples
+								<ul>
+									<li class="fragment"><a href="http://www.smarty.net/">Smarty</a></li>
+									<li class="fragment"><a href="https://github.com/Spoon/Template">Spoon Template Component</a></li>
+									<li class="fragment"><a href="http://twig.sensiolabs.org/">Twig</a> <em>&larr; recommended!</em></li>
+									<li class="fragment">&hellip; the template engine / views included in frameworks such as <a href="http://framework.zend.com/">Zend Framework</a>, <a href="http://cakephp.org/">CakePHP</a>, <a href="http://www.yiiframework.com/">YII</a>, etc.</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 
 				</section>
