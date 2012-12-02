@@ -1,14 +1,14 @@
-<!doctype html>  
+<!doctype html>
 <html lang="en">
-	
+
 	<head>
 		<meta charset="utf-8">
-		
+
 		<title>Webscripting1 &mdash; Serverside Webscripting</title>
 
 		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting">
 		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
-		
+
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="HandheldFriendly" content="True" />
@@ -16,13 +16,13 @@
 
 		<meta http-equiv="cleartype" content="on" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		
+
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		
+
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/main.css">
 		<style>
-		
+
 			/* clearfix */
 			.clearfix:after {
 				content: ".";
@@ -44,16 +44,16 @@
 			* html .clearfix {
 				height: 1%;
 			}
-			
+
 			/* main overrides */
 			html, body {
 				overflow: auto;
 			}
-			
+
 			#reveal .intro section footer {
 				position: static;
 			}
-			
+
 			/* intro */
 			#reveal .intro {
 				max-width: 1200px;
@@ -61,30 +61,30 @@
 				text-align: center;
 				margin: 0 auto 0;
 			}
-			
+
 			#reveal .intro > section {
 				width: 100%;
 				/* min-height: 600px; */
 			}
-			
+
 			#reveal .intro ul.thumbs {
 				width: 100%;
 				padding: 0;
 				margin: 0 auto 50px;
 				list-style: none;
 			}
-			
+
 			#reveal .intro ul.thumbs li {
 				width: 20%;
 				float: left;
 				text-align: center;
 				margin: 0;
 			}
-			
+
 			#reveal .intro ul.thumbs li img {
 				max-width: 100%;
 			}
-			
+
 			#reveal #about {
 				position: fixed;
 				height: 415px;
@@ -93,7 +93,7 @@
 				overflow: hidden;
 				width: 30px;
 				padding: 15px 0 0 20px;
-				
+
 				-webkit-box-shadow: -10px 0px 25px #1c1e20;
 				-moz-box-shadow:    -10px 0px 25px #1c1e20;
 				box-shadow:         -10px 0px 25px #1c1e20;
@@ -101,12 +101,12 @@
 				opacity: 0.8;
 				background: rgba(46,49,51,0.9);
 			}
-			
+
 			#reveal #about:hover {
 				width: 240px;
 				opacity: 1;
 			}
-			
+
 			#reveal #about p {
 				font-size: 15px;
 				line-height: 1.2;
@@ -123,42 +123,42 @@
 				     -o-transition: all .2s ease;
 				        transition: all .2s ease;
 			}
-			
+
 			@media (max-width: 1330px) {
-				
+
 				#reveal h1 {
 					font-size: 100px;
 				}
-				
+
 				#reveal h3 {
 					font-size: 40px;
 				}
-				
+
 			}
-			
+
 			@media (max-width: 1200px) {
-				
+
 				#reveal #about {
 					height: auto;
 					position: static;
 					width: 90%;
 					margin: 25px auto 25px;
 					padding: 15px;
-				} 
-				
+				}
+
 				#reveal #about:hover {
 					width: 90%;
 				}
-				
+
 				#reveal #about p {
 					width: 100%;
 					margin-bottom: 12px;
 				}
-				
+
 				#reveal .intro ul.thumbs li {
 					width: 25%;
 				}
-				
+
 			}
 
 			@media (max-width: 1100px) {
@@ -174,7 +174,7 @@
 			}
 
 			@media (max-width: 960px) {
-			
+
 				#reveal .intro ul.thumbs li {
 					width: 33%;
 				}
@@ -214,7 +214,7 @@
 				#reveal h1 {
 					font-size: 80px;
 				}
-				
+
 				#reveal h3 {
 					font-size: 30px;
 				}
@@ -226,11 +226,11 @@
 				#reveal .intro ul.thumbs li {
 					width: 100%;
 				}
-				
+
 				#reveal .intro section footer {
 					font-size: 50%;
 				}
-				
+
 				#reveal #about p {
 					font-size: 13px;
 				}
@@ -242,7 +242,7 @@
 				#reveal h1 {
 					font-size: 60px;
 				}
-				
+
 				#reveal h3 {
 					font-size: 20px;
 				}
@@ -260,7 +260,7 @@
 				}
 
 			}
-			
+
 		</style>
 
 		<script type="text/javascript">
@@ -278,9 +278,9 @@
 		</script>
 		
 	</head>
-	
+
 	<body>
-		
+
 		<div id="reveal">
 			<div class="intro">
 				<section>
@@ -295,12 +295,13 @@
 						<li><a href="05.classes.html" title="05.classes"><img src="assets/index/05.jpg" alt="05.classes" title="05.classes" /></a></li>
 						<li><a href="06.code.organization.html" title="06.code.organization"><img src="assets/index/06.jpg" alt="06.code.organization" title="06.code.organization" /></a></li>
 						<li><a href="07.databases.html" title="07.databases"><img src="assets/index/07.jpg" alt="07.databases" title="07.databases" /></a></li>
+						<li><a href="08.templates.html" title="08.templates"><img src="assets/index/08.jpg" alt="08.templates" title="08.templates" /></a></li>
 					</ul>
 					<footer>
 						<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 					</footer>
 				</section>
-			</div>	
+			</div>
 			<div id="about">
 				<p>This collection of slides form the course materials for the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at <a href="http://www.kahosl.be/">KaHo Sint-Lieven</a>, Ghent, Belgium.</p>
 				<p>The materials were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>.</p>
@@ -310,8 +311,8 @@
 
 			<!-- ikdoeict.be Link -->
 			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
-			
+
 		</div>
-		
+
 	</body>
 </html>
