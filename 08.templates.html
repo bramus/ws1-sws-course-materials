@@ -379,6 +379,98 @@
 						<h2>Conditional blocks</h2>
 					</section>
 
+					<section>
+						<h2>Conditional blocks</h2>
+						<ul>
+							<li class="fragment">
+								Most likely you'll have content on your site which can or cannot be displayed depending on a variable
+								<ul>
+									<li class="example">Example: If a user is logged in, a message on your site could read <em>Welcome $name</em>. If he's not logged in, it could read <em>Please log in</em></li>
+									<li class="example">It'd be stupid to have two separate templates for this</li>
+								</ul>
+							</li>
+							<li class="fragment">In essence, we want our template to respond to an <code>if</code> statement.</li>
+							<li class="fragment">
+								We'll introduce <em>options</em> in our <code>Template</code> class
+								<ul>
+									<li class="example">Wrapped between <code>{option:oName}</code> and <code>{/option:oName}</code> in our <code>.tpl</code></li>
+									<li class="example">Not shown by default, you have to enabled it from within the <code>.php</code></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Template example</h2>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php">Hi there {$user}, the weather today is {$weather}.
+
+{option:oCloudy}
+&lt;img src=&quot;weather/cloudy.png&quot; alt=&quot;&quot; title=&quot;&quot; /&gt;&lt;br /&gt;
+It might be a good idea to bring your umbrella with you
+{/option:oCloudy}
+
+{option:oSunny}
+&lt;img src=&quot;weather/sunny.png&quot; alt=&quot;&quot; title=&quot;&quot; /&gt;&lt;br /&gt;
+Wear a hat!
+{/option:oSunny}</code></pre>
+						</div>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/04/04.php">&lt;?php
+
+$tpl = new Template('04.tpl');
+
+$tpl-&gt;assign('title', $title);
+$tpl-&gt;assign('user', $userName);
+$tpl-&gt;assign('weather', $weatherToday);
+
+if ($weatherToday == 'cloudy') {
+	$tpl-&gt;assignOption('oCloudy');
+} else {
+	$tpl-&gt;assignOption('oSunny');
+}</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Extended Class Functionality</h2>
+						<ul>
+							<li class="fragment">Keep track of the assigned options</li>
+							<li class="fragment">When <code>display()</code> is called, show all assigned options and remove all unassigned options</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Class Inner workings</h2>
+						<ul>
+							<li class="fragment">
+								A debug session
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/08/debug-04.png" class="noborder" width="810" height="487" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>Assigning an option is basically stripping away the <code>{option:oName}</code> and <code>{/option:oName}</code> around it so that the HTML is left over.</p>
+											<p>Before displaying, we need to clean up the unassigned options by searching for all <code>{option:oName}</code>-<code>{/option:oName}</code> leftovers and deleting those entirely (template tags + inner content).</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>That's basically it!</h2>
+						<ul>
+							<li class="fragment">
+								Not that hard, right?
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
