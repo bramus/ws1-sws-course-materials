@@ -1,0 +1,999 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 09.persistence</title>
+
+		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 09.persistence">
+		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/main.css" media="screen">
+		<link rel="stylesheet" href="css/print.css" media="print">
+
+		<link rel="stylesheet" href="lib/zenburn.css">
+
+		<style>
+			.columns .column {
+				float: left;
+				list-style: none;
+				margin: 0 0 12px 0;
+				padding: 0;
+			}
+
+			.column-12 {
+				width: 50%;
+				text-align: center;
+			}
+			code {
+				color: gainsboro;
+			}
+
+			li > code, li em > code, li del > code, li ins > code, p > code {
+				background: #3F3F3F;
+				padding: 2px 4px;
+				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+				font-size: 80%;
+			}
+
+			del code, code.nok {
+				color: #C55;
+			}
+
+			ins code, code.ok {
+				color: #5C5;
+			}
+
+			strong {
+				color: #553d00;
+				background: transparent url('assets/02/strong.png') no-repeat 50% 50%;
+				font-size: 80%;
+				padding: 0 4px;
+				font-family: palatino, times;
+				font-weight: 300;
+				font-style: italic;
+			}
+
+			#reveal section img.noborder {
+				background: transparent;
+				border: 0;
+				-webkit-box-shadow: none;
+				-moz-box-shadow: none;
+				-ms-box-shadow: none;
+				-o-box-shadow: none;
+				box-shadow: none;"
+			}
+
+			#reveal .hastooltip {
+				position: relative;
+			}
+
+			#reveal .hastooltip .tooltip {
+				position: absolute;
+				bottom: 5px;
+				right: 5px;
+				background-image: url('assets/comments.png');
+				background-position: bottom right;
+				background-repeat: no-repeat;
+				width: 60px;
+				height: 60px;
+				z-index: 110;
+			}
+
+			#reveal .tooltip div {
+				display: none;
+				position: absolute;
+				bottom: 30px;
+				right: 40px;
+				font-size: 50%;
+				line-height: 1.48;
+				min-width: 420px;
+				opacity: 0.9;
+				border: 2px solid #ccc;
+				padding: 20px;
+				background-color: #ffc;
+				background-image: -webkit-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -moz-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -ms-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: -o-linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,180,0));
+				border-radius: 4px;
+				box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
+				text-shadow: 0 1px 0 rgba(255,255,255,.4);
+				color: #333;
+			}
+
+			#reveal .tooltip:hover div {
+				display: block;
+			}
+
+			#reveal .tooltip ul {
+				margin: 5px 5px 5px 15px;
+			}
+
+			#reveal .tooltip ul li {
+				margin-left: 10px;
+			}
+
+			#reveal .tooltip div *:last-child {
+				margin-bottom: 0;
+			}
+
+			@keyframes pizzapalace-cycle {
+			    0% { background-position: 0 0; }
+			    100% { background-position: -2290px 0; }
+			}
+
+			#pizzapalace-strip {
+				display: block;
+				width: 572px;
+				height: 526px;
+				background: transparent url(assets/09/pizzapalace-strip.png) no-repeat 0 0 !important;
+				background-size: 2308px 526px !important;
+				transform-origin: center top;
+				transform: scale(0.6);
+				top: -320px;
+				margin: 0 auto 0;
+				transition: all 0.25s;
+			}
+
+			#pizzapalace-strip:hover {
+				transform: scale(1);
+				top: -200px;
+				animation: pizzapalace-cycle 12s steps(4) infinite;
+			}
+
+			@keyframes colormysite-cycle {
+			    0% { background-position: 0 0; }
+			    100% { background-position: -1112px 0; }
+			}
+
+			#colormysite-strip {
+				display: block;
+				width: 556px;
+				height: 480px;
+				background: transparent url(assets/09/colormysite-strip.png) no-repeat 0 0 !important;
+				background-size: 1112px 480px !important;
+				transform-origin: center top;
+				transform: scale(0.6);
+				top: -120px;
+				margin: 0 auto 0;
+				transition: all 0.25s;
+			}
+
+			#colormysite-strip:hover {
+				transform: scale(1);
+				animation: colormysite-cycle 4s steps(2) infinite;
+			}
+
+			@keyframes login-cycle {
+			    0% { background-position: 0 0; }
+			    100% { background-position: -3395px 0; }
+			}
+
+			#login-strip {
+				display: block;
+				width: 580px;
+				height: 449px;
+				background: transparent url(assets/09/login-strip.png) no-repeat 0 0 !important;
+				background-size: 3395px 449px !important;
+				transform-origin: center top;
+				transform: scale(0.6);
+				top: -220px;
+				margin: 0 auto 0;
+				transition: all 0.25s;
+			}
+
+			#login-strip:hover {
+				top: -120px;
+				transform: scale(1);
+				animation: login-cycle 12s steps(6) infinite;
+			}
+
+		</style>
+
+	</head>
+
+	<body>
+
+		<div id="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+
+				<!-- 0 : Title -->
+				<section>
+
+					<section>
+						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
+						<h1>09.persistence</h1>
+
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+						<script>
+							// Delicously hacky. Look away.
+							if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) )
+							document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
+						</script>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Persistence</h2>
+					</section>
+
+					<section>
+						<h2>Persistence?</h2>
+
+						<ul>
+							<li class="fragment">
+								HTTP is stateless
+								<ul class="fragment">
+									<li>HTTP does not provide a mechanism to keep or maintain information about other requests that might have happened</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								How can we keep information between two requests?
+								<ul class="fragment">
+									<li>How can we persist data between requests?</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Example: Pizza Palace</h2>
+						<ul>
+							<li class="fragment">
+								How can we let the last page of this example site know what choices you made on the pages before?
+								<a href="assets/09/examples/1.pizzapalace/v0" id="pizzapalace-strip"></a>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Persistence using the querystring</h2>
+					</section>
+
+					<section>
+						<h2>Persistence using the querystring</h2>
+						<ul>
+							<li class="fragment">Collect all selected options, and attach them to the querystring of the <code>action</code> of the form</li>
+							<li class="fragment">On the final page, all data can be found in <code>$_GET</code></li>
+							<li class="fragment">
+								Beware: only works with <code>&lt;form method=&quot;post&quot;&gt;</code>
+								<ul>
+									<li class="fragment">Reason: when the method is <code>get</code>, the browser discards the already attached parameters from <code>action</code> and then adds all the fields of the form to it</li>
+								</ul>
+							</code>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Code</h2>
+						<ul>
+							<li class="fragment">
+								Let's take a peek
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/09/pizzapalace-code-querystring.png" class="noborder" width="810" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>On each page, extract the form parameters from <code>$_POST</code>, and add it to the <code>action</code> of the form. Remember to <code>urlencode()</code> them!</p>
+											<p>On the following pages, extract the values to persist from <code>$_GET</code> and re-add them to the form</p>
+											<p>On the final page, all parameters can be found in <code>$_GET</code></p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Afterthoughts</h2>
+						<ul>
+							<li class="fragment">Querystring = Cumbersome
+								<ul>
+									<li class="fragment">
+										Per piece of data, you need to add an extra parameter to the querystring
+										<ul>
+											<li class="fragment">Even if you don't need that data immediately</li>
+										</ul>
+									</li>
+									<li class="fragment">The client needs to re-send all data for each request</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Querystring = Limited
+								<ul>
+									<li class="fragment">Querystrings are limited in length (at about 2000 chars some browsers will start failing)!</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Querystring = Insecure
+								<ul>
+									<li class="fragment">Adding a <code>?loggedin=true</code> parameter to the querystring is not secure</li>
+									<li class="fragment">Params may be spoofed</li>
+									<li class="fragment">URLs my be passed on</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Persistence using hidden fields</h2>
+					</section>
+
+					<section>
+						<h2>Persistence using hidden fields</h2>
+						<ul>
+							<li class="fragment">Collect all selected options, and add them to the form as hidden fields</li>
+							<li class="fragment">On the final page, all data can be found in <code>$_GET</code> or <code>$_POST</code>, depending on the <code>method</code> used</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Code</h2>
+						<ul>
+							<li class="fragment">
+								Let's take a peek
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/09/pizzapalace-code-hiddenfields.png" class="noborder" width="810" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>On each page, extract the form parameters from <code>$_GET</code> or <code>$_POST</code>, and add it as a hidden field in the form.</p>
+											<p>On the following pages, extract the values to persist from <code>$_GET</code> or <code>$_POST</code> and re-add them to the form</p>
+											<p>On the final page, all parameters can be found in <code>$_GET</code> or <code>$_POST</code>, depending on the form <code>method</code> used.</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Afterthoughts</h2>
+						<ul>
+							<li class="fragment">Hidden Fields = Cumbersome
+								<ul>
+									<li class="fragment">
+										Per piece of data, you need to add an extra parameter to the querystring
+										<ul>
+											<li class="fragment">Even if you don't need that data immediately</li>
+										</ul>
+									</li>
+									<li class="fragment">The client needs to re-send all data for each request</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Hidden Fields = Limited
+								<ul>
+									<li class="fragment">When using <code>$_GET</code>: limit of querystring</li>
+									<li class="fragment">
+										When using <code>$_POST</code>: limit set by server
+										<pre class="bigger"><code class="language-php">echo ini_get('post_max_size');</code></pre>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Hidden Fields = Insecure
+								<ul>
+									<li class="fragment">Adding a <code>loggedin=true</code> hidden field is not secure</li>
+									<li class="fragment">Params may be spoofed</li>
+									<li class="fragment">URLs my be passed on</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Persistence using cookies</h2>
+					</section>
+
+					<section>
+						<h2>Cookies</h2>
+						<ul>
+							<li class="fragment">Store data on the client-side using <code>name=value</code> pairs</li>
+							<li class="fragment">
+								Cookie usage not unlimited; Minimum requirements set via <a href="http://www.ietf.org/rfc/rfc2109.txt">RFC 2109</a> <em>(item 6.3, page 15)</em>
+								<ul>
+									<li class="fragment">
+										Allow a minimum of 4kb to be stored in a cookie
+										<ul>
+											<li>All browsers: 4kb max</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Allow at least 20 cookies per domain
+										<ul>
+											<li>Firefox &amp; IE: 50 max</li>
+											<li>Opera: 30 max</li>
+											<li>Safari: unlimited</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Allow at least 300 cookies in total
+										<ul>
+											<li>Firefox: 1000 max</li>
+											<li>IE &amp; Opera: unknown</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">The limits don't form a problem most of the time</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Client-server traffic</h2>
+						<ul>
+							<li class="fragment">
+								Cookies are stored client-side.
+								<ul>
+									<li class="fragment">When visiting a website, the client will send all (valid) cookies to the server via a header in the request head</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								The server can instruct a client to set a cookie.
+								<ul>
+									<li class="fragment">The instruction is sent via a header in the server response head</li>
+									<li class="fragment">Only after (!) the entire response has been received will the client create the cookie</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Cookie properties (1)</h2>
+						<ul>
+							<li class="fragment">
+								Properties/Fields
+								<ul>
+									<li><code>name</code></li>
+									<li><code>value</code></li>
+									<li><code>expires</code></li>
+									<li><code>path</code></li>
+									<li><code>domain</code></li>
+									<li><code>secure</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								<code>name</code> and <code>value</code>
+								<ul>
+									<li class="fragment">Name of the cookie and its value</li>
+									<li class="fragment">Minimum required properties of a cookie</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Cookie properties (2)</h2>
+						<ul>
+							<li class="fragment">
+								<code>expires</code>
+								<ul>
+									<li class="fragment">
+										Time when a cookie should expire
+										<ul>
+											<li>Default: current time</li>
+										</ul>
+									</li>
+									<li class="fragment">Expire a week from now: <code>time() + 60*60*24*7</code></li>
+									<li class="fragment">
+										Delete a cookie by setting a time in the past <code>time() - 1</code>
+										<ul>
+											<li>Best is to take a point in time way back, to overcome time differences between the server and client: <code>time() - 60*60*24*7</code></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								<code>path</code>
+								<ul>
+									<li class="fragment">
+										Path on the domain on which the cookie is valid
+										<ul>
+											<li>Default: current path</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Cookie created on <code>/admin</code> can't be read from <code>/</code>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>Cookie properties (3)</h2>
+						<ul>
+							<li class="fragment">
+								<code>domain</code>
+								<ul>
+									<li class="fragment">
+										Domain on which the cookie is valid
+										<ul>
+											<li>Default: current domain</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										If <code>www.ikdoeict.be</code> instructs a cookie to be created for <code>ikdoeict.be</code>, then that cookie can also be read from <code>student.ikdoeict.be</code>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								<code>secure</code>
+								<ul>
+									<li class="fragment">
+										Indicates if a cookie may only be transmitted from the client to the server when running over a secure connection
+										<ul>
+											<li>Default: <code>false</code></li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Creating Cookies in PHP</h2>
+						<ul>
+							<li class="fragment">
+								Use a function named <code>setcookie()</code>
+								<ul>
+									<li class="fragment">Via the response header, an instruction is sent to the client to create a cookie</li>
+									<li class="fragment">
+										Function Parameters: the properties as described before
+										<ul>
+											<li>Only <code>name</code> and <code>value</code> are mandatory</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Example
+										<pre class="bigger"><code class="language-php">setcookie('color', $theValue, time() + 24*60*60*7);</code></pre>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Reading Cookies in PHP</h2>
+						<ul>
+							<li class="fragment">
+								Via a request header, all (*) cookies are automatically sent to the server when making a request.
+							</li>
+							<li class="fragment">
+								PHP <em>automagically</em> populates a global associative array <code>$_COOKIE</code>
+							</li>
+								<ul>
+									<li class="fragment">Like <code>$_GET</code> and <code>$_POST</code>, but for cookies</li>
+									<li class="fragment">
+										Example
+										<pre class="bigger"><code class="language-php">$color = (string) isset($_COOKIE['color']) ? $_COOKIE['color'] : '#FFFFFF';</code></pre>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Example: Color my site</h2>
+						<ul>
+							<li class="fragment">
+								Change the background color of the page and store it in a cookie
+								<a href="assets/09/examples/2.sitecolor/v0" id="colormysite-strip"></a>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Code</h2>
+						<ul>
+							<li class="fragment">
+								Let's take a peek
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/09/colormysite-code-v1.png" class="noborder" width="810" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>Although the code looks OK, someting odd is happening: the color changes indeed, but with a one-page delay. Refreshing the page in the browser seems to fix this too</p>
+											<p>The problem relies in the fact that <code>setcookie()</code> doesn't create a cookie, but sends an instruction to create one. At the time the page is being rendered, the cookie hasn't change yet (as the browser creates the cookie when the HTML's already been rendered)</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Code, revisited</h2>
+						<ul>
+							<li class="fragment">
+								Let's take a peek
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/09/colormysite-code-v2.png" class="noborder" width="810" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>By using a <code>header('location: ...');</code> we can enforce a refresh from within our PHP code. That way, when the page reloads, the cookie will be present.</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Afterthoughts</h2>
+						<ul>
+							<li class="fragment">
+								Ideal for storing data that needs to be saved for a longer time / in between sessions
+							</li>
+							<li class="fragment">
+								Cookies = Uncertain
+								<ul>
+									<li class="fragment">
+										Cookies may be manually deleted by the client
+									</li>
+									<li class="fragment">
+										Cookies may be disabled (browser settting)
+									</li>
+									<li class="fragment">
+										Cookies may overwrite eachother (FIFO)
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Cookies = Insecure
+								<ul>
+									<li class="fragment">
+										May be changed/read externally
+									</li>
+									<li class="fragment">
+										May be stolen via XSS
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Only to be used for storing non-critical data such as a color preference for example
+							</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Persistence using sessions</h2>
+					</section>
+
+					<section>
+						<h2>Sessions</h2>
+
+						<ul>
+							<li class="fragment">
+								Session = period of time in which a user interacts with a website
+							</li>
+							<li class="fragment">
+								Session starts with first request to a site and stops when you shut down the browser, or after a timeout
+								<ul>
+									<li>Timeout is configurable on the server</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								A session is identified by a <strong>session id</strong>
+								<ul>
+									<li>
+										The client needs to send the identifier with each request so that the server knows which session it is about
+										<ul>
+											<li>May be sent using the querystring, a hidden field or a cookie</li>
+											<li>If you forget sending it once, a new session id will be generated</li>
+										</ul>
+									</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Session variables are stored serverside, linked to the session id
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Sessions in PHP</h2>
+						<ul>
+							<li>
+								In PHP
+								<ul>
+									<li class="fragment">
+										The session id is stored in variable named <code>PHPSESSID</code>
+										<ul>
+											<li>Name of the variable is configurable</li>
+										</ul>
+									</li>
+									<li class="fragment">PHP provides you some functions to create, manipulate, and destroy sessions</li>
+									<li class="fragment">PHP fetches the variables linked to the session id and populates an associative array <code>$_SESSION</code> with them</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Sessions, practical (1)</h2>
+						<ul>
+							<li>
+								Starting / continuing a session
+								<pre class="bigger"><code class="language-php">session_start();</code></pre>
+								<ul>
+									<li class="fragment">
+										Searches for the <code>PHPSESSID</code> in <code>$_COOKIE</code>, <code>$_GET</code>, or <code>$_POST</code>
+										<ul>
+											<li class="fragment">If not found, a (new) session id is generated</li>
+											<li class="fragment">If found, all linked vars are fetched and <code>$_SESSOIN</code> is populated</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Best is to call this function on each page, even if that page doesn't use the session data
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Sessions, practical (2)</h2>
+						<ul>
+							<li class="fragment">
+								Storing a var in the session
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/09/examples/3.stranger/somepage.php">session_start();
+$_SESSION['name'] = 'Bramus!';</code></pre>
+							</li>
+							<li class="fragment">
+								Fetching a var from the session
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/09/examples/3.stranger/someotherpage.php">session_start();
+$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'stranger';</code></pre>
+							</li>
+							<li class="fragment">
+								Erasing a var from the session
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/09/examples/3.stranger/unset.php">session_start();
+unset($_SESSION['name']);</code></pre>
+							</li>
+							<li class="fragment">
+								Erasing an entire session
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/09/examples/3.stranger/destroy.php">session_start();
+// Best practice: unset all session vars before stopping the session
+foreach ($_SESSION as $key => $value) unset($_SESSION[$key]);
+session_destroy();</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Passing the PHPSESSID</h2>
+						<ul>
+							<li class="fragment">
+								Session id <strong>must</strong> be sent with each request
+								<ul>
+									<li>hidden fields (manual)</li>
+									<li>query string (manual)</li>
+									<li>cookies (automatic)</li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Example using querystring
+								<pre class="bigger"><code class="language-php">session_start();
+echo '&lt;a href=&quot;nextpage.php?PHPSESSID=' . session_id() . '&quot; title=&quot;to next page&quot;&gt;to next page&lt;/a&gt;';</code></pre>
+							</li>
+							<li class="fragment">
+								Cookies do it automatically, based upon a <code>php.ini</code> setting
+								<pre class="bigger"><code>session.use_cookies = 1</code></pre>
+								<ul>
+									<li class="fragment">Enabled by default</li>
+									<li class="fragment">Easy, as you as a developer don't need to do any extra work</li>
+									<li class="fragment">Disadvantage: inherits all disadvantages that cookies have</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Some php.ini settings</h2>
+						<pre class="bigger"><code class="language-php">// path where sessions are saved on the server
+session.save_path = /tmp
+
+// name of the session id variable
+session.name = PHPSESSID
+
+// use cookies for storing the session id?
+session.use_cookies = 1
+
+// exipiry time of the cookie. Default value: when the browser closes
+session.cookie_lifetime = 0
+
+// expiry time of session variables
+session.gc_maxlifetime = 1440</code></pre>
+					</section>
+
+					<section>
+						<h2>Example: Authentication</h2>
+						<ul>
+							<li class="fragment">
+								A login and logout page, along with three content pages, showing content based upon the logged in state.
+								<a href="assets/09/examples/4.login/v0" id="login-strip"></a>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Code</h2>
+						<ul>
+							<li class="fragment">
+								Let's take a peek
+								<div class="hastooltip">
+
+									<figure>
+										<img src="assets/09/login-code.png" class="noborder" width="810" alt="" title="" />
+									</figure>
+
+									<div class="tooltip">
+										<div>
+											<p>The login page is very simple for this proof-of-concept: any login where the username equals the password is accepted</p>
+											<p>If the login validates, a <code>loggedIn</code> variable is stored in the session, along with the <code>name</code></p>
+											<p>The content pages use a simple <code>if</code> to display the <code>$_SESSION['name']</code> or a request to log in</p>
+											<p>The logout page simply destroys the session and redirects to the index</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+				</section>
+
+
+
+
+				<section>
+
+					<section>
+						<h2>Summary</h2>
+					</section>
+
+					<section>
+						<h2>Summary</h2>
+						<ul>
+							<li class="fragment">
+								4 ways to persist data between requests
+								<ol>
+									<li>Querystring</li>
+									<li>Hidden Fields</li>
+									<li>Cookies</li>
+									<li>Sessions</li>
+								</ol>
+							</li>
+							<li class="fragment">
+								Querystring and Hidden fields not practical when persisting lots of data. Okay for storing small amounts of (non-critical) data.
+							</li>
+							<li class="fragment">Cookies are okay to storing (non-critical) data for a longer period of time</li>
+							<li class="fragment">Sessions suggested above all</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+
+				<!-- The END -->
+				<section>
+					<section>
+						<h2>Questions?</h2>
+						<footer>
+							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
+						</footer>
+					</section>
+				</section>
+
+
+
+				<!-- Sources -->
+				<section id="sources">
+					<section>
+						<h2>Sources</h2>
+						<ul>
+							<li><a href="http://www.boutell.com/newfaq/misc/urllength.html">WWW FAQs: What is the maximum length of a URL?</a></li>
+						</ul>
+					</section>
+				</section>
+
+			</div>
+
+			<!-- The navigational controls UI -->
+			<aside class="controls">
+				<a class="left" href="#">&#x25C4;</a>
+				<a class="right" href="#">&#x25BA;</a>
+				<a class="up" href="#">&#x25B2;</a>
+				<a class="down" href="#">&#x25BC;</a>
+				<span id="revealIndex">/</span>
+			</aside>
+
+			<!-- Index Link -->
+			<aside class="back">
+				<a href="index.html">&larr; Back to index</a>
+			</aside>
+
+			<!-- ikdoeict.be Link -->
+			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
+
+			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
+			<div class="progress"><span></span></div>
+
+		</div>
+
+		<script src="js/reveal.js"></script>
+		<script src="lib/highlight.js"></script>
+		<script src="lib/prefixfree.js"></script>
+		<script src="lib/css-snippets.js"></script>
+		<script src="lib/css-edit.js"></script>
+		<script src="lib/incrementable.js"></script>
+		<script src="js/main.js"></script>
+
+	</body>
+</html>
