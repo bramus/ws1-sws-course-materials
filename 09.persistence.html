@@ -291,7 +291,7 @@
 						<h2>Persistence using the querystring</h2>
 						<ul>
 							<li class="fragment">Collect all selected options, and attach them to the querystring of the <code>action</code> of the form</li>
-							<li class="fragment">On the final page, all data can be found in <code>$_GET</code></li>
+							<li class="fragment">On the final page, all data can be found in <strong>a combination</strong> of <code>$_GET</code> and <code>$_POST</code></li>
 							<li class="fragment">
 								Beware: only works with <code>&lt;form method=&quot;post&quot;&gt;</code>
 								<ul>
@@ -316,7 +316,7 @@
 										<div>
 											<p>On each page, extract the form parameters from <code>$_POST</code>, and add it to the <code>action</code> of the form. Remember to <code>urlencode()</code> them!</p>
 											<p>On the following pages, extract the values to persist from <code>$_GET</code> and re-add them to the form</p>
-											<p>On the final page, all parameters can be found in <code>$_GET</code></p>
+											<p>On the final page, all parameters can be found in a combination of <code>$_GET</code> and <code>$_POST</code></p>
 										</div>
 									</div>
 								</div>
@@ -371,7 +371,7 @@
 						<h2>Persistence using hidden fields</h2>
 						<ul>
 							<li class="fragment">Collect all selected options, and add them to the form as hidden fields</li>
-							<li class="fragment">On the final page, all data can be found in <code>$_GET</code> or <code>$_POST</code>, depending on the <code>method</code> used</li>
+							<li class="fragment">On the final page, all data can be found in <strong>either</strong> <code>$_GET</code> or <code>$_POST</code>, depending on the <code>method</code> used</li>
 						</ul>
 					</section>
 
@@ -390,7 +390,7 @@
 										<div>
 											<p>On each page, extract the form parameters from <code>$_GET</code> or <code>$_POST</code>, and add it as a hidden field in the form.</p>
 											<p>On the following pages, extract the values to persist from <code>$_GET</code> or <code>$_POST</code> and re-add them to the form</p>
-											<p>On the final page, all parameters can be found in <code>$_GET</code> or <code>$_POST</code>, depending on the form <code>method</code> used.</p>
+											<p>On the final page, all parameters can be found in either <code>$_GET</code> or <code>$_POST</code>, depending on the form <code>method</code> used.</p>
 										</div>
 									</div>
 								</div>
@@ -799,7 +799,7 @@
 										Searches for the <code>PHPSESSID</code> in <code>$_COOKIE</code>, <code>$_GET</code>, or <code>$_POST</code>
 										<ul>
 											<li class="fragment">If not found, a (new) session id is generated</li>
-											<li class="fragment">If found, all linked vars are fetched and <code>$_SESSOIN</code> is populated</li>
+											<li class="fragment">If found, all linked vars are fetched and <code>$_SESSION</code> is populated</li>
 										</ul>
 									</li>
 									<li class="fragment">
