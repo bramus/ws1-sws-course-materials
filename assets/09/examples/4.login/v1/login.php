@@ -16,7 +16,7 @@
 	$formError = false;
 
 	// form submitted
-	if (isset($_POST['btnSubmit'])) {
+	if (isset($_POST['moduleAction']) && ($_POST['moduleAction'] == 'login')) {
 
 		// extract sent in username & password
 		$username = isset($_POST['username']) ? trim($_POST['username']) : '';
@@ -103,7 +103,8 @@
 				<dt><label for="password">Password</label></dt>
 				<dd><input type="password" name="password" id="password" value="" /></dd>
 			</dl>
-			<label><input type="submit" name="btnSubmit" value="Log in &gt;" /></label>
+			<input type="hidden" name="moduleAction" id="moduleAction" value="login" />
+			<input type="submit" name="btnSubmit" value="Log in &gt;" />
 		</fieldset>
 	</form>
 
