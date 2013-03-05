@@ -154,7 +154,12 @@
 								<ul>
 									<li>Install one of these for this course</li>
 									<li>Follow <a href="http://helpdesk.ikdoeict.be/index.php?/Knowledgebase/Article/View/11/0/howto-installatieconfiguratie-van-software-wamplamp-stack">these instructions</a> afer installation</li>
-									<li>On Windows, also add <code>C:\wamp\bin\php\<em>version</em>\</code> to the system's <code>PATH</code> variable</li>
+									<li>Be sure to add the PHP binary to your system's <code>PATH</code>
+										<ul>
+											<li>Windows: Add <code>C:\wamp\bin\php\<em>version</em>\</code> to <code>PATH</code> via Computer Settings</li>
+											<li>OS X: Paste this on the Terminal: <code>echo 'export PATH=/Applications/MAMP/bin/php/php<em>version</em>/bin/:$PATH' &gt;&gt; ~/.bash_profile</code></li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 							<li class="fragment">
