@@ -1,16 +1,16 @@
-<!doctype html>  
+<!doctype html>
 <html lang="en">
-	
+
 	<head>
 		<meta charset="utf-8">
-		
+
 		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 07.databases</title>
 
 		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 07.databases">
 		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
-		
+
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		
+
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/main.css" media="screen">
 		<link rel="stylesheet" href="css/print.css" media="print">
@@ -39,11 +39,11 @@
 				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 				font-size: 80%;
 			}
-			
+
 			del code, code.nok {
 				color: #C55;
 			}
-			
+
 			ins code, code.ok {
 				color: #5C5;
 			}
@@ -101,11 +101,11 @@
 			});
 		</script>
 	</head>
-	
+
 	<body>
-		
+
 		<div id="reveal">
-			
+
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
@@ -116,7 +116,7 @@
 					<section>
 						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
 						<h1>07.databases</h1>
-					
+
 						<footer>
 							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 						</footer>
@@ -238,11 +238,11 @@
 								We use a <code>config.php</code> to store our credentials in
 
 								<pre class="bigger"><code class="language-php">&lt;?php
-	
+
 		define('DB_HOST', 'localhost');
 		define('DB_USER', 'root');
 		define('DB_PASS', 'Azerty123');
-	
+
 		define('DB_NAME_FF', 'fotofactory');
 		define('DB_NAME_STATUS', 'status');
 
@@ -266,17 +266,17 @@
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS)
 		or die ('Could not connect to database server');
-		
+
 	// If connection succeeded, we end up here.
 	// If not, the die() above gets interpreted
 	echo 'Connected';
-	
+
 	// Select database &quot;fotofactory&quot;
 	@mysqli_select_db($dbhandler, DB_NAME_FF)
 		or die ('Could not select database');
-	
+
 	echo ' and selected the DB';
-	
+
 	// ... your query magic here
 
 //EOF</code></pre></div>
@@ -294,9 +294,9 @@
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
 		or die ('Could not connect to database server or access database');
-		
+
 	echo 'Connected and selected the DB (in one go)';
-	
+
 	// ... your query magic here
 
 //EOF</code></pre></div>
@@ -336,11 +336,11 @@
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
 		or die ('Could not connect to database server or access database');
-		
+
 	echo 'Connected and selected the DB (in one go)';
-	
+
 	// ... your query magic here
-	
+
 	@mysqli_close($dbhandler);
 
 //EOF</code></pre></div>
@@ -374,7 +374,7 @@
 	$dbhandler = mysqli_connect(DB_HOST, DB_USER, 'wrongpass');
 
 //EOF</code></pre>
-						
+
 							<pre class="bigger"><code>Warning: mysqli_connect() [function.mysqli-connect]: (28000/1045): Access denied for user 'root'@'localhost' (using password: YES) in /Users/bramus/Dropbox/Kaho/../assets/07/examples/02.php on line 5</code></pre>
 						</div>
 					</section>
@@ -409,7 +409,7 @@
 		or die ('Could not connect to database server or access database');
 
 //EOF</code></pre>
-						
+
 							<pre class="bigger"><code>Could not connect to database server or access database</code></pre>
 						</div>
 
@@ -520,13 +520,13 @@
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-	
+
 	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-	
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	echo '&lt;p&gt;This example outputs nothing&lt;/p&gt;';
-	
+
 	@mysqli_close($dbhandler);
 
 //EOF</code></pre>
@@ -598,22 +598,22 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03b.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-		
+
 		while ($row = mysqli_fetch_row($result)) {
 			// Outputs &lt;p&gt;id - name&lt;/p&gt;
 			echo '&lt;p&gt;' . $row[0] . '-' . $row[1] . '&lt;/p&gt;';
 		}
-		
+
 	}
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -625,22 +625,22 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03c.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-		
+
 		while ($row = mysqli_fetch_assoc($result)) {
 			// Outputs &lt;p&gt;id - name&lt;/p&gt;
 			echo '&lt;p&gt;' . $row['id'] . '-' . $row['name'] . '&lt;/p&gt;';
 		}
-		
+
 	}
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -652,22 +652,22 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03d.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-		
+
 		while ($row = mysqli_fetch_object($result)) {
 			// Outputs &lt;p&gt;id - name&lt;/p&gt;
 			echo '&lt;p&gt;' . $row-&gt;id . '-' . $row-&gt;name . '&lt;/p&gt;';
 		}
-		
+
 	}
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -724,17 +724,17 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03e.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'UPDATE collections SET user_id = ROUND(RAND()*10) WHERE id != 2';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		echo '&lt;p&gt;' . mysqli_affected_rows($dbhandler) . ' were affected&lt;/p&gt;';
-		
+
 	}
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -746,17 +746,17 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03f.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'INSERT INTO collections (name, user_id) VALUES ("TestColl", 2)';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		echo '&lt;p&gt;Row inserted with ID' . mysqli_insert_id($dbhandler) . '&lt;/p&gt;';
-		
+
 	}
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -768,24 +768,24 @@
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03g.php">&lt;?php
 
 	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-		
+
 	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-		
+
 	$result = @mysqli_query($dbhandler, $query);
-	
+
 	if ($result !== false) { // Yes, we have one or more rows returned
-		
+
 		// &hellip; process rows here
-		
+
 	}
-	
+
 	// Free up some memory (and tell how much memory is used before and after)
 	echo memory_get_usage() . PHP_EOL;
 	mysqli_free_result($result);
 	echo memory_get_usage() . PHP_EOL;
-	
+
 	// &hellip; your other code here
-	
+
 	@mysqli_close($dbhandler);</code></pre>
 						</div>
 					</section>
@@ -832,9 +832,9 @@
 
 	$id = $_GET['id']; // get ID from URL
 	$dbhandler = &hellip;; // open database connection
-	
+
 	// get product from DB
-	$result = @mysqli_query($dbhandler, 
+	$result = @mysqli_query($dbhandler,
 		'SELECT * FROM products WHERE id = ' . $id
 	) or showDbError('query');
 
@@ -842,7 +842,7 @@
 	&hellip;
 
 &hellip;
-	
+
 // EOF</code></pre>
 							</li>
 						</ul>
@@ -863,13 +863,13 @@
 
 	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
 	$dbhandler = &hellip;; // open database connection
-	
-	$result = @mysqli_query($dbhandler, 
+
+	$result = @mysqli_query($dbhandler,
 		'SELECT * FROM products WHERE id = ' . $id
 	) or showDbError('query');
 
 &hellip;
-	
+
 // EOF</code></pre>
 						</div>
 					</section>
@@ -899,13 +899,13 @@
 
 	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
 	$dbhandler = &hellip;; // open database connection
-	
-	$result = @mysqli_query($dbhandler, 
+
+	$result = @mysqli_query($dbhandler,
 		'SELECT * FROM products WHERE id = &quot;' . $id . '&quot;'
 	) or showDbError('query');
 
 &hellip;
-	
+
 // EOF</code></pre>
 						</div>
 					</section>
@@ -932,13 +932,13 @@
 							<pre class="bigger"><code class="language-php">&lt;?php
 
 &hellip;
-	
-	$result = @mysqli_query($dbhandler, 
+
+	$result = @mysqli_query($dbhandler,
 		'SELECT * FROM products WHERE id = &quot;' . addslashes($id) . '&quot;'
 	) or showDbError('query');
 
 &hellip;
-	
+
 // EOF</code></pre>
 						</div>
 					</section>
@@ -979,7 +979,7 @@
 						</ul>
 
 						<div class="fragment">
-							<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler, 
+							<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler,
 	'SELECT * FROM products WHERE id = &quot;' . mysqli_real_escape_string($dbhandler, $id) . '&quot;'
 ) or showDbError('query');</code></pre>
 						</div>
@@ -1228,7 +1228,7 @@ $query = 'SELECT * FROM statuses '
 $status = 'Just received the trophy &quot;Marksman of the year&quot;';
 $date = time();
 
-$query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
+$query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))',
 	mysqli_real_escape_string($dbhandler, $name),
 	mysqli_real_escape_string($dbhandler, $status),
 	mysqli_real_escape_string($dbhandler, (int) $date)
@@ -1287,7 +1287,7 @@ $query 	= @mysqli_prepare($dbhandler, 'INSERT INTO statuses (name, status, datum
 
 $query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND datum &lt;= FROM_UNIXTIME(?) ORDER BY id DESC');
 @mysqli_stmt_bind_param($query, 'si', $name, $date);
-	
+
 @mysqli_stmt_execute($query) or showDbError('query');
 @mysqli_stmt_bind_result($query, $r_id, $r_name, $r_status, $r_datum);
 @mysqli_stmt_store_result($query);
@@ -1295,9 +1295,9 @@ $query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND 
 echo '&lt;p&gt;Got ' . mysqli_stmt_num_rows($query) . ' rows:&lt;/p&gt;';
 
 while ($row = mysqli_stmt_fetch($query)) {
-	echo '&lt;p&gt;' . $r_id . ' - ' . $r_name . ' - ' . 
+	echo '&lt;p&gt;' . $r_id . ' - ' . $r_name . ' - ' .
 		 date('d/m/Y H:i:s', strtotime($r_datum)) . ': ' . $r_status . '&lt;/p&gt;';
-}	
+}
 
 @mysqli_stmt_close($query);</code></pre>
 						</div>
@@ -1337,7 +1337,7 @@ $blog = 'SELECT id, title, content FROM blogs WHERE id = &quot;' . $id . '&quot;
 
 // &hellip; fetch and show blogpost
 
-$comments = 'SELECT id, blog_id, comment, publishdate, author_id 
+$comments = 'SELECT id, blog_id, comment, publishdate, author_id
 FROM comments WHERE blog_id = &quot;' . $id . '&quot;';
 
 // &hellip; fetch comments into array
@@ -1346,7 +1346,7 @@ foreach ($comments as $c) {
 
 	$authorInfo = 'SELECT * FROM authors WHERE id = &quot;' . $c['author_id'] . '&quot;';
 
-	// &hellip; show comment + author info 
+	// &hellip; show comment + author info
 
 }</code></pre>
 								<ul>
@@ -1380,7 +1380,7 @@ $comments = 'SELECT c.id, c.blog_id, c.comment, c.publishdate, c.author_id, a.na
 
 foreach ($comments as $c) {
 
-	// &hellip; show comment + author info 
+	// &hellip; show comment + author info
 
 }</code></pre>
 								<ul>
@@ -1404,7 +1404,7 @@ foreach ($comments as $c) {
 
 						<ul>
 							<li class="fragment">
-								You must <strong>always</strong> encrypt stored passwords. Never store them as plaintext 
+								You must <strong>always</strong> encrypt stored passwords. Never store them as plaintext
 								<ul>
 									<li>If you don't, it's very easy for a hacker to steal lots of passwords if he ever got access to your database</li>
 								</ul>
@@ -1526,7 +1526,7 @@ foreach ($comments as $c) {
 							<li class="fragment">Run Queries</li>
 							<li class="fragment">Add users and set privileges</li>
 						</ul>
-						
+
 					</section>
 
 				</section>
@@ -1587,11 +1587,11 @@ foreach ($comments as $c) {
 					<section>
 						<h2>Sources</h2>
 						<ul>
-							
+
 						</ul>
 					</section>
 				</section>
-				
+
 			</div>
 
 			<!-- The navigational controls UI -->
@@ -1602,7 +1602,7 @@ foreach ($comments as $c) {
 				<a class="down" href="#">&#x25BC;</a>
 				<span id="revealIndex">/</span>
 			</aside>
-			
+
 			<!-- Index Link -->
 			<aside class="back">
 				<a href="index.html">&larr; Back to index</a>
@@ -1610,12 +1610,12 @@ foreach ($comments as $c) {
 
 			<!-- ikdoeict.be Link -->
 			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
-			
+
 			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
 			<div class="progress"><span></span></div>
-			
+
 		</div>
-		
+
 		<script src="js/reveal.js"></script>
 		<script src="lib/highlight.js"></script>
 		<script src="lib/prefixfree.js"></script>

@@ -770,8 +770,8 @@ $tpl-&gt;display();</code></pre>
 						<h2>Template Creation</h2>
 						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes' 
-             . DIRECTORY_SEPARATOR . 'classes' 
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes'
+             . DIRECTORY_SEPARATOR . 'classes'
              . DIRECTORY_SEPARATOR . 'template.php';
 
 $tpl = new Template(__DIR__  . DIRECTORY_SEPARATOR . '07.tpl');
@@ -830,7 +830,7 @@ $tpl-&gt;parseIteration('iSingle');</code></pre>
 	{iteration:iSingleWithValue}
 	&lt;li&gt;
 		I've been spawned by an iteration and I have a local variable:
-		&lt;em&gt;{$varInIteration}&lt;/em&gt; and also can access a global variable, 
+		&lt;em&gt;{$varInIteration}&lt;/em&gt; and also can access a global variable,
 		such as $var: &lt;em&gt;{$var}&lt;/em&gt;
 	&lt;/li&gt;
 	{/iteration:iSingleWithValue}

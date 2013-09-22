@@ -1,16 +1,16 @@
-<!doctype html>  
+<!doctype html>
 <html lang="en">
-	
+
 	<head>
 		<meta charset="utf-8">
-		
+
 		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 01.php.intro</title>
 
 		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 01.php.intro">
 		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
-		
+
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		
+
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/main.css" media="screen">
 		<link rel="stylesheet" href="css/print.css" media="print">
@@ -38,11 +38,11 @@
 				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 				font-size: 80%;
 			}
-			
+
 			del code, code.nok {
 				color: #C55;
 			}
-			
+
 			ins code, code.ok {
 				color: #5C5;
 			}
@@ -64,11 +64,11 @@
 			}
 		</style>
 	</head>
-	
+
 	<body>
-		
+
 		<div id="reveal">
-			
+
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
@@ -78,7 +78,7 @@
 					<section>
 						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
 						<h1>01.php.intro</h1>
-					
+
 						<footer>
 							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 						</footer>
@@ -89,7 +89,7 @@
 						</script>
 					</section>
 				</section>
-				
+
 
 				<!-- PHP & Running PHP -->
 				<section>
@@ -117,7 +117,7 @@
 							</li>
 							<li class="fragment">
 								Very popular on the internet
-								<ul>									
+								<ul>
 									<li>One of the first Serverside Scripting Languages (° 1995)</li>
 									<li>PHP plugins exist for nearly all web servers and OSes</li>
 									<li>e.g. Wordpress, Facebook, Wikipedia, etc.</li>
@@ -241,7 +241,7 @@ bramus$</code></pre></div>
 						</ul>
 					</section>
 				</section>
-				
+
 
 				<!-- PHP Syntax: Variables/Arrays/Casting, -->
 				<section>
@@ -481,7 +481,7 @@ php ( );</code></pre></div>
 					</section>
 
 				</section>
-				
+
 
 				<!-- Code Comments -->
 				<section>
@@ -510,7 +510,7 @@ comment
 						</ul>
 					</section>
 				</section>
-				
+
 
 				<!-- Selections/Iterations/Operators -->
 				<section>
@@ -528,26 +528,26 @@ comment
 	if ($condition) {
 		// do something
 	}
-	
+
 	if ($condition) {
 		// do something
 	} else {
 		// do something else
 	}
-	
+
 	switch ($var) {
-		
-		case $value1: 
+
+		case $value1:
 			// do something
 			break;
-			
+
 		case $value2:
-			// do something 
-			break; 
-			
+			// do something
+			break;
+
 		default:
 			// do something
-			
+
 	}</code></pre></div>
 							</li>
 						</ul>
@@ -592,11 +592,11 @@ comment
 	while ($condition) {
 		// do something
 	}
-	
+
 	do {
 		// do something
 	} while ($condition);
-	
+
 	for ($x = 0; $x &lt; 5; $x++) {
 		// do something
 	}
@@ -739,18 +739,18 @@ not equal</code></pre></div>
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/functions-chopstringend1.php">&lt;?php
 
 	// Our chopStringEnd function
-	function chopStringEnd($str, $len, $ending) { 
+	function chopStringEnd($str, $len, $ending) {
 		if (strlen($str) &lt; $len)
 			return $str;
 		else
 			return substr($str, 0, $len - strlen($str)) . $ending;
 	}
-	
+
 	// Our variables
 	$origStr = '/Users/bramus/Dropbox/Kaho/Lesactiviteiten/Webscripting1';
 	$cutoffLength = 40;
 	$endStr	= '...';
-		
+
 	// Go!
 	echo chopStringEnd($origStr, $cutoffLength, $endStr);</code></pre></div>
 							</li>
@@ -765,18 +765,18 @@ not equal</code></pre></div>
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/functions-chopstringend2.php">&lt;?php
 
 	// Our chopStringEnd function
-	function chopStringEnd($str, $len = 30, $ending = '---') { 
+	function chopStringEnd($str, $len = 30, $ending = '---') {
 		if (strlen($str) &lt; $len)
 			return $str;
 		else
 			return substr($str, 0, $len - strlen($str)) . $ending;
 	}
-	
+
 	// Our variables
 	$origStr = '/Users/bramus/Dropbox/Kaho/Lesactiviteiten/Webscripting1';
 	$cutoffLength = 40;
 	$endStr = '...';
-		
+
 	// Go!
 	echo chopStringEnd($origStr, $cutoffLength, $endStr) . PHP_EOL;
 	echo chopStringEnd($origStr, $cutoffLength) . PHP_EOL;
@@ -794,14 +794,14 @@ not equal</code></pre></div>
 
 	/**
 	 * Chops a string at the given length with the given ending
-	 * 
+	 *
 	 * @param	string 	$str 	The initial String
 	 * @param	int 	$len 	The length to chop off at
 	 * @param	string 	$ending	The ending to add
-	 * 
+	 *
 	 * @return	string 	The circumcised up string
 	 */
-	function chopStringEnd($str, $len = 30, $ending = '---') { 
+	function chopStringEnd($str, $len = 30, $ending = '---') {
 		if (strlen($str) &lt; $len)
 			return $str;
 		else
@@ -814,7 +814,7 @@ not equal</code></pre></div>
 							<footer class="fragment">This way your IDE will tell you which params are needed, what type they need to be, etc.</footer>
 					</section>
 				</section>
-				
+
 
 				<!-- Scoping: Problem, global keywoard, define() function -->
 				<section>
@@ -916,7 +916,7 @@ files/uploads/me.jpg</code></pre></div>
 						</ul>
 					</section>
 				</section>
-				
+
 
 				<!-- Errors and debugging: @, dump() -->
 				<section>
@@ -934,7 +934,7 @@ files/uploads/me.jpg</code></pre></div>
 	function divide($numerator, $denominator) {
 		return $numerator / $denominator;
 	}
-	
+
 	echo divide(1, 2) . PHP_EOL;	// 0.5
 	echo divide(1, 0) . PHP_EOL;	// "Warning: Division by zero"
 	echo @divide(1, 0) . PHP_EOL;	// (suppressed)
@@ -993,7 +993,7 @@ array(3) {
 						</ul>
 					</section>
 				</section>
-				
+
 
 				<!-- Dates in PHP: epoch, time functions, params -->
 				<section>
@@ -1182,7 +1182,7 @@ array(3) {
 					</section>
 
 				</section>
-				
+
 
 				<!-- CLI input, output -->
 				<section>
@@ -1223,7 +1223,7 @@ Argument #3 : baz</code></pre></div>
 							<li class="fragment">
 								Version 1
 								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
-	$args = getopt('ab:c::'); 
+	$args = getopt('ab:c::');
 	# nothing = don't accept any value (why? WHYYYY?)
 	# trailing : = required
 	# trailing :: = optional
@@ -1247,7 +1247,7 @@ array(3) {
 							<li class="fragment">
 								Version 2
 								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
-	$args = getopt('', array('a', 'b:', 'c::')); 
+	$args = getopt('', array('a', 'b:', 'c::'));
 	# nothing = don't accept any value (why? WHYYYY?)
 	# trailing : = required
 	# trailing :: = optional
@@ -1274,7 +1274,7 @@ array(3) {
 	$name = readline('What is your name? ');
 	$city = readline('Where to you live? ');
 	echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
-								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-interactive.php 
+								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-interactive.php
 What is your name? Bramus
 Where to you live? Vinkt
 Hello Bramus from Vinkt</code></pre></div>
@@ -1303,7 +1303,7 @@ elephant
 cow
 giraffe
 
-bramus$ cat cli-stdin-input.txt | php cli-stdin.php 
+bramus$ cat cli-stdin-input.txt | php cli-stdin.php
 yeknom
 tnahpele
 woc
@@ -1354,7 +1354,7 @@ echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 						</ul>
 					</section>
 				</section>
-				
+
 
 				<!-- More CLI: Lint a file, check the config -->
 				<section>
@@ -1375,7 +1375,7 @@ echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 							</li>
 							<li class="fragment">
 								PHP will tell you what went wrong and where
-								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -l faulty.php 
+								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -l faulty.php
 
 Parse error: parse error, expecting `')'' in faulty.php on line 4
 Errors parsing faulty.php</code></pre></div>
@@ -1410,7 +1410,7 @@ Configure Command =>  '/private/var/tmp/apache_mod_php/apache_mod_php-79~4/php/c
 							<li class="fragment">
 								Know your PHP version by running <code>php -v</code>
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -v
-PHP 5.3.15 with Suhosin-Patch (cli) (built: Aug 24 2012 17:45:44) 
+PHP 5.3.15 with Suhosin-Patch (cli) (built: Aug 24 2012 17:45:44)
 Copyright (c) 1997-2012 The PHP Group
 Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 							</li>
@@ -1422,7 +1422,7 @@ Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 
 				</section>
 
-				
+
 
 				<!-- Conventions: code style -->
 				<section>
@@ -1505,7 +1505,7 @@ Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 						</ul>
 					</section>
 				</section>
-				
+
 			</div>
 
 			<!-- The navigational controls UI -->
@@ -1516,7 +1516,7 @@ Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 				<a class="down" href="#">&#x25BC;</a>
 				<span id="revealIndex">/</span>
 			</aside>
-			
+
 			<!-- Index Link -->
 			<aside class="back">
 				<a href="index.html">&larr; Back to index</a>
@@ -1524,12 +1524,12 @@ Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
 
 			<!-- ikdoeict.be Link -->
 			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
-			
+
 			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
 			<div class="progress"><span></span></div>
-			
+
 		</div>
-		
+
 		<script src="js/reveal.js"></script>
 		<script src="lib/highlight.js"></script>
 		<script src="lib/prefixfree.js"></script>
