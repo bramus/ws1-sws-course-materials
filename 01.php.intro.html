@@ -127,7 +127,10 @@
 								Suffers from historical cruft &amp; syntax inconsistencies
 							</li>
 							<li class="fragment">
-								Current version: 5.4.7
+								Current versions: 5.4.20 &amp; 5.5.4
+								<ul>
+									<li>Both these version get bugfixes implemented</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -156,6 +159,7 @@
 								<ul>
 									<li>Just extract the <code>.zip</code> onto your filesystem and you're good to go</li>
 									<li>Windows users must download from <a href="http://windows.php.net/">http://windows.php.net/</a></li>
+									<li>OS X users obtain prebuilt binaries using <a href="https://github.com/josegonzalez/homebrew-php">PHP Homebrew formulae</a> or from <a href="http://php-osx.liip.ch/">Liip AG</a></li>
 								</ul>
 							</li>
 						</ul>
@@ -168,7 +172,7 @@
 								PHP can be configured via a file named <code>php.ini</code>
 							</li>
 							<li class="fragment">We'll take a closer look at this file when it's needed</li>
-							<li class="fragment">Note: the <code>php.ini</code> shipped with Wampserver/MAMP is configured correctly</li>
+							<li class="fragment">Note: the <code>php.ini</code> shipped with Wampserver/MAMP is configured <em>mostly</em> correctly</li>
 						</ul>
 					</section>
 
@@ -184,13 +188,13 @@
 											<li>A <code>;</code> ends a statement</li>
 											<li>Type <code>quit</code> or <code>exit</code> to leave the shell</li>
 										</ul>
-										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -a
-Interactive shell
+										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ <span class="fragment">php -a</span>
+<span class="fragment">Interactive shell
 
-php &gt; echo 'hello';
-hello
-php &gt; quit
-bramus$</code></pre></div>
+php &gt;</span><span class="fragment"> echo 'hello';</span>
+<span class="fragment">hello
+php &gt;</span><span class="fragment"> quit
+bramus$</span></code></pre></div>
 									</li>
 								</ul>
 							</li>
@@ -204,9 +208,9 @@ bramus$</code></pre></div>
 								<ul>
 									<li class="fragment">
 										Run <code>php -r &quot;<em>one line of PHP code</em>&quot;</code> to run a single line of PHP code
-										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -r &quot;echo 'hello' . PHP_EOL;&quot;
-hello
-bramus$</code></pre></div>
+										<div class="fragment"><pre class="bigger"><code class="language-php">bramus$<span class="fragment"> php -r &quot;echo 'hello' . PHP_EOL;&quot;</span>
+<span class="fragment">hello
+bramus$</span></code></pre></div>
 									</li>
 									<li class="fragment">
 										Run <code>php [-f] <em>file.php</em></code> to &ldquo;execute&rdquo; a file that contains PHP code
@@ -217,9 +221,9 @@ bramus$</code></pre></div>
 										<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 	echo 'hello' . PHP_EOL;
 ?&gt;</code></pre></div>
-<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-example.php
-hello
-bramus$</code></pre></div>
+<div class="fragment"><pre class="bigger"><code class="language-php">bramus$<span class="fragment"> php cli-example.php</span>
+<span class="fragment">hello
+bramus$</span></code></pre></div>
 									</li>
 								</ul>
 							</li>
@@ -231,9 +235,15 @@ bramus$</code></pre></div>
 							<li class="fragment">
 								In a web context
 								<ul>
-									<li>Give your file a <code>.php</code> extension and the PHP interpreter will interpret the file
+									<li class="fragment">Give your file a <code>.php</code> extension and the PHP interpreter will interpret the file
 										<ul>
 											<li>The webserver must of course be configured to do so</li>
+										</ul>
+									</li>
+									<li class="fragment">PHP 5.4+ ships with a built-in webserver which can be started from anywhere
+										<pre class="bigger"><code>php -S localhost:8080</code></pre>
+										<ul>
+											<li>All PHP files in that folder will be served</li>
 										</ul>
 									</li>
 								</ul>
@@ -257,26 +267,26 @@ bramus$</code></pre></div>
 							</li>
 							<li class="fragment">
 								Use <code>echo</code> or <code>print</code> to output something onscreen.
-								<pre class="bigger"><code class="language-php">bramus$ php -a
-Interactive shell
+								<pre class="bigger"><code class="language-php">bramus$<span class="fragment"> php -a</span>
+<span class="fragment">Interactive shell
 
-php &gt; echo 'hello';
-hello
-php &gt; echo('hello');
-hello
-php &gt; print 'hello';
-hello
-php &gt; print('hello');
-hello</code></pre>
+php &gt;</span><span class="fragment"> echo 'hello';
+<span class="fragment">hello
+php &gt;</span><span class="fragment"> echo('hello');
+<span class="fragment">hello
+php &gt;</span><span class="fragment"> print 'hello';
+<span class="fragment">hello
+php &gt;</span><span class="fragment"> print('hello');
+<span class="fragment">hello</code></pre>
 								<ul>
 									<li class="fragment">The first example is the preferred syntax</li>
 								</ul>
 							</li>
 							<li class="fragment">
 								Statements end in a <code>;</code>
-								<pre class="bigger"><code class="language-php">php &gt; echo 'hello'
-php &gt; ;
-hello</code></pre>
+								<pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> echo 'hello'</span><span class="fragment">
+php &gt;</span><span class="fragment"> ;</span><span class="fragment">
+hello</span></code></pre>
 							</li>
 						</ul>
 					</section>
@@ -289,9 +299,9 @@ hello</code></pre>
 								<ul class="fragment">
 									<li>Variable names start with a <code>$</code></li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
-php &gt; echo $a;
-3</code></pre></div>
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> $a = 3;</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo $a;</span><span class="fragment">
+3</span></code></pre></div>
 							</li>
 							<li class="fragment">
 								Variables are of a certain type
@@ -324,12 +334,12 @@ php &gt; echo $a;
 							</li>
 							<li class="fragment">Both are typical properties of scripting languages</li>
 						</ul>
-						<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
-php &gt; echo gettype($a);
+						<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> $a = 3;</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo gettype($a);</span><span class="fragment">
 integer
-php &gt; $a = 'Hello';
-php &gt; echo gettype($a);
-string</code></pre></div>
+php &gt;</span><span class="fragment"> $a = 'Hello';</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo gettype($a);</span><span class="fragment">
+string</span></code></pre></div>
 					</section>
 
 					<section>
@@ -337,12 +347,12 @@ string</code></pre></div>
 						<ul>
 							<li class="fragment">
 								To enforce a variable being of a certain type, you must explicitly cast it to that type
-								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $a = 3;
-php &gt; echo gettype($a);
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> $a = 3;</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo gettype($a);</span><span class="fragment">
 integer
-php &gt; $a = (string) $a;
-php &gt; echo gettype($a);
-string</code></pre></div>
+php &gt;</span><span class="fragment"> $a = (string) $a;</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo gettype($a);</span><span class="fragment">
+string</span></code></pre></div>
 					</section>
 
 					<section>
@@ -353,12 +363,12 @@ string</code></pre></div>
 								<ul>
 									<li>
 										<code>$firstName</code> and <code>$firstname</code> are not the same!
-										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $firstName = 'Bramus';
-php &gt; echo $firstName;
+										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> $firstName = 'Bramus';</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo $firstName;</span><span class="fragment">
 Bramus
-php &gt; echo $firstname;
+php &gt;</span><span class="fragment"> echo $firstname;</span><span class="fragment">
 
-Notice: Undefined variable: firstname in php shell code on line 1</code></pre></div>
+Notice: Undefined variable: firstname in php shell code on line 1</span></code></pre></div>
 									</li>
 								</ul>
 							</li>
@@ -367,12 +377,12 @@ Notice: Undefined variable: firstname in php shell code on line 1</code></pre></
 								<ul>
 									<li>
 										When using a <code>+</code>, PHP will think you're adding numbers <em>(weak typing!)</em>
-										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $firstName = 'Bramus';
-php &gt; $lastName = 'Van Damme',
-php &gt; echo $firstName + ' ' + $lastName;
+										<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> $firstName = 'Bramus';</span><span class="fragment">
+php &gt;</span><span class="fragment"> $lastName = 'Van Damme';</span><span class="fragment">
+php &gt;</span><span class="fragment"> echo $firstName + ' ' + $lastName;</span><span class="fragment">
 0
-php &gt; echo $firstName . ' ' . $lastName;
-Bramus Van Damme
+php &gt;</span><span class="fragment"> echo $firstName . ' ' . $lastName;</span><span class="fragment">
+Bramus Van Damme</span>
 </code></pre></div>
 									</li>
 								</ul>
@@ -561,7 +571,7 @@ comment
 								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 
 	$a = 7;
-	if ($a < 9) {
+	if ($a &lt; 9) {
 		echo '$a is less than 9';
 	} else {
 		echo '$a is greater than 9';
@@ -572,12 +582,27 @@ comment
 									<li class="fragment">Course convention: indent one <code>TAB</code> inside curly brackets</li>
 								</ul>
 							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Selections (3)</h2>
+						<ul>
 							<li class="fragment">
 								When possible, use the ternary operator
 								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 
 	$a = 7;
-	echo (($a < 9) ? '$a is less than 9' : '$a is greater than 9');</code></pre></div>
+	echo (($a &lt; 9) ? '$a is less than 9' : '$a is greater than 9');</code></pre></div>
+							</li>
+							<li class="fragment">
+								Since PHP 5.3, the ternary operator has gotten smarter:
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+
+	echo $nickName ?: $firstName;</code></pre></div>
+								<ul class="fragment">
+									<li>If <code>$nickName</code> is <em>truthy</em> then it will be outputted. If not <code>$firstName</code> will.</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -620,23 +645,23 @@ comment
 						<ul>
 							<li class="fragment">
 								Example
-								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; for ($x = 1; $x &lt;= 5; $x++) {
-php { echo 'Hello 2ICT' . $x . PHP_EOL;
-php { }
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt;<span class="fragment"> for ($x = 1; $x &lt;= 5; $x++) {</span><span class="fragment">
+php { </span><span class="fragment">echo 'Hello 2ICT' . $x . PHP_EOL;</span><span class="fragment">
+php { </span><span class="fragment">}</span><span class="fragment">
 Hello 2ICT1
 Hello 2ICT2
 Hello 2ICT3
 Hello 2ICT4
-Hello 2ICT5</code></pre></div>
+Hello 2ICT5</span></code></pre></div>
 							</li>
 							<li class="fragment">
 								Example
-								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; $countries = array('BE' => 'Belgium', 'NL' => 'The Netherlands');
-php &gt; foreach ($countries as $key =&gt; $value) {
-php { echo $key . ' = ' . $value . PHP_EOL;
-php { }
+								<div class="fragment"><pre class="bigger"><code class="language-php">php &gt; <span class="fragment">$countries = array('BE' => 'Belgium', 'NL' => 'The Netherlands');</span><span class="fragment">
+php &gt; </span><span class="fragment">foreach ($countries as $key =&gt; $value) {</span><span class="fragment">
+php { </span><span class="fragment">echo $key . ' = ' . $value . PHP_EOL;</span><span class="fragment">
+php { </span><span class="fragment">}</span><span class="fragment">
 BE = Belgium
-NL = The Netherlands</code></pre></div>
+NL = The Netherlands</span></code></pre></div>
 							</li>
 						</ul>
 					</section>
@@ -700,9 +725,9 @@ not equal</code></pre></div>
 							<li class="fragment">
 								A few math-related functions
 								<ul>
-									<li><code>ceil</code> &mdash; round fractions up</li>
-									<li><code>floor</code> &mdash; round fractions down</li>
-									<li><code>round</code> &mdash; round a float</li>
+									<li><code>ceil</code> &mdash; round numerical values up</li>
+									<li><code>floor</code> &mdash; round numerical values down</li>
+									<li><code>round</code> &mdash; round numerical values mathematically</li>
 									<li><code>rand</code>/<code>mt_rand</code> &mdash; generate a random number</li>
 									<li><code>sqrt</code> &mdash; calculate the square root of a number</li>
 									<li>...</li>
@@ -896,10 +921,10 @@ files/uploads/me.jpg</code></pre></div>
 					</section>
 
 					<section>
-						<h2>How to properly fix it</h2>
+						<h2>How to properly fix it (since 2000)</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>define()</code>
+								Use <code>define()</code>, a function that shipped with PHP4
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping5.php">&lt;?php
 
 	define('HOST', 'http://www.myhost.com/');
@@ -911,7 +936,28 @@ files/uploads/me.jpg</code></pre></div>
 	echo absUrl('files/uploads/me.jpg');</code></pre></div>
 							</li>
 							<li class="fragment">
-								Course convention: always use <code>define()</code>, never use <code>global</code>
+								Course convention: always use <code>define()</code> to define global constants, never use the <code>global</code> keyword
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How we can fix this since 2009</h2>
+						<ul>
+							<li class="fragment">
+								Since PHP 5.3 it's possible to use the <code>use</code> keyword to inject a variable into a function
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/scoping6.php">&lt;?php
+
+	$host = 'http://www.myhost.com/';
+
+	$absUrl = function ($relUrl) use ($host) {
+		return $host . $relUrl;
+	};
+
+	echo $absUrl('files/uploads/me.jpg');</code></pre></div>
+							</li>
+							<li class="fragment">
+								This syntax is only used when working with callback functions. We'll stick to using <code>define()</code> for now.
 							</li>
 						</ul>
 					</section>
@@ -986,8 +1032,8 @@ array(3) {
 							<li class="fragment">
 								Real debugging is possible with
 								<ul>
-									<li>Built-in IDE debugger (eg. Zend Studio has one, Aptana had one)</li>
-									<li>External debugger, linked to IDE (eg. XDebug + Netbeans/Aptana)</li>
+									<li>Built-in IDE debugger<br /><em>(eg. Zend Studio/PHPStorm have one, Aptana had one)</em></li>
+									<li>External debugger, linked to IDE<br /><em>(eg. XDebug + Aptana/PHPStorm/Netbeans)</em></li>
 								</ul>
 							</li>
 						</ul>
@@ -1222,7 +1268,7 @@ Argument #3 : baz</code></pre></div>
 							</li>
 							<li class="fragment">
 								Version 1
-								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-args2.php">&lt;?php
 	$args = getopt('ab:c::');
 	# nothing = don't accept any value (why? WHYYYY?)
 	# trailing : = required
@@ -1246,7 +1292,7 @@ array(3) {
 						<ul>
 							<li class="fragment">
 								Version 2
-								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-args3.php">&lt;?php
 	$args = getopt('', array('a', 'b:', 'c::'));
 	# nothing = don't accept any value (why? WHYYYY?)
 	# trailing : = required
@@ -1270,7 +1316,7 @@ array(3) {
 						<ul>
 							<li class="fragment">
 								Use <code>readline()</code> to ask for input whilst the script is runnning
-								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-interactive.php">&lt;?php
 	$name = readline('What is your name? ');
 	$city = readline('Where to you live? ');
 	echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
@@ -1290,7 +1336,7 @@ Hello Bramus from Vinkt</code></pre></div>
 							</li>
 							<li class="fragment">
 								<code>STDIN</code> = input
-								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-stdin.php">&lt;?php
 	while(!feof(STDIN)) {
 		$line = trim(fgets(STDIN));
 		if(strlen($line) &gt; 0) {
@@ -1338,7 +1384,7 @@ stderr world</code></pre></div>
 							</li>
 							<li class="fragment">
 								Fortunately we can knock up an alternative for that platform, using <code>STDIN</code>
-								<div class="fragment"><pre class="bigger"><code class="language-php">function getInput($question = '') {
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-interactive2.php">function getInput($question = '') {
 	if (!function_exists('readline')) {
 		echo $question . ' ';
 		return stream_get_line(STDIN, 1024, PHP_EOL);
@@ -1380,6 +1426,7 @@ echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 Parse error: parse error, expecting `')'' in faulty.php on line 4
 Errors parsing faulty.php</code></pre></div>
 							</li>
+							<li class="fragment">Handy if you link this to a precommit hook in Git to prevent you from committing faulty code</li>
 						</ul>
 					</section>
 
@@ -1390,11 +1437,11 @@ Errors parsing faulty.php</code></pre></div>
 								Check your PHP config by running <code>php -i</code>
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -i
 phpinfo()
-PHP Version => 5.3.15
+PHP Version => 5.4.10
 
-System => Darwin brm.local 12.2.0 Darwin Kernel Version 12.2.0: Sat Aug 25 00:48:52 PDT 2012; root:xnu-2050.18.24~1/RELEASE_X86_64 x86_64
-Build Date => Aug 24 2012 17:40:23
-Configure Command =>  '/private/var/tmp/apache_mod_php/apache_mod_php-79~4/php/configure'  '--prefix=/usr' '--mandir=/usr/share/man' '--infodir=/usr/share/info' '--disable-depe...</code></pre></div>
+System => Darwin brm.local 12.5.0 Darwin Kernel Version 12.5.0: Mon Jul 29 16:33:49 PDT 2013; root:xnu-2050.48.11~1/RELEASE_X86_64 x86_64
+Build Date => Jan 21 2013 15:11:11
+Configure Command =>  './configure'  '--with-mysql=/Applications/MAMP/Library' '--with-apxs2=/Applications/MAMP/Library/bin/apxs'...</code></pre></div>
 							</li>
 							<li class="fragment">
 								If you don't have access to the shell of the machine, upload a file with these contents to it and load it via the browser
@@ -1410,9 +1457,11 @@ Configure Command =>  '/private/var/tmp/apache_mod_php/apache_mod_php-79~4/php/c
 							<li class="fragment">
 								Know your PHP version by running <code>php -v</code>
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php -v
-PHP 5.3.15 with Suhosin-Patch (cli) (built: Aug 24 2012 17:45:44)
+PHP 5.4.10 (cli) (built: Jan 21 2013 15:12:32)
 Copyright (c) 1997-2012 The PHP Group
-Zend Engine v2.3.0, Copyright (c) 1998-2012 Zend Technologies</code></pre></div>
+Zend Engine v2.4.0, Copyright (c) 1998-2012 Zend Technologies
+    with XCache v2.0.1, Copyright (c) 2005-2012, by mOo
+    with Xdebug v2.2.1, Copyright (c) 2002-2012, by Derick Rethans</code></pre></div>
 							</li>
 							<li class="fragment">
 								Convert a PHP file to a syntax highlighted HTML file with <code>php -s file.php</code>
