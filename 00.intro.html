@@ -28,6 +28,16 @@
 			.column-12 {
 				width: 50%;
 			}
+			code {
+				color: gainsboro;
+			}
+
+			li > code, li em > code, li del > code, li ins > code, p > code {
+				background: #3F3F3F;
+				padding: 2px 4px;
+				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+				font-size: 80%;
+			}
 		</style>
 	</head>
 
@@ -69,64 +79,73 @@
 					<section>
 						<h2>Wait? What? This is it?!</h2>
 						<ul class="short">
-							<li>Yes, it's called a slide deck.</li>
-							<li>Built with HTML/CSS/JS</li>
-							<li>Powered by <em>(a customized)</em> <a href="http://hakim.se/projects/reveal-js">Reveal.js</a></li>
-							<li>Main navigation: left/right</li>
-							<li>Sub-slides: up/down <em>(try it now!)</em></li>
-							<li>Touch Device users: Swiping supported!</li>
+							<li class="fragment">
+								Yes, it's called a slide deck.
+								<ul>
+									<li>Built with HTML/CSS/JS</li>
+									<li>Powered by <em>(a customized)</em> <a href="http://hakim.se/projects/reveal-js">Reveal.js</a></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Navigation
+								<ul>
+									<li>Main navigation: left/right</li>
+									<li>Sub-slides: up/down <em>(try it now!)</em></li>
+									<li>Touch Device users: Swiping supported!</li>
+								</ul>
+							</li>
 						</ul>
 					</section>
 
 					<section>
 						<h2>Lost?</h2>
 						<ul class="short">
-							<li>Compass <em>(Bottom-Right)</em></li>
-							<li>Slide Number <em>(Bottom-Right)</em></li>
-							<li>Progress Bar <em>(Bottom)</em></li>
-							<li>Slide Overview <em>(space)</em></li>
-							<li>Back to index link <em>(Top-Left)</em></li>
+							<li class="fragment">Compass <em>(Bottom-Right)</em></li>
+							<li class="fragment">Slide Number <em>(Bottom-Right)</em></li>
+							<li class="fragment">Progress Bar <em>(Bottom)</em></li>
+							<li class="fragment">Slide Overview <em>(space)</em></li>
+							<li class="fragment">Back to index link <em>(Top-Left)</em></li>
 						</ul>
 					</section>
 
 					<section>
 						<h2>Code Examples</h2>
 						<ul>
-							<li>This slidedeck is filled with interactive examples</li>
-							<li>
+							<li class="fragment">This slidedeck is filled with interactive examples</li>
+							<li class="fragment">
 								Syntax Highlighted + Editable
 								<ul>
 									<li>Thanks to <a href="http://softwaremaniacs.org/soft/highlight/en/">Highlight.js</a></li>
 								</ul>
 							</li>
-							<li>
+							<li class="fragment">
 								Numeric values can be adjusted with the &uarr; &amp; &darr; keys
 								<ul><li>Thanks to <em>(a customized)</em> <a href="https://github.com/LeaVerou/Incrementable/">Incrementable</a></li></ul>
 							</li>
-							<li>
+							<li class="fragment">
 								Give it a try!
-							</li>
-						</ul>
-						<pre class="bigger"><code contenteditable class="language-css">body {
+								<pre class="bigger"><code contenteditable class="language-css">body {
 	font-size: 1em;
 	padding: 20px;
 	color: lime;
 }</code></pre>
+							</li>
+						</ul>
 					</section>
 
 					<section>
 						<h2>Code Examples: CSS</h2>
 						<ul>
-							<li><span id="css-demo">Some CSS Snippets are linked to elements ...</span>
+							<li class="fragment"><span id="css-demo">Some CSS Snippets are linked to elements ...</span>
 								<pre class="bigger"><code contenteditable class="language-css" data-subject="#css-demo">color: red;</code></pre>
 							</li>
-							<li>... or to the current slide
+							<li class="fragment">... or to the current slide
 								<pre class="bigger"><code contenteditable class="language-css" data-subject="slide" data-step="10">font-size: 100%;</code></pre>
 								<ul>
 									<li>Thanks to <em>(a customized)</em> <a href="https://github.com/LeaVerou/CSSS/tree/master/plugins">CSS Snippets</a></li>
 								</ul>
 							</li>
-							<li>And oh, CSS Snippets don't need vendor prefixes
+							<li class="fragment">And oh, CSS Snippets don't need vendor prefixes
 								<pre class="bigger" id="rounded-demo"><code contenteditable class="language-css" data-subject="#rounded-demo">box-shadow: 0px 0px 10px #888;</code></pre>
 								<ul>
 									<li>Thanks to <a href="https://github.com/LeaVerou/prefixfree">PrefixFree</a></li>
@@ -137,12 +156,14 @@
 
 					<section>
 						<h2>Code Examples: JS</h2>
-						<ul>
+						<ul class="fragment">
 							<li>JavaScript blocks can even be run!</li>
-							<li>Use &ldquo;Run&rdquo; button, or hit CTRL+ENTER</li>
-						</ul>
-						<pre class="bigger"><code contenteditable class="language-javascript">// A comment
+							<li>
+								Use &ldquo;Run&rdquo; button, or hit CTRL+ENTER
+								<pre class="bigger"><code contenteditable class="language-javascript">// A comment
 alert('OK GO!');</code></pre>
+							</li>
+						</ul>
 						<ul>
 							<li class="fragment">Note
 								<ul>
@@ -155,36 +176,36 @@ alert('OK GO!');</code></pre>
 
 					<section>
 						<h2>Code Examples: HTML</h2>
-						<ul>
+						<ul class="fragment">
 							<li>HTML blocks can be rendered into an overlay</li>
 							<li>Use &ldquo;Show in overlay&rdquo; button, or hit CTRL+ENTER</li>
 							<li>Click the dark overlay background to close it</li>
 						</ul>
-						<pre class="bigger"><code contenteditable class="language-html">&lt;h2&gt;This is how you mark up an unordered list&lt;/h2&gt;
+						<div class="fragment"><pre class="bigger"><code contenteditable class="language-html">&lt;h2&gt;This is how you mark up an unordered list&lt;/h2&gt;
 &lt;ul&gt;
 	&lt;li&gt;Coffee&lt;/li&gt;
 	&lt;li&gt;Tea&lt;/li&gt;
 	&lt;li&gt;Milk&lt;/li&gt;
-&lt;/ul&gt;</code></pre>
+&lt;/ul&gt;</code></pre></div>
 					</section>
 
 					<section>
 						<h2>Code Examples: HTML &amp; PHP</h2>
 						<ul>
-							<li>
+							<li class="fragment">
 								HTML &amp; PHP examples can be linked to a working example.
 								<ul>
 									<li>The example can be rendered into the overlay</li>
 									<li>The example can be linked into a new window/tab</li>
 								</ul>
 							</li>
-							<li>Use &ldquo;Show in script overlay&rdquo; button, or hit CTRL+ENTER</li>
-							<li>Click the dark overlay background to close it</li>
+							<li class="fragment">Use &ldquo;Show in script overlay&rdquo; button, or hit CTRL+ENTER</li>
+							<li class="fragment">Click the dark overlay background to close it</li>
 						</ul>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/00/examples/helloworld.php">&lt;?php
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/00/examples/helloworld.php">&lt;?php
 	echo 'Hello world! The time is now ' . date('Y-m-d H:i:s', time());
 ?&gt;
-</code></pre>
+</code></pre></div>
 						<footer>
 							<span class="fragment" style="display: block;">Note: PHP code examples aren't editable</span>
 							<span class="fragment">Beware: PHP code examples don't run on GitHub!</span>
@@ -194,7 +215,7 @@ alert('OK GO!');</code></pre>
 					<section>
 						<h2>Printing?</h2>
 						<ul class="short">
-							<li>
+							<li class="fragment">
 								Don't
 								<ul>
 									<li>These are interactive slides</li>
@@ -202,7 +223,7 @@ alert('OK GO!');</code></pre>
 									<li>You can't copy paste from paper</li>
 								</ul>
 							</li>
-							<li>If you really want: you can
+							<li class="fragment">If you really want: you can
 								<ul>
 									<li>Only supported in Firefox and IE though</li>
 								</ul>
@@ -255,21 +276,17 @@ alert('OK GO!');</code></pre>
 						<h2>Timing</h2>
 						<ul>
 							<li class="fragment">
-								One semester = 13 weeks
+								One semester = 12 + 1 weeks
 							</li>
 							<li class="fragment">
-								Weekly sub-course alternation
+								Two blocks
 								<ul>
-									<li>Week 1, 3, 5, 8, 10 &amp; 12 = Serverside Webscripting (SWS)</li>
-									<li>Week 2, 4, 7, 9, 11 &amp; 13 = Clientside Webscripting (CWS)</li>
-									<li>Note: Week 6 = polyweek</li>
+									<li>First 6 weeks = Serverside Webscripting (SWS)</li>
+									<li>Last 6 weeks = Clientside Webscripting (CWS)</li>
 								</ul>
 							</li>
 							<li class="fragment">
-								Ergo: this week = serverside
-								<ul>
-									<li>Workshop &amp; both (!) hands-on labs</li>
-								</ul>
+								Ergo: we're started for 6 weeks of SWS
 							</li>
 						</ul>
 					</section>
@@ -358,21 +375,21 @@ alert('OK GO!');</code></pre>
 						<div class="columns clearfix">
 							<ul class="column column-12">
 								<li class="fragment">
-									Week 1
+									Workshop 1
 									<ul>
 										<li>Course Introduction</li>
 										<li>PHP Introduction</li>
 									</ul>
 								</li>
 								<li class="fragment">
-									Week 3
+									Workshop 2
 									<ul>
 										<li>Client-Server</li>
 										<li>Forms</li>
 									</ul>
 								</li>
 								<li class="fragment">
-									Week 5
+									Workshop 3
 									<ul>
 										<li>Files &amp; Folders</li>
 									</ul>
@@ -380,20 +397,20 @@ alert('OK GO!');</code></pre>
 							</ul>
 							<ul class="column column-12">
 								<li class="fragment">
-									Week 8
+									Workshop 4
 									<ul>
 										<li>Code Organization</li>
 										<li>Databases</li>
 									</ul>
 								</li>
 								<li class="fragment">
-									Week 10
+									Workshop 5
 									<ul>
 										<li>Data Persistency</li>
 									</ul>
 								</li>
 								<li class="fragment">
-									Week 12
+									Workshop 6
 									<ul>
 										<li>Classes &amp; Templates</li>
 									</ul>
@@ -408,24 +425,21 @@ alert('OK GO!');</code></pre>
 							<li class="fragment">
 								Technology
 								<ul>
-									<li>Webserver: Apache recommended</li>
+									<li>Scripting Language: PHP 5.3</li>
 									<li>Databaseserver: MySQL</li>
-									<li>Scripting Language: PHP 5.4</li>
+									<li>Webserver: Apache or <a href="http://php.net/manual/en/features.commandline.webserver.php">PHP 5.4's built-in server</a></li>
 								</ul>
 							</li>
 							<li class="fragment">
-								Use one of these packages
+								<a href="http://www.wampserver.com/en/">Wampserver</a> (Win) or <a href="http://www.mamp.info/en/">MAMP (Pro)</a> (OS X) recommended
 								<ul>
-									<li>
-										Windows: <a href="http://www.wampserver.com/en/">Wampserver</a>
+									<li class="fragment">Follow <a href="http://helpdesk.ikdoeict.be/index.php?/Knowledgebase/Article/View/11/4/howto-installatieconfiguratie-van-software-wamplamp-stack">these instructions</a> to configure your install</li>
+									<li class="fragment">Be sure to add the PHP binary to your system's <code>PATH</code>
+										<ul>
+											<li>Windows: Add <code>C:\wamp\bin\php\<em>version</em>\</code> to <code>PATH</code> via Computer Settings</li>
+											<li>OS X: Paste this on the Terminal: <code>echo 'export PATH=/Applications/MAMP/bin/php/php<em>version</em>/bin/:$PATH' &gt;&gt; ~/.bash_profile</code></li>
+										</ul>
 									</li>
-									<li>Mac OS X: <a href="http://www.mamp.info/en/">MAMP (Pro)</a></li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Follow <a href="http://helpdesk.ikdoeict.be/index.php?/Knowledgebase/Article/View/11/4/howto-installatieconfiguratie-van-software-wamplamp-stack">these instructions</a> to configure your install
-								<ul>
-									<li>On Windows, also add <code>C:\wamp\bin\php\<em>version</em>\</code> to the system's <code>PATH</code> variable</li>
 								</ul>
 							</li>
 						</ul>
@@ -467,7 +481,7 @@ alert('OK GO!');</code></pre>
 							<li class="fragment">
 								Course Materials
 								<ul>
-									<li>Available at <a href="http://bramus.github.com/ws1-sws-course-materials/">GitHub</a> and <a href="http://leercentrum.ikdoeict.be/">leercentrum.ikdoeict.be</a></li>
+									<li>Available on <a href="http://bramus.github.com/ws1-sws-course-materials/">GitHub</a></li>
 									<li>Feel free to fork and commit improvements/additions</li>
 								</ul>
 							</li>
@@ -504,7 +518,7 @@ git reset --hard
 git pull</code></pre>
 							</li>
 						</ul>
-						<footer>Note: make sure to install Wampserver first</footer>
+						<footer>Note: This is an example on Windows using Wampserver</footer>
 					</section>
 
 					<section>
@@ -518,10 +532,11 @@ git pull</code></pre>
 								</ul>
 							</li>
 							<li class="fragment">
-								Exam (50%)
+								Final exam (50%)
 								<ul>
 									<li>One assignment in which you'll have to convert a static site to a dynamic one within a given timespan</li>
 									<li>Open book</li>
+									<li style="color: #F33;">Minimum score of 8/20 required to possibly pass this OLA</li>
 								</ul>
 							</li>
 						</ul>
@@ -553,7 +568,7 @@ git pull</code></pre>
 										Correct URL? Correct variable? Does the variable contain anything?
 										<ul>
 											<li>Debugsession</li>
-											<li>use <code>dump();</code></li>
+											<li>use <code>var_dump()</code> and the like</li>
 										</ul>
 									</li>
 									<li>
