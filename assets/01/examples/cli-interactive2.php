@@ -1,5 +1,7 @@
 <?php
-	
+
+	if (php_sapi_name() != 'cli') exit('Please run this file from the CLI');
+
 	/**
 	 * Cross-platform input on the command line
 	 *

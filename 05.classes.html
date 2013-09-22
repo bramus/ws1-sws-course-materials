@@ -1,16 +1,16 @@
-<!doctype html>  
+<!doctype html>
 <html lang="en">
-	
+
 	<head>
 		<meta charset="utf-8">
-		
+
 		<title>Webscripting1 &mdash; Serverside Webscripting &mdash; 05.classes</title>
 
 		<meta name="description" content="Webscripting1 &mdash; Serverside Webscripting &mdash; 05.clases">
 		<meta name="author" content="Bram(us) Van Damme - ikdoeict.be">
-		
+
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		
+
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/main.css" media="screen">
 		<link rel="stylesheet" href="css/print.css" media="print">
@@ -75,11 +75,11 @@
 
 		</script>
 	</head>
-	
+
 	<body>
-		
+
 		<div id="reveal">
-			
+
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 
@@ -88,9 +88,9 @@
 				<section>
 
 					<section>
-						<h3 class="inverted">Serverside Webscripting <small>[JLW274]</small></h3>
+						<h3 class="inverted">Serverside Webscripting <small>[JLW322]</small></h3>
 						<h1>05.classes</h1>
-					
+
 						<footer>
 							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 						</footer>
@@ -151,7 +151,7 @@ echo $inst->var3;</code></pre>
 						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/02.php">&lt;?php
 
 class BasicClass {
-	
+
 	const CLASS_CONSTANT = 12.7;
 
 	public function multiply($x) {
@@ -172,13 +172,13 @@ echo $inst->multiply(3) . PHP_EOL;</code></pre>
 						<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/03.php">&lt;?php
 
 class BasicClass {
-	
+
 	static $staticVariable;
-	
+
 	public function __construct($name) {
 		self::$staticVariable = $name;
 	}
-	
+
 	public static function staticFunction($ohai) {
 		echo $ohai . PHP_EOL;
 	}
@@ -274,9 +274,9 @@ abstract class Animal {
 }
 
 class Dog extends Animal {
-	
+
 	private $tricks = array('jump', 'lay down', 'roll over', 'play dead');
-	
+
 	public function doTrick() {
 		return $this->tricks[rand(0, sizeof($this->tricks) - 1)];
 	}
@@ -344,7 +344,7 @@ echo $dog->doTrick();</code></pre>
 									<li>Use the (extra) <code>static</code> keyword</li>
 									<li>Static variables' value shared amongst instances</li>
 									<li>Static methods callable without an instance</li>
-									<li>Accessible/Callable via <code>ClassName::$someStaticVariable</code> / <code>ClassName::someStaticMethod()</code></li> 
+									<li>Accessible/Callable via <code>ClassName::$someStaticVariable</code> / <code>ClassName::someStaticMethod()</code></li>
 								</ul>
 							</li>
 						</ul>
@@ -438,7 +438,7 @@ echo $dog->doTrick();</code></pre>
 						</ul>
 					</section>
 				</section>
-				
+
 			</div>
 
 			<!-- The navigational controls UI -->
@@ -449,7 +449,7 @@ echo $dog->doTrick();</code></pre>
 				<a class="down" href="#">&#x25BC;</a>
 				<span id="revealIndex">/</span>
 			</aside>
-			
+
 			<!-- Index Link -->
 			<aside class="back">
 				<a href="index.html">&larr; Back to index</a>
@@ -457,12 +457,12 @@ echo $dog->doTrick();</code></pre>
 
 			<!-- ikdoeict.be Link -->
 			<a href="http://www.ikdoeict.be/" title="ikdoeict.be" id="ikdoeict">ikdoeict.be</a>
-			
+
 			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
 			<div class="progress"><span></span></div>
-			
+
 		</div>
-		
+
 		<script src="js/reveal.js"></script>
 		<script src="lib/highlight.js"></script>
 		<script src="lib/prefixfree.js"></script>
