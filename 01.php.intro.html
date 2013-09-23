@@ -770,10 +770,11 @@ not equal</code></pre></div>
 
 	// Our chopStringEnd function
 	function chopStringEnd($str, $len, $ending) {
-		if (strlen($str) &lt; $len)
+		if (strlen($str) &lt; $len) {
 			return $str;
-		else
+		} else {
 			return substr($str, 0, $len - strlen($str)) . $ending;
+		}
 	}
 
 	// Our variables
@@ -796,10 +797,11 @@ not equal</code></pre></div>
 
 	// Our chopStringEnd function
 	function chopStringEnd($str, $len = 30, $ending = '---') {
-		if (strlen($str) &lt; $len)
+		if (strlen($str) &lt; $len) {
 			return $str;
-		else
+		} else {
 			return substr($str, 0, $len - strlen($str)) . $ending;
+		}
 	}
 
 	// Our variables
@@ -832,10 +834,11 @@ not equal</code></pre></div>
 	 * @return	string 	The circumcised up string
 	 */
 	function chopStringEnd($str, $len = 30, $ending = '---') {
-		if (strlen($str) &lt; $len)
+		if (strlen($str) &lt; $len) {
 			return $str;
-		else
+		} else {
 			return substr($str, 0, $len - strlen($str)) . $ending;
+		}
 	}
 
 	...</code></pre></div>
