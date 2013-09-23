@@ -1395,7 +1395,11 @@ stderr world</code></pre></div>
 						<h2>Interactive scripts, Revisited</h2>
 						<ul>
 							<li class="fragment">
-								Unfortunately <code>readline()</code> <a href="http://php.net/manual/en/intro.readline.php">isn't available on Windows</a></em>
+								Unfortunately <code>readline()</code> <a href="http://php.net/manual/en/intro.readline.php">isn't available everywhere</a></em>
+								<ul>
+									<li>On Unix PHP needs to be compiled with it enabled</li>
+									<li>On Windows it's not available at all</li>
+								</ul>
 							</li>
 							<li class="fragment">
 								Fortunately we can knock up an alternative for that platform, using <code>STDIN</code>
