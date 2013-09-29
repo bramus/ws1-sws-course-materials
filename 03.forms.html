@@ -261,9 +261,9 @@
 						<h2>Headers (2)</h2>
 						<ul>
 							<li class="fragment">
-								It is recommened to stop the script executing further, as the client will ignore the <em>response body</em> when a redirect header is received.
+								When redirecting <em>(e.g. in a scenario not being logged in for example)</em> you <strong>MUST</strong> stop the script executing further to prevent the content from being transmitted to the user
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em">
 								Scripts can be stopped prematurely via <code>exit()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect.php">&lt;?php
 
@@ -282,7 +282,7 @@
 							<li class="fragment">
 								As per protocol spec, the <em>response head</em> must be sent before <em>response body</em>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em">
 								Put differently: once you've started sending the <em>response body</em>, it's impossible to manipulate the <em>response head</em>
 
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect_fail.php">&lt;?php
@@ -388,11 +388,14 @@
 									<li><em>(*) Not all really, more on that later</em></li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Querystring format: <code>key=value&amp;key=value&amp;key=value</code>
 								<ul>
 									<li>The <code>key</code>s are the <code>name</code> attributes of the elements, the <code>value</code>s the entered/selected <code>value</code>
 								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								The browser then makes a request to the URL defined in the form <code>action</code> attribute and pass that querystring to it
 							</li>
 						</ul>
 					</section>
@@ -401,7 +404,7 @@
 						<h2>GET vs POST (1)</h2>
 						<ul>
 							<li class="fragment">
-								With <code>GET</code> all values of the querystring are attached to the form's <code>target</code> URL
+								With <code>GET</code> all values of the querystring are attached to the form its <code>target</code> URL
 								<ul>
 									<li>The entered values are visible in the URL of the browser</li>
 									<li>
@@ -412,7 +415,7 @@
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								With <code>POST</code> the querystring is sent in the <em>request body</em>
 								<ul>
 									<li>
@@ -653,19 +656,65 @@
 					</section>
 
 					<section>
+						<h2>Flow / Code structure</h2>
+						<ul>
+							<li class="fragment">
+								In web development, we most of the time send a form to itself and follow this code structure
+								<ol style="margin-top: 1em;">
+									<li class="fragment">
+										extract needed variables from <code>$_GET</code>
+									</li>
+									<li class="fragment">
+										if the form was submitted
+										<ol>
+											<li class="fragment">if form <code>method</code> is <code>POST</code>: extract needed values from <code>$_POST</code>, overwriting those extracted in #1</li>
+											<li class="fragment">
+												check all values for validity
+												<ul>
+													<li class="fragment">
+														the form checks out:
+														<ul>
+															<li>perform an action <em>(e.g. database insert, send an e-mail)</em></li>
+															<li>redirect to somewhere else <em>(viz. stop execution of this script)</em></li>
+														</ul>
+													</li>
+													<li class="fragment">
+														the form does not check out:
+														<ul>
+															<li>build a list of errors</li>
+															<li>continue with this script</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ol>
+									</li>
+									<li class="fragment">
+										show the form
+										<ul>
+											<li>also show errors (if any)</li>
+											<li>persist values</li>
+										</ul>
+									</li>
+								</ol>
+							</li>
+						</ul>
+					</section>
+
+					<section>
 						<h2>Persistency</h2>
 
 						<ul>
 							<li class="fragment">
-								After having submitted the form to itself, make it show the values you entered
+								Persistency = After having submitted the form to itself, make it show the values you entered
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								You can let PHP automatically output the URL of the page itself instead of typing it manually
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	...
 &lt;/form&gt;</code></pre></div>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Different types of inputs (text, checkbox, dropdown) require different persistency methods
 							</li>
 						</ul>
@@ -679,7 +728,7 @@
 								<ul>
 									<li class="fragment">Just output the sent-in value</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_02.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_02.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
 		value=&quot;&lt;?php echo $_GET['name']; ?&gt;&quot; /&gt;
@@ -704,9 +753,9 @@
 									<li class="fragment">For each <code>&lt;option&gt;</code>, check if the value matches the sent-in value</em></li>
 									<li class="fragment">If so: set the <code>selected=&quot;selected&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
-		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_GET['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
+		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_P['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
 		&lt;option value=&quot;1&quot;&lt;?php if ((int) $_GET['cont'] === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
 		&lt;option value=&quot;2&quot;&lt;?php if ((int) $_GET['cont'] === 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
 		&lt;option value=&quot;3&quot;&lt;?php if ((int) $_GET['cont'] === 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
@@ -728,7 +777,7 @@
 									<li class="fragment">For each radiobutton, check if the value matches the sent-in value</li>
 									<li class="fragment">If so: set the <code>checked=&quot;checked&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 
 	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&lt;?php if ($_GET['gender']
 		 === 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
@@ -770,7 +819,7 @@
 						<ul>
 							<li class="fragment">
 								When not suppressing errors, with exactly the same PHP code, we get a rather nasty result
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_05.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_05.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	(same HTML code as before)
 &lt;/form&gt;</code></pre></div>
 							</li>
@@ -787,7 +836,7 @@
 							</li>
 							<li class="fragment">
 								Fix: check with <code>isset()</code> if a variable exists before using it
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
 	value=&quot;&lt;?php echo isset($_GET['name']) ? $_GET['name'] : ''; ?&gt;&quot; /&gt;
 &lt;/form&gt;</code></pre></div>
@@ -800,7 +849,7 @@
 						<ul>
 							<li class="fragment">
 								If we enter some HTML-looking text, we break the form
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	(same HTML code as before)
 &lt;/form&gt;</code></pre></div>
 							</li>
@@ -815,7 +864,7 @@
 							</li>
 							<li class="fragment">
 								Fix: convert special characters with <code>htmlentities()</code> to their HTML safe / encoded version
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_07.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_07.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
 	value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; /&gt;
 &lt;/form&gt;</code></pre></div>
@@ -838,11 +887,12 @@
 								This kind of attack is known as <strong>cross-site scripting</strong> or <strong>XSS</strong>
 								<ul>
 									<li class="fragment">XSS is <a href="http://blogs.msdn.com/b/ie/archive/2012/09/10/xss-trends-and-internet-explorer.aspx">the most common vulnerability of websites</a>!</li>
-									<li class="fragment">Example: <a href="http://blog.twitter.com/2010/09/all-about-onmouseover-incident.html">Twitter onMouseOver incident</a></li>
+									<!-- <li class="fragment">Example: <a href="http://blog.twitter.com/2010/09/all-about-onmouseover-incident.html">Twitter onMouseOver incident</a></li> -->
+									<li class="fragment">Example: <a href="http://praetorianprefect.com/archives/2010/06/persistent-xss-on-twitter-com/">Persistent XSS on Twitter</a></li>
 								</ul>
 							</li>
 						</ul>
-						<footer class="fragment"><em>!! If you don't prevent XSS in the assignments or your exam, you will fail them !!</em></footer>
+						<footer class="fragment"><em style="color: #F55;">!! If you don't prevent XSS in the assignments or your exam, you will fail them !!</em></footer>
 					</section>
 
 					<section>
@@ -913,21 +963,18 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 							<li class="fragment">
 								Don't ever trust user input
 								<ul>
+									<li class="fragment">Data might be crafted in a way to harm your server (XSS!)</li>
 									<li class="fragment">Data might be in the wrong format (e.g. dates)</li>
-									<li class="fragment">Data might be crafted in a way to harm your server (think <code>htmlentities()</code>)</li>
 								</ul>
 							</li>
 							<li class="fragment">
 								Even if a user means no harm, he might just have forgotten to complete a field
 							</li>
 							<li class="fragment">
-								Therefor you must verify all incoming data
+								Therefore you <strong>must</strong> verify all incoming data
 								<ul>
 									<li>If any data is missing or malformed, inform the user with a proper message</li>
 								</ul>
-							</li>
-							<li class="fragment">
-								Tip: Always put your formchecking procedure at the very top of your script.
 							</li>
 						</ul>
 					</section>
@@ -1006,7 +1053,7 @@ exit(0); // do not forget to exit after redirect</code></pre></div>
 								Handling file uploads
 								<ul>
 									<li>PHP will fill the <code>$_FILES</code> superglobal with info about each file sent</li>
-									<li class="fragment">File uploads are stored in a temp folder on the server, you'll have to move them manually &mdash; see next workshop</li>
+									<li class="fragment">File uploads are stored in a temp folder on the server, you'll have to move them manually <br />&rarr; <em>see next workshop</em></li>
 								</ul>
 							</li>
 						</ul>
