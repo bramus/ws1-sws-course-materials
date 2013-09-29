@@ -247,9 +247,9 @@
 						<h2>Headers (2)</h2>
 						<ul>
 							<li class="fragment">
-								It is recommened to stop the script executing further, as the client will ignore the <em>response body</em> when a redirect header is received.
+								When redirecting <em>(e.g. in a scenario not being logged in for example)</em> you <strong>MUST</strong> stop the script executing further to prevent the content from being transmitted to the user
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em">
 								Scripts can be stopped prematurely via <code>exit()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect.php">&lt;?php
 
@@ -268,7 +268,7 @@
 							<li class="fragment">
 								As per protocol spec, the <em>response head</em> must be sent before <em>response body</em>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em">
 								Put differently: once you've started sending the <em>response body</em>, it's impossible to manipulate the <em>response head</em>
 
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/redirect_fail.php">&lt;?php
@@ -374,11 +374,14 @@
 									<li><em>(*) Not all really, more on that later</em></li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Querystring format: <code>key=value&amp;key=value&amp;key=value</code>
 								<ul>
 									<li>The <code>key</code>s are the <code>name</code> attributes of the elements, the <code>value</code>s the entered/selected <code>value</code>
 								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								The browser then makes a request to the URL defined in the form <code>action</code> attribute and pass that querystring to it
 							</li>
 						</ul>
 					</section>
@@ -387,7 +390,7 @@
 						<h2>GET vs POST (1)</h2>
 						<ul>
 							<li class="fragment">
-								With <code>GET</code> all values of the querystring are attached to the form's <code>target</code> URL
+								With <code>GET</code> all values of the querystring are attached to the form its <code>target</code> URL
 								<ul>
 									<li>The entered values are visible in the URL of the browser</li>
 									<li>
@@ -398,7 +401,7 @@
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								With <code>POST</code> the querystring is sent in the <em>request body</em>
 								<ul>
 									<li>
@@ -639,19 +642,59 @@
 					</section>
 
 					<section>
+						<h2>Flow / Code structure</h2>
+						<ul>
+							<li class="fragment">
+								In web development, we most of the time send a form to itself and follow this code structure
+								<ol style="margin-top: 1em;">
+									<li class="fragment">
+										extract needed variables from <code>$_GET</code>/<code>$_POST</code>
+									</li>
+									<li class="fragment">
+										the form was submitted: check it
+										<ul>
+											<li class="fragment">
+												the form checks out
+												<ul>
+													<li>perform an action <em>(e.g. database insert, send an e-mail)</em></li>
+													<li>redirect to somewhere else <em>(viz. stop execution of this script)</em></li>
+												</ul>
+											</li>
+											<li class="fragment">
+												the form does not check out
+												<ul>
+													<li>build a list of errors</li>
+													<li>continue with this script</li>
+												</ul>
+											</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										show the form
+										<ul>
+											<li>show errors (if any)</li>
+											<li>persist values</li>
+										</ul>
+									</li>
+								</ol>
+							</li>
+						</ul>
+					</section>
+
+					<section>
 						<h2>Persistency</h2>
 
 						<ul>
 							<li class="fragment">
-								After having submitted the form to itself, make it show the values you entered
+								Persistency = After having submitted the form to itself, make it show the values you entered
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								You can let PHP automatically output the URL of the page itself instead of typing it manually
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
 	...
 &lt;/form&gt;</code></pre></div>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Different types of inputs (text, checkbox, dropdown) require different persistency methods
 							</li>
 						</ul>
