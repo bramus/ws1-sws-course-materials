@@ -14,7 +14,7 @@
 			$allOk = true;
 
 			// name not empty
-			if (trim($name) === '') {
+			if (trim($name) == '') {
 				$msgName = 'Please enter your name';
 				$allOk = false;
 			}

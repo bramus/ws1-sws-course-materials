@@ -314,8 +314,9 @@
 							<figure>
 								<a href="assets/03/examples/form_01.php"><img src="assets/03/testform.jpg" alt="Our testform" title="Our testform" width="700" /></a>
 							</figure>
+							<p style="font-size: 75%">Let's take a look at <code>assets/03/examples/form_01.php</code> <a href="assets/03/examples/form_01.php">&rarr;</a></p>
+
 						</div>
-						<footer class="fragment">Check the example's HTML code for now, don't send it yet</form>
 					</section>
 
 					<section>
@@ -537,6 +538,17 @@
 					</section>
 
 					<section>
+						<h2>$_GET / $_POST Example</h2>
+						<div class="fragment">
+							<figure>
+								<a href="assets/03/examples/form_01.php"><img src="assets/03/testform.jpg" alt="Our testform" title="Our testform" width="700" /></a>
+							</figure>
+							<p style="font-size: 75%">Let's take a look at <code>assets/03/examples/form_01.php</code> and <code>assets/03/examples/form_process.php</code> <a href="assets/03/examples/form_01.php">&rarr;</a></p>
+
+						</div>
+					</section>
+
+					<section>
 						<h2>Querystring revisited</h2>
 						<ul>
 							<li class="fragment">
@@ -594,37 +606,6 @@
 						<h2>When to use GET or POST (1)</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>POST</code> for sensitive actions
-								<ul>
-									<li class="fragment">
-										Consider these links
-										<ul>
-											<li><code>index.php?module=blog&amp;action=delete&amp;id=1</code></li>
-											<li><code>login.php?username=bramus&amp;password=Azerty123</code></li>
-										</ul>
-									</li>
-									<li class="fragment"><code>GET</code> can be cached by webspiders</li>
-									<li class="fragment"><code>GET</code> remains visible in the browser history</li>
-									<li class="fragment"><code>GET</code> can be bookmarked and distributed</li>
-									<li class="fragment"><code>GET</code> link can become invalid over time</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Use <code>POST</code> when sending files
-							</li>
-							<li class="fragment">
-								Use <code>POST</code> for lengthy data
-								<ul>
-									<li>URLS are limited to 2048 characters!</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>When to use GET or POST (2)</h2>
-						<ul>
-							<li class="fragment">
 								Use <code>GET</code> for read actions
 								<ul>
 									<li class="fragment"><code>showArticle()</code></li>
@@ -636,9 +617,46 @@
 								Use <code>POST</code> for manipulative and sensitive actions
 								<ul>
 									<li class="fragment"><code>addComment()</code></li>
-									<li class="fragment"><code>registerUser()</code></li>
 									<li class="fragment"><code>deleteUser()</code></li>
 									<li class="fragment"><code>login()</code></li>
+								</ul>
+							</li>
+							<li class="fragment">
+								Use <code>POST</code> when sending files
+							</li>
+							<li class="fragment">
+								Use <code>POST</code> for lengthy data <em>(Max length URLs: 2048 chars)</em>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>When to use GET or POST (2)</h2>
+						<ul>
+							<li class="fragment">
+								Examples of how it's not done:
+								<ul>
+									<li class="fragment">
+										Consider these links
+										<ul>
+											<li><code>index.php?module=blog&amp;action=delete&amp;id=1</code></li>
+											<li><code>login.php?username=bramus&amp;password=Azerty123</code></li>
+											<li><code>like.php?page=HotBabes123</code></li>
+										</ul>
+									</li>
+									<li class="fragment">
+										Why not <code>GET</code>?
+										<ul>
+											<li class="fragment"><code>GET</code> can be bookmarked</li>
+											<li class="fragment"><code>GET</code> can be distributed/embedded (iframe)</li>
+											<li class="fragment"><code>GET</code> can be cached by webspiders</li>
+											<li class="fragment"><code>GET</code> remains visible in the browser history</li>
+											<li class="fragment"><code>GET</code> link can become invalid over time</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										&rarr; Use <code>POST</code> instead!
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -667,7 +685,7 @@
 									<li class="fragment">
 										if the form was submitted
 										<ol>
-											<li class="fragment">if form <code>method</code> is <code>POST</code>: extract needed values from <code>$_POST</code>, overwriting those extracted in #1</li>
+											<li class="fragment">if form <code>method</code> is <code>POST</code>: extract needed values from <code>$_POST</code>,<br />sometimes overwriting those extracted in #1</li>
 											<li class="fragment">
 												check all values for validity
 												<ul>
@@ -755,7 +773,7 @@
 								</ul>
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
-		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_P['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
+		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_GET['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
 		&lt;option value=&quot;1&quot;&lt;?php if ((int) $_GET['cont'] === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
 		&lt;option value=&quot;2&quot;&lt;?php if ((int) $_GET['cont'] === 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
 		&lt;option value=&quot;3&quot;&lt;?php if ((int) $_GET['cont'] === 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
@@ -947,6 +965,33 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 ...</code></pre></div>
 					</section>
 
+
+					<section>
+						<h2>Cleaning things up</h2>
+
+						<ul>
+							<li class="fragment">
+								It's much nicer to have a block of code at the top where we fetch all vars and then later on work with those vars
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_11.php" data-overlay-height="600">&lt;?php
+
+	$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
+	$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
+	$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
+	$cont = isset($_GET['cont']) ? (int) $_GET['cont'] : 0;
+	$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
+	$remark = isset($_GET['remark']) ? (string) $_GET['remark'] : '';
+
+?&gt;&lt;!doctype html&gt;
+...
+&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;&lt;?php echo htmlentities($name); ?&gt;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+...</code></pre></div>
+							</li>
+						</ul>
+						<footer class="fragment" style="line-height: 1.2;">
+							Note: Always work with the raw variables in your scripts.<br />Only use <code>htmlentities()</code> when outputting it on screen
+						</footer>
+					</section>
+
 				</section>
 
 
@@ -984,6 +1029,7 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking.php" data-overlay-height="600">&lt;?php
 
 	// initial values
+	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
 	$msgName = '*';
 
 	// form is sent
@@ -992,7 +1038,7 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 		$allOk = true;
 
 		// name not set, or empty
-		if (!isset($_POST['name']) || ((string) $_POST['name'] === '')) {
+		if (trim($name) == '') {
 			$msgName = 'Please enter your name';
 			$allOk = false;
 		}
