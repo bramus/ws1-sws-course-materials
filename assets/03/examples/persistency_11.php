@@ -1,47 +1,15 @@
 <?php
 
 	/**
-	 * Helper functions
+	 * Get default values
 	 */
 
-		/**
-		 * Disable php's magic quotes (yuck!)
-		 *
-		 * @return	void
-		 */
-		function disableMagicQuotes() {
-			$_POST 		= array_map('stripPostSlashes', $_POST);
-			$_GET		= array_map('stripPostSlashes', $_GET);
-			$_COOKIE 	= array_map('stripPostSlashes', $_COOKIE);
-			$_REQUEST 	= array_map('stripPostSlashes', $_REQUEST);
-		}
-
-		/**
-		 * Guaranteed no slashes (if magic_quot	es is on, it strips the slashes)
-		 *
-		 * @param string $string The string to remove the slashes from
-		 * @return string
-		 */
-		function stripPostSlashes($string) {
-			return (get_magic_quotes_gpc() || get_magic_quotes_runtime()) ? stripslashes($string) : $string;
-		}
-
-
-	/**
-	 * Main code
-	 */
-
-		// Disable Magic Quotes
-		disableMagicQuotes();
-
-		// Get default values
-		$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
-		$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
-		$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
-		$cont = isset($_GET['cont']) ? (int) $_GET['cont'] : 0;
-		$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
-		$remark = isset($_GET['remark']) ? (string) $_GET['remark'] : '';
-
+	$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
+	$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
+	$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
+	$cont = isset($_GET['cont']) ? (int) $_GET['cont'] : 0;
+	$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
+	$remark = isset($_GET['remark']) ? (string) $_GET['remark'] : '';
 
 ?><!DOCTYPE html>
 <html>
