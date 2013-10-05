@@ -7,23 +7,23 @@
 
 	// a file was uploaded
 	if (isset($_FILES['avatar'])) {
-		
+
 		// get file info
 		echo '<p>Uploaded file: ' . $_FILES['avatar']['name'] . '</p>' . PHP_EOL;
 		echo '<p>Temp location: ' . $_FILES['avatar']['tmp_name'] . '</p>' . PHP_EOL;
 		echo '<p>Size: ' . $_FILES['avatar']['size'] . '</p>' . PHP_EOL;
 
 		// check file extension
-		if (!in_array(substr($_FILES['avatar']['name'], -4), array('.jpg', '.png', '.gif'))) {
-			exit('<p>Invalid file extension. Only .jpg, .png or .gif allowed</p>');
+		if (!in_array((new SplFileInfo($_FILES['avatar']['name']))->getExtension(), array('jpeg', 'jpg', 'png', 'gif'))) {
+			exit('<p>Invalid file extension. Only .jpeg, .jpg, .png or .gif allowed</p>');
 		}
-		
+
 		// store file in this folder
 		@move_uploaded_file(
 			$_FILES['avatar']['tmp_name'],
 			__DIR__ . DIRECTORY_SEPARATOR . $_FILES['avatar']['name']
 		) or die('<p>Error while saving file in the uploads folder</p>');
-		
+
 		// show image
 		echo '<p><img src=' . $_FILES['avatar']['name'] . ' alt="" /><p>';
 	}
