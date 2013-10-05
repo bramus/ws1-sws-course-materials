@@ -390,37 +390,6 @@
 					</section>
 
 					<section>
-						<h2>Classes in PHP</h2>
-						<ul>
-							<li class="fragment">
-								We'll touch these in detail later, but you should know this
-								<ul>
-									<li class="fragment">
-										Create an instance with the <code>new</code> keyword
-										<pre class="bigger"><code class="language-php">$car = new Car();</code></pre>
-									</li>
-									<li class="fragment">
-										Access a datamember/function with <code>-&gt;</code>
-										<pre class="bigger"><code class="language-php">$car-&gt;start();
-echo $car-&gt;state; // 'egine running'
-$car-&gt;stop();</code></pre>
-									</li>
-									<li class="fragment">
-										Access a static datamember/function or class constant with <code>::</code>
-										<pre class="bigger"><code class="language-php">echo Car::NUMBEROFWHEELS; // 4</code></pre>
-										<ul>
-											<li><em>Note: Class constants are defined in ALLCAPS, not camelCase</em></li>
-										</ul>
-									</li>
-									<li class="fragment">
-										PHP supports inheritance
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
 						<h2>SPL and files (1)</h2>
 						<ul>
 							<li class="fragment">SPL contains a <code>SPLFileInfo</code> class, an object oriented interface to information for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileinfo.php">phpdocs</a>)</em></li>
