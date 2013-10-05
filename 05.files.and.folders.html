@@ -421,13 +421,13 @@
 	$filename = './testfile.txt';
 	$fi = new SplFileInfo($filename);
 
-	echo '&lt;p&gt;The file ' . $filename . ' was last modified on ' . date('Y-m-d H:i:s', $fi-&gt;getMTime()) . '&lt;/p&gt;' . PHP_EOL;
+	echo '&lt;p&gt;The file ' . $fi-&gt;getFileName() . ' was last modified on ' . date('Y-m-d H:i:s', $fi-&gt;getMTime()) . '&lt;/p&gt;' . PHP_EOL;
 
-	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isDir() ? '' : 'not') . ' a directory&lt;/p&gt;' . PHP_EOL;
+	echo '&lt;p&gt;The file ' . $fi-&gt;getFileName() . ' is ' . ($fi-&gt;isDir() ? '' : 'not') . ' a directory&lt;/p&gt;' . PHP_EOL;
 
-	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isFile() ? '' : 'not') . ' a file&lt;/p&gt;' . PHP_EOL;
+	echo '&lt;p&gt;The file ' . $fi-&gt;getFileName() . ' is ' . ($fi-&gt;isFile() ? '' : 'not') . ' a file&lt;/p&gt;' . PHP_EOL;
 
-	echo '&lt;p&gt;The file ' . $filename . ' is ' . ($fi-&gt;isLink() ? '' : 'not') . ' a shortcut&lt;/p&gt;' . PHP_EOL;
+	echo '&lt;p&gt;The file ' . $fi-&gt;getFileName() . ' is ' . ($fi-&gt;isLink() ? '' : 'not') . ' a shortcut&lt;/p&gt;' . PHP_EOL;
 
 // EOF</code></pre></li>
 						</ul>
@@ -558,8 +558,8 @@ if (isset($_FILES['avatar'])) {
 	echo '&lt;p&gt;Temp location: ' . $_FILES['avatar']['tmp_name'] . '&lt;/p&gt;';
 	echo '&lt;p&gt;Size: ' . $_FILES['avatar']['size'] . '&lt;/p&gt;';
 
-	if (!in_array(substr($_FILES['avatar']['name'], -4), array('.jpg', '.png', '.gif'))) {
-		exit('&lt;p&gt;Invalid extension. Only .jpg, .png or .gif allowed&lt;/p&gt;');
+	if (!in_array((new SplFileInfo($_FILES['avatar']['name']))-&gt;getExtension(), array('jpeg', 'jpg', 'png', 'gif'))) {
+		exit('&lt;p&gt;Invalid extension. Only .jpeg, .jpg, .png or .gif allowed&lt;/p&gt;');
 	}
 
 	@move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . DIRECTORY_SEPARATOR . $_FILES['avatar']['name']) or die('&lt;p&gt;Error while saving file in the uploads folder&lt;/p&gt;');

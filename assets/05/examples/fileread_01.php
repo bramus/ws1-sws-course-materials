@@ -24,7 +24,7 @@
 
 	// close the filehandle
 	fclose($handle);
-		
+
 	// output the fetched contents
 	echo $contents;
 

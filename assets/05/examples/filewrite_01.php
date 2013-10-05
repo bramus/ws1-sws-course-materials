@@ -8,3 +8,5 @@
 	file_put_contents('./testfile2.txt', 'hello!' . PHP_EOL);
 
 	echo 'The file contents were adjusted, check via Finder/explorer';
+
+// EOF

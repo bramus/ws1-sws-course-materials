@@ -5,5 +5,5 @@
 	} catch (Exception $e) {
 		echo 'There was an error: <br />' . $e->getMessage();
 	}
-	
+
 // EOF
