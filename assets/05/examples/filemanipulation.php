@@ -6,14 +6,14 @@
  */
 
 	// Copy file
-	copy('./testfile.txt', './copiedfile.txt');
+	copy(__DIR__ . '/testfile.txt', __DIR__ . '/copiedfile.txt');
 
 	// Rename file
 	// @note if the path differs you can move a file with this function!
-	rename('./copiedfile.txt', './testfile2.txt');
+	rename(__DIR__ . '/copiedfile.txt', __DIR__ . '/testfile2.txt');
 
 	// Delete file
-	unlink('./testfile2.txt');
+	unlink(__DIR__ . '/testfile2.txt');
 
 	echo 'The demo was done';
 

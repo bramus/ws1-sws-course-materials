@@ -6,7 +6,7 @@
  */
 
 	// path to file (relative from this PHP file)
-	$filename = './testfile.txt';
+	$filename = __DIR__ . '/testfile.txt';
 
 	// open the file in read mode
 	// @see http://php.net/fopen for other modes (r, r+, w, w+, a, a+, ...)

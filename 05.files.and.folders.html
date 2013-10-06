@@ -152,6 +152,27 @@
 						</ul>
 					</section>
 
+					<section>
+						<h2>Magic Constants</h2>
+						<ul>
+							<li class="fragment">
+								Oldskool: <code>./</code> = current working directory <small>(*)</small>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = './';</code></pre>
+							</li>
+							<li class="fragment">
+								Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = dirname(__FILE__);</code></pre>
+							</li>
+							<li class="fragment">
+								Since PHP 5.3: <code>__DIR__</code> = The full path of the PHP file.
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = __DIR__;</code></pre>
+							</li>
+						</ul>
+						<footer class="fragment">
+							(*) For now consider this to be the relative path of the PHP file <em>(but that's not always true)</em>
+						</footer>
+					</section>
+
 				</section>
 
 
@@ -195,7 +216,7 @@
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/fileread_01.php">&lt;?php
 
 	// path to file (relative from this PHP file)
-	$filename = './testfile.txt';
+	$filename = __DIR__ . '/testfile.txt';
 
 	// open the file in read mode
 	$handle = fopen($filename, 'r');
@@ -226,7 +247,7 @@
 								Example 2
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/fileread_02.php">&lt;?php
 
-	$handle = fopen('./testfile.txt', 'r');
+	$handle = fopen(__DIR__ . '/testfile.txt', 'r');
 
 	if ($handle) {
 		while (!feof($handle)) {
@@ -249,7 +270,7 @@
 								Get all lines of a file in an array using <code>file()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/fileread_03.php">&lt;?php
 
-	$lines = file('./testfile.txt');
+	$lines = file(__DIR__ . '/testfile.txt');
 
 	// Loop through our array, show line and line numbers too.
 	foreach ($lines as $line_num =&gt; $line) {
@@ -259,7 +280,7 @@
 							<li class="fragment">
 								Get the entire file contens using 1 command
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/fileread_04.php">&lt;?php
-	echo file_get_contents('./testfile.txt');</code></pre>
+	echo file_get_contents(__DIR__ . '/testfile.txt');</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -275,14 +296,14 @@
 								Or just use <code>file_put_contents()</code>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/filewrite_01.php">&lt;?php
 
-	file_put_contents('./testfile2.txt', 'hello!' . PHP_EOL);</code></pre>
+	file_put_contents(__DIR__ . '/testfile2.txt', 'hello!' . PHP_EOL);</code></pre>
 								<ul>
 									<li class="fragment">
 										To update a file use <code>file_put_contents()</code> with a <em>flag</em>
 										<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/filewrite_02.php">&lt;?php
 
 	file_put_contents(
-		'./testfile2.txt',
+		__DIR__ . '/testfile2.txt',
 		'hello!' . PHP_EOL,
 		FILE_APPEND
 	);</code></pre>
@@ -301,7 +322,7 @@
 								Example
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/fileproperties.php">&lt;?php
 
-	$filename = './testfile.txt';
+	$filename = __DIR__ . '/testfile.txt';
 
 	echo '&lt;p&gt;The file ' . $filename . (file_exists($filename) ? 'exists' : 'does not exist') . '&lt;/p&gt;' . PHP_EOL;
 
@@ -325,14 +346,14 @@
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/filemanipulation.php">&lt;?php
 
 	// Copy file
-	copy('./testfile.txt', './copiedfile.txt');
+	copy(__DIR__ . '/testfile.txt', __DIR__ . '/copiedfile.txt');
 
 	// Rename file
 	// @note if the path differs you can move a file with this function!
-	rename('./copiedfile.txt', './testfile2.txt');
+	rename(__DIR__ . '/copiedfile.txt', __DIR__ . '/testfile2.txt');
 
 	// Delete file
-	unlink('./testfile2.txt');</code></pre>
+	unlink(__DIR__ . '/testfile2.txt');</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -345,7 +366,7 @@
 								Example
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/dirread.php">&lt;?php
 
-	$myBaseDir	= './';
+	$myBaseDir	= __DIR__;
 	$dp = opendir($myBaseDir);
 
 	// read base directory
@@ -377,7 +398,7 @@
 								Suppress errors with <code>@</code> and stop the process when neccessary
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/dirread.php">&lt;?php
 
-	$myBaseDir	= './';
+	$myBaseDir	= __DIR__;
 	$dp = @opendir($myBaseDir) or die('Error reading ' . $myBaseDir);
 
 	...</code></pre>
@@ -425,7 +446,7 @@
 							<li class="fragment">Example (file info)
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/spl_fileproperties.php">&lt;?php
 
-	$filename = './testfile.txt';
+	$filename = __DIR__ . '/testfile.txt';
 	$fi = new SplFileInfo($filename);
 
 	echo '&lt;p&gt;The file ' . $fi-&gt;getFileName() . ' was last modified on ' . date('Y-m-d H:i:s', $fi-&gt;getMTime()) . '&lt;/p&gt;' . PHP_EOL;
@@ -446,7 +467,7 @@
 							<li class="fragment">Example (file read)
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/spl_fileread.php">&lt;?php
 
-	$lines = new SPLFileObject('./testfile.txt');
+	$lines = new SPLFileObject(__DIR__ . '/testfile.txt');
 
 	// Loop through our array, show line and line numbers too.
 	foreach ($lines as $line_num =&gt; $line) {
@@ -470,7 +491,7 @@
 								Example
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/spl_dirread.php">&lt;?php
 
-	$myBaseDir = './';
+	$myBaseDir = __DIR__;
 	$di = new DirectoryIterator($myBaseDir);
 
 	foreach ($di as $file) {
@@ -511,27 +532,6 @@
 						</ul>
 					</section>
 
-					<section>
-						<h2>Magic Constants</h2>
-						<ul>
-							<li class="fragment">
-								Oldskool: <code>./</code> = current working directory <small>(*)</small>
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = './';</code></pre>
-							</li>
-							<li class="fragment">
-								Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = dirname(__FILE__);</code></pre>
-							</li>
-							<li class="fragment">
-								Since PHP 5.3: <code>__DIR__</code> = The full path of the PHP file.
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = __DIR__;</code></pre>
-							</li>
-						</ul>
-						<footer class="fragment">
-							(*) For now consider this to the relative path of the PHP file <em>(but that's not always true)</em>
-						</footer>
-					</section>
-
 				</section>
 
 				<section>
@@ -544,10 +544,10 @@
 						<h2>Handling file uploads (1)</h2>
 						<ul>
 							<li class="fragment">
-								Files are uploaded into a temp folder. You'll need to move them manually using <code>move_uploaded_file()</code>
+								Files are uploaded into a temp location. You'll need to move them manually using <code>move_uploaded_file()</code>
 							</li>
 							<li class="fragment">
-								PHP will populate a <em>superglobal</em> named <code>$_FILES</code>
+								PHP will populate a <em>superglobal</em> named <code>$_FILES</code> containing that temp location per file.
 							</li>
 						</ul>
 						<footer class="fragment">Don't forget: make sure your webserver has the proper permissions!</footer>

@@ -6,7 +6,7 @@
  */
 
 	// Our base dir
-	$myBaseDir = './';
+	$myBaseDir = __DIR__;
 
 	// open base directory
 	$di = new DirectoryIterator($myBaseDir);

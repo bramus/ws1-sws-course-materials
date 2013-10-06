@@ -5,6 +5,6 @@
  * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
  */
 
-	echo file_get_contents('./testfile.txt');
+	echo file_get_contents(__DIR__ . '/testfile.txt');
 
 // EOF

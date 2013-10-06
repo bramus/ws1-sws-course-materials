@@ -5,7 +5,7 @@
  * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
  */
 
-	$lines = new SPLFileObject('./testfile.txt');
+	$lines = new SPLFileObject(__DIR__ . '/testfile.txt');
 
 	// Loop through our array, show line and line numbers too.
 	foreach ($lines as $line_num => $line) {
