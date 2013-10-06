@@ -562,6 +562,32 @@ if (isset($_FILES['avatar'])) {
 						</ul>
 					</section>
 
+					<section>
+						<h2>Security / Best Practices</h2>
+
+						<ul>
+							<li class="fragment">
+								Provide a separate, dedicated folder to store all uploads in
+								<ul>
+									<li>e.g. <code>files/</code></li>
+									<li>Use subfolders where appropriate, e.g. <code>files/photoalbums/1</code> and <code>files/photoalbums/2</code></li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Rename files when moving them to prevent name conflicts
+								<ul>
+									<li> e.g. give photos in photoalbums a sequential name such as <code>1.jpg</code>, <code>2.jpg</code>, etc.</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Always limit the allowed file extensions
+								<ul>
+									<li>You don't want one to upload a <code>.php</code> file, right?</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 				<!-- The END -->
