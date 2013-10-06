@@ -153,20 +153,39 @@
 					</section>
 
 					<section>
+						<h2>Predefined Constants</h2>
+						<ul>
+							<li class="fragment">
+								<code>DIRECTORY_SEPARATOR</code> is a predefined constant containing the directory separator
+								<ul>
+									<li><code>\</code> on Windows, <code>/</code> on *nix</li>
+									<li>Use of it is not mandatory as <code>/</code> works fine on Windows too</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
 						<h2>Magic Constants</h2>
 						<ul>
 							<li class="fragment">
-								Oldskool: <code>./</code> = current working directory <small>(*)</small>
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = './';</code></pre>
+								Getting to know the current directory of the PHP file
+								<ul>
+									<li class="fragment">
+										Oldskool: <code>./</code> = current working directory <small>(*)</small>
+										<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = './';</code></pre>
+									</li>
+									<li class="fragment">
+										Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
+										<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = dirname(__FILE__);</code></pre>
+									</li>
+									<li class="fragment">
+										Since PHP 5.3: <code>__DIR__</code> = The full path of the PHP file.
+										<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = __DIR__;</code></pre>
+									</li>
+								</ul>
 							</li>
-							<li class="fragment">
-								Since PHP 4.2: <code>__FILE__</code> = The full path and filename of the PHP file.
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = dirname(__FILE__);</code></pre>
-							</li>
-							<li class="fragment">
-								Since PHP 5.3: <code>__DIR__</code> = The full path of the PHP file.
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/05/examples/magic_constants.php">$myBaseDir = __DIR__;</code></pre>
-							</li>
+							<li class="fragment">&rarr; Use <code>__DIR__</code></li>
 						</ul>
 						<footer class="fragment">
 							(*) For now consider this to be the relative path of the PHP file <em>(but that's not always true)</em>
