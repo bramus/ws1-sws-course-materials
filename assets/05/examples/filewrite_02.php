@@ -5,7 +5,7 @@
  * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
  */
 
-	file_put_contents('./testfile2.txt', 'hello!' . PHP_EOL, FILE_APPEND);
+	file_put_contents(__DIR__ . '/testfile2.txt', 'hello!' . PHP_EOL, FILE_APPEND);
 
 	echo 'The file contents were adjusted, check via Finder/explorer';
 

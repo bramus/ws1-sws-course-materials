@@ -5,7 +5,7 @@
  * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
  */
 
-	$handle = fopen('./testfile.txt', 'r');
+	$handle = fopen(__DIR__ . '/testfile.txt', 'r');
 
 	if ($handle) {
 		while (!feof($handle)) {
