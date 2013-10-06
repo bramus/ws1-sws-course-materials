@@ -132,6 +132,26 @@
 						</ul>
 					</section>
 
+					<section>
+						<h2>post_max_size and upload_max_filesize</h2>
+						<ul>
+							<li class="fragment">
+								PHP can restrict the filesize of a POST request and uploads
+							</li>
+							<li class="fragment">
+								In <code>php.ini</code> the <code>post_max_size</code> and <code>upload_max_filesize</code> settings limit this
+								<ul>
+									<li class="fragment">
+										<code>post_max_size</code> limits the size of a POST request, including files
+									</li>
+									<li class="fragment">
+										<code>upload_max_filesize</code> limits the size of an uploaded file
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
@@ -607,7 +627,9 @@ if (isset($_FILES['avatar'])) {
 					<section>
 						<h2>Sources</h2>
 						<ul>
-							<li><a href="http://fr2.php.net/manual/en/ini.core.php#ini.open-basedir">http://fr2.php.net/manual/en/ini.core.php#ini.open-basedir</a></li>
+							<li><a href="http://php.net/manual/en/ini.core.php#ini.open-basedir">http://php.net/manual/en/ini.core.php#ini.open-basedir</a></li>
+							<li><a href="http://php.net/manual/en/ini.core.php#ini.upload-max-filesize">http://php.net/manual/en/ini.core.php#ini.upload-max-filesize</a></li>
+							<li><a href="http://php.net/manual/en/ini.core.php#ini.post-max-size">http://php.net/manual/en/ini.core.php#ini.post-max-size</a></li>
 							<li><a href="http://php.net/manual/en/book.spl.php">http://php.net/manual/en/book.spl.php</a></li>
 							<li><a href="http://www.php.net/manual/en/class.splfileinfo.php">http://www.php.net/manual/en/class.splfileinfo.php</a></li>
 							<li><a href="http://www.php.net/manual/en/class.splfileobject.php">http://www.php.net/manual/en/class.splfileobject.php</a></li>
