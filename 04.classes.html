@@ -124,25 +124,25 @@ class BasicClass {
 	public $var3;
 
 	public function __construct($var) {
-		$this->var1 = $var;
-		$this->var2 = $var;
-		$this->var3 = $var;
+		$this-&gt;var1 = $var;
+		$this-&gt;var2 = $var;
+		$this-&gt;var3 = $var;
 	}
 
 	public function doubleVar3() {
-		$this->var3 = $this->var3 . ' ' . $this->var3;
+		$this-&gt;var3 = $this-&gt;var3 . ' ' . $this-&gt;var3;
 	}
 
 	public function getVar1() {
-		return $this->var1;
+		return $this-&gt;var1;
 	}
 
 }
 
 $inst = new BasicClass('foo');
-echo $inst->getVar1() . PHP_EOL;
-$inst->doubleVar3();
-echo $inst->var3;</code></pre>
+echo $inst-&gt;getVar1() . PHP_EOL;
+$inst-&gt;doubleVar3();
+echo $inst-&gt;var3;</code></pre>
 					</section>
 
 					<section>
@@ -163,7 +163,7 @@ class BasicClass {
 echo BasicClass::CLASS_CONSTANT . PHP_EOL;
 
 $inst = new BasicClass();
-echo $inst->multiply(3) . PHP_EOL;</code></pre>
+echo $inst-&gt;multiply(3) . PHP_EOL;</code></pre>
 					</section>
 
 					<section>
@@ -204,7 +204,7 @@ class Animal {
 	private $name;
 
 	public function __construct($name) {
-		$this->name = $name;
+		$this-&gt;name = $name;
 	}
 
 	protected function say($what) {
@@ -216,13 +216,13 @@ class Animal {
 class Dog extends Animal {
 
 	public function bark() {
-		echo $this->say('WOOF!');
+		echo $this-&gt;say('WOOF!');
 	}
 
 }
 
 $dog = new Dog('Sparky');
-$dog->bark();</code></pre>
+$dog-&gt;bark();</code></pre>
 					</section>
 
 					<section>
@@ -235,11 +235,11 @@ class Animal {
 	private $name;
 
 	public function __construct($name) {
-		$this->name = $name;
+		$this-&gt;name = $name;
 	}
 
 	final function getName() { // cannot be overridden!
-		echo $this->name;
+		echo $this-&gt;name;
 	}
 }
 
@@ -253,7 +253,7 @@ class Dog extends Animal {
 }
 
 $dog = new Dog('Sparky');
-echo $dog->getName() . PHP_EOL;</code></pre>
+echo $dog-&gt;getName() . PHP_EOL;</code></pre>
 					</section>
 
 					<section>
@@ -266,7 +266,7 @@ abstract class Animal {
 	private $name;
 
 	public function __construct($name) {
-		$this->name = $name;
+		$this-&gt;name = $name;
 	}
 
 	abstract public function doTrick();
@@ -278,14 +278,14 @@ class Dog extends Animal {
 	private $tricks = array('jump', 'lay down', 'roll over', 'play dead');
 
 	public function doTrick() {
-		return $this->tricks[rand(0, sizeof($this->tricks) - 1)];
+		return $this-&gt;tricks[rand(0, sizeof($this-&gt;tricks) - 1)];
 	}
 
 }
 
 
 $dog = new Dog('Sparky');
-echo $dog->doTrick();</code></pre>
+echo $dog-&gt;doTrick();</code></pre>
 					</section>
 
 				</section>
@@ -314,7 +314,7 @@ echo $dog->doTrick();</code></pre>
 									<li>Define a method with the <code>function</code> keyword</li>
 									<li>Defining a variable requires no specific keyword</li>
 									<li>Scope is <code>public</code>, <code>protected</code>, or <code>private</code></li>
-									<li>Accessible/Callable via <code>$this->dataMember</code> <em>(internal)</em> or <br /><code>$instance->dataMember</code> <em>(external, if scope allows it)</em></li>
+									<li>Accessible/Callable via <code>$this-&gt;dataMember</code> <em>(internal)</em> or <br /><code>$instance->dataMember</code> <em>(external, if scope allows it)</em></li>
 								</ul>
 							</li>
 							<li class="fragment">
@@ -396,6 +396,7 @@ echo $dog->doTrick();</code></pre>
 									<li>Define an interface with the <code>interface</code> keyword</li>
 									<li>A class can implement an interface via the <code>implements</code> keyword</li>
 									<li>A class can implement multiple interfaces</li>
+									<li>An interface itself cannot be instantiated</li>
 								</ul>
 							</li>
 							<li class="fragment">
