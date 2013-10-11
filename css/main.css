@@ -26,8 +26,7 @@ html, body {
 	padding: 0;
 	margin: 0;
 	overflow: hidden;
-	
-	font-family: 'Lato', TrebuchetMS, Times, 'Times New Roman', serif; /* better to use sans-serif at the end, but if you do that (and leave out Times) then the left control of the controls is sized differently (!) */
+	font-family: 'Lato', "Trebuchet MS", "TrebuchetMS", Helvetica, Times, 'Times New Roman', serif; /* better to use sans-serif at the end, but if you do that (and leave out Times) then the left control of the controls is sized differently (!) */
 	font-size: 36px;
 	font-weight: 200;
 	letter-spacing: -0.02em;
