@@ -689,7 +689,7 @@ var_dump($stmt);</code></pre>
 								<ul>
 									<li class="fragment">
 										Charset must be set on the DSN!
-										<pre class="bigger"><code class="language-php">	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
 </code></pre>
 									</li>
 									<li class="fragment">
@@ -705,7 +705,7 @@ var_dump($stmt);</code></pre>
 						<h2>Prepared Statements (1)</h2>
 						<ul>
 							<li class="fragment">
-								Mingling parameters into your query is confusing
+								Mingling parameters into your query will become confusing when having lots of parameters
 								<ul>
 									<li class="fragment">
 										&rarr; Prepared statements overcome this
@@ -713,14 +713,21 @@ var_dump($stmt);</code></pre>
 								</ul>
 							</li>
 							<li class="fragment" style="margin-top: 1em;">
-								Prepared statements also prevent XSS, but you <strong>MUST</strong> enable it manually onto the connection using <code style="white-space: nowrap; font-size: 70%;">$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>
-								<pre class="bigger"><code class="language-php">// Make Connection
+								Prepared statements also prevent XSS, but only if
+								<ul>
+									<li class="fragment">
+										You use it properly
+									</li>
+									<li class="fragment">
+										You instruct it to disable emulated prepares using <code style="white-space: nowrap; font-size: 70%;">$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>
+										<pre class="bigger"><code class="language-php">// Make Connection
 try {
 	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (Exception $e) {
 	showDbError('connect', $e->getMessage());
-}</code></pre>
+}</code></pre></li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -731,6 +738,9 @@ try {
 							<li class="fragment">
 								Use <code>PDO::prepare()</code><small><a href="http://www.php.net/manual/en/pdo.quote.php">&#9873;</a></small> to <em>prepare</em> a query with placeholders
 								<pre class="bigger"><code class="language-php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');</code></pre>
+								<ul>
+									<li class="fragment">Everywhere you would add a parameter in the query, replace it by a <code>?</code></li>
+								</ul>
 							</li>
 							<li class="fragment" style="margin-top: 1em">
 								The result is an instance of <code>PDOStatement</code><small><a href="http://www.php.net/manual/en/class.pdostatement.php">&#9873;</a></small>. With it:
@@ -911,6 +921,9 @@ echo 'Created album with ID ' . $db->lastInsertId();</code></pre>
 $stmt->execute(array(10));
 
 echo 'Deleted ' . $stmt->rowCount() . ' rows';</code></pre>
+								<ul>
+									<li class="fragment"><em>Note: matched rows which aren't updated are not included in this count!</em></li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -1203,7 +1216,7 @@ if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 							<li class="fragment">
 								<code>md5()</code><small><a href="http://php.net/md5">&#9873;</a></small> and <code>sha1()</code><small><a href="http://php.net/sha1">&#9873;</a></small> are outdated/too weak, don't use them
 							</li>
-							<li class="fragment">Since PHP 5.5, use <code>password_hash</code><small><a href="http://php.net/password_hash">&#9873;</a></small></li>
+							<li class="fragment">Since PHP 5.5, use <code>password_hash()</code><small><a href="http://php.net/password_hash">&#9873;</a></small></li>
 						</ul>
 					</section>
 
@@ -1256,9 +1269,12 @@ if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 				<section id="summary">
 
 					<section>
-						<h2>Chapter summary</h2>
+						<h2>Code summary</h2>
 
-						<p style="margin-top: 5.5em;"><em>A summary of this chapter available is in <a href="07.databases.summary.html">07.databases.summary.html</a></em></p>
+						<p style="margin-top: 5.5em;"><em>A code-only summary of this chapter available is at <a href="07.databases.summary.html">07.databases.summary.html</a></em></p>
+						<footer>
+							<em>Note: not all information from these slides can be found in this summary!</em>
+						</footer>
 
 					</section>
 
