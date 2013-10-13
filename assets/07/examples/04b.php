@@ -5,60 +5,31 @@
 	 * @param string $type
 	 * @return void
 	 */
-	function showDbError($type) {
-		// The referrerd page will show a proper error based on the $_GET parameters
+	function showDbError($type, $msg) {
+		file_put_contents(__DIR__ . '/error_log', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
 		header('location: error.php?type=db&detail=' . $type);
 		exit();
 	}
 
 	// Include config
 	require_once 'config.php';
-	
-	// Connect to database server "localhost" with username "root" and password "Azerty123" + select the DB "status"
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_STATUS) or showDbError('connect');
-	
-	// Variables
-	$name = 'bramus';
-	$status = 'Just received the trophy "Marksman of the year"';
-	$datetime = time();
-		
-	// @note: Also possible: $datetime = date('Y-m-d H:i:s'); + in that case don't use FROM_UNIXTIME() in query
-		
-	// A simple insert
-	$query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))', 
-				mysqli_real_escape_string($dbhandler, $name),
-				mysqli_real_escape_string($dbhandler, $status),
-				mysqli_real_escape_string($dbhandler, (int) $datetime)
-			);
-	
-	// Insert it
-	@mysqli_query($dbhandler, $query) or showDbError('query');
-					
-	// A select
-	$query 	= sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNIXTIME(%d) ORDER BY id DESC',
-				mysqli_real_escape_string($dbhandler, $name),
-				mysqli_real_escape_string($dbhandler, (int) $datetime)
-			);
-	
-	// Execute Query
-	$result = @mysqli_query($dbhandler, $query) or showDbError('query');
-	
-	// Process result
-	if ($result !== false) { // Yes, we have one or more rows returned
-		
-		echo '<p>Got ' . mysqli_num_rows($result) . ' rows returned from query:</p>';
-		
-		echo '<dl>';
-		
-		while ($row = mysqli_fetch_assoc($result)) {
-			echo '<dt>' . $row['id'] . ' - ' . $row['name'] . ' - ' . date('d/m/Y H:i:s', strtotime($row['datum'])) . '</dt><dd>' . $row['status'] . '</dd>';
-		}
-		
-		echo '</dl>';
-		
+
+	// Make Connection
+	try {
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+	} catch (Exception $e) {
+		showDbError('connect', $e->getMessage());
 	}
-	
-	// Close connection
-	@mysqli_close($dbhandler);
+
+	// Get ID from URL
+	$id = isset($_GET['id']) ? $_GET['id'] : '0';
+
+	// Get collection from DB
+	$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+	$stmt->bindValue(1, $id, PDO::PARAM_INT);
+	$stmt->execute();
+
+	// Handle result here ....
+	echo('Nothing to see here, check the source');
 
 //EOF

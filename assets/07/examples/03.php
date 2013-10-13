@@ -5,30 +5,25 @@
 	 * @param string $type
 	 * @return void
 	 */
-	function showDbError($type) {
-		// The referrerd page will show a proper error based on the $_GET parameters
+	function showDbError($type, $msg) {
+		file_put_contents(__DIR__ . '/error_log', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
 		header('location: error.php?type=db&detail=' . $type);
 		exit();
 	}
 
 	// Include config
 	require_once 'config.php';
-	
-	// Connect to database server "localhost" with username "root" and password "Azerty123" + select the DB "fotofactory"
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF) or showDbError('connect');
-	
-	// A simple select
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-	
-	// Execute query
-	$result = @mysqli_query($dbhandler, $query) or showDbError('query');
-	
-	// Process result
-	echo '<p>This example outputs nothing</p>';
-	// @todo Insert fetch function here
-	var_dump($result);
-	
-	// Close connection
-	@mysqli_close($dbhandler);
+
+	// Make Connection
+	try {
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+	} catch (Exception $e) {
+		showDbError('connect', $e->getMessage());
+	}
+
+	$stmt = $db->query('SELECT * FROM collections WHERE user_id = 2');
+	var_dump($stmt);
+
+	// Handle result here ....
 
 //EOF

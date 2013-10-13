@@ -1,0 +1,2 @@
+2013-10-10 12:08:39 : SQLSTATE[42000] [1049] Unknown database 'does_not_exist'
+2013-10-10 12:32:53 : SQLSTATE[42000] [1049] Unknown database 'does_not_exist'

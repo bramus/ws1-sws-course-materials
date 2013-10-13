@@ -25,11 +25,12 @@
 	$id = isset($_GET['id']) ? $_GET['id'] : '0';
 
 	// Get collection from DB
-	$stmt = $db->prepare('SELECT * FROM collections WHERE id = :id');
-	$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-	$stmt->execute();
+	$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+	$stmt->execute(array(1));
 
-	// Handle result here ....
-	echo('Nothing to see here, check the source');
+	$collection = $stmt->fetch(PDO::FETCH_ASSOC);
+	echo '<pre>';
+	var_dump($collection);
+	echo '</pre>';
 
 //EOF
