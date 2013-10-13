@@ -448,7 +448,7 @@
 
 	function showDbError($type, $msg) {
 		file_put_contents(
-			__DIR__ . '/error_log',
+			__DIR__ . '/error_log_mysql',
 			PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg,
 			FILE_APPEND
 		);
@@ -1248,6 +1248,20 @@ if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 						</footer>
 					</section>
+				</section>
+
+
+
+				<!-- Summary -->
+				<section id="summary">
+
+					<section>
+						<h2>Chapter summary</h2>
+
+						<p style="margin-top: 5.5em;"><em>A summary of this chapter available is in <a href="07.databases.summary.html">07.databases.summary.html</a></em></p>
+
+					</section>
+
 				</section>
 
 
