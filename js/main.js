@@ -61,7 +61,7 @@ window.addEventListener('load', function() {
 				if (subTitleEl) {
 					subSlides.push({
 						num: i + '/' + (j-1),
-						title: subTitleEl.innerText || subTitleEl.innerHTML,
+						title: subTitleEl.innerText || subTitleEl.innerHTML.replace(/<br[^>]*>/g, ' '),
 					});
 				}
 			}
@@ -69,7 +69,7 @@ window.addEventListener('load', function() {
 
 		toc.push({
 			num : i,
-			title: document.querySelector('#' + mainSection.id + ' > section > h2').innerText || document.querySelector('#' + mainSection.id + ' > section > h2').innerHTML,
+			title: document.querySelector('#' + mainSection.id + ' > section > h2').innerText || document.querySelector('#' + mainSection.id + ' > section > h2').innerHTML.replace(/<br[^>]*>/g, ' '),
 			subSlides : subSlides
 		});
 	}

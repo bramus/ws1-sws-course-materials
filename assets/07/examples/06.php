@@ -21,15 +21,10 @@
 		showDbError('connect', $e->getMessage());
 	}
 
-	// Get ID from URL
-	$id = isset($_GET['id']) ? $_GET['id'] : '0';
-
 	// Get collection from DB
-	$stmt = $db->prepare('SELECT * FROM collections WHERE id = :id');
-	$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-	$stmt->execute();
+	$stmt = $db->prepare('INSERT INTO collections(name, user_id) VALUES (?,?)');
+	$stmt->execute(array('Trip to Amsterdam', 10));
 
-	// Handle result here ....
-	echo('Nothing to see here, check the source');
+	echo 'Created album with ID ' . $db->lastInsertId();
 
 //EOF

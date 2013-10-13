@@ -21,15 +21,10 @@
 		showDbError('connect', $e->getMessage());
 	}
 
-	// Get ID from URL
-	$id = isset($_GET['id']) ? $_GET['id'] : '0';
-
 	// Get collection from DB
-	$stmt = $db->prepare('SELECT * FROM collections WHERE id = :id');
-	$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-	$stmt->execute();
+	$stmt = $db->prepare('DELETE FROM collections WHERE user_id = ?');
+	$stmt->execute(array(10));
 
-	// Handle result here ....
-	echo('Nothing to see here, check the source');
+	echo 'Deleted ' . $stmt->rowCount() . ' rows';
 
 //EOF

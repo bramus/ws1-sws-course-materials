@@ -3,7 +3,11 @@
 	// Include config
 	require_once 'config.php';
 
-	// Connect to database server "localhost" with username "root" and a faulty password
-	$dbhandler = mysqli_connect(DB_HOST, DB_USER, 'wrongpass');
+	// Make Connection
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+
+	echo 'Connected to the database';
+
+	// ... your query magic here
 
 //EOF

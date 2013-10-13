@@ -6,9 +6,14 @@
 	 * @return void
 	 */
 	function showDbError($type, $msg) {
+
+		// Log it (for the developer)
 		file_put_contents(__DIR__ . '/error_log', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
+
+		// Redirect to nice error page (for the visitor)
 		header('location: error.php?type=db&detail=' . $type);
 		exit();
+
 	}
 
 	// Include config
@@ -16,20 +21,13 @@
 
 	// Make Connection
 	try {
-		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
 	} catch (Exception $e) {
 		showDbError('connect', $e->getMessage());
 	}
 
-	// Get ID from URL
-	$id = isset($_GET['id']) ? $_GET['id'] : '0';
+	echo 'Connected to the database';
 
-	// Get collection from DB
-	$stmt = $db->prepare('SELECT * FROM collections WHERE id = :id');
-	$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-	$stmt->execute();
-
-	// Handle result here ....
-	echo('Nothing to see here, check the source');
+	// ... your query magic here
 
 //EOF

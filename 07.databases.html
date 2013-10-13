@@ -90,6 +90,11 @@
 				cursor: pointer;
 			}
 
+			abbr {
+				border-bottom: 1px dotted #fff;
+				cursor: default;
+			}
+
 		</style>
 
 		<script type="text/javascript">
@@ -170,7 +175,7 @@
 								<ul>
 									<li class="fragment"><code>mysql</code> &mdash; Classic extension, procedural (= based on methods)</li>
 									<li class="fragment"><code>mysqli</code> &mdash; Improved version of the <code>mysql</code> extension. Supports Prepared Statements, Multiple Statements, Transactions, etc. Both OO and procedural</li>
-									<li class="fragment"><code>pdo_mysql</code> &mdash; OO based; Implements PHP Data Objects, an interface to communicating with a database server.</li>
+									<li class="fragment"><code>pdo_mysql</code> &mdash; OO based; Implements <em>PHP Data Objects</em>, an interface to communicating with a database server.</li>
 								</ul>
 							</li>
 						</ul>
@@ -181,31 +186,32 @@
 
 						<ul>
 							<li class="fragment">
-								DBMS? MySQL
+								DBMS? &rarr; MySQL
 								<ul>
 									<li class="fragment">We've already worked with this</li>
 									<li class="fragment">Free</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								Extension? <code>mysqli</code>
+							<li class="fragment" style="margin-top: 1em;">
+								Extension? &rarr; PDO
 								<ul>
-									<li>Better than <code>mysql</code></li>
-									<li><code>pdo_mysql</code> a tad above our level, for now</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								OO or procedural? Procedural
-								<ul>
-									<li class="fragment">Most examples online are <code>mysql</code> based. Changing to the <code>mysqli</code> version is only a matter of changing the prefix of the function</li>
-									<li class="fragment">If you know how to work procedural, and understand OO well, it's a very small step towards the OO version</li>
+									<li class="fragment">
+										The <code>mysql</code> and <code>mysqli</code> extensions are outdated
+										<ul>
+											<li class="fragment"><code>mysql</code> is procedural. <code>mysqli</code>'s OO form not robust as it clearly was an afterthought</li>
+										</ul>
+									</li>
+									<li class="fragment">
+										PDO is object oriented
+									</li>
+									<li class="fragment"><code>mysql</code> and <code>mysqli</code> are MySQL only. PDO plays nice with multiple DBMS's such as MSSQL, PostgreSQL, etc.</li>
 								</ul>
 							</li>
 						</ul>
 					</section>
 
 					<section>
-						<h2>Activating mysqli</h2>
+						<h2>Activating pdo_mysql</h2>
 
 						<ul>
 							<li class="fragment">
@@ -213,7 +219,7 @@
 								<ul>
 									<li class="fragment">
 										Remove the leading <code>;</code> to activate<br />
-										<div style="text-align: center;"><figure><img src="assets/07/phpini.jpg" alt="" title="" /></figure></div>
+										<div style="text-align: center;"><figure><img src="assets/07/phpini.jpg" width="600" alt="" title="" /></figure></div>
 									</li>
 									<li class="fragment">Already activated in Wampserver</li>
 								</ul>
@@ -226,10 +232,10 @@
 
 						<ul>
 							<li class="fragment">
-								Use <code>phpinfo()</code> and check if <code>mysqli</code> appears on the page<br />
+								Use <code>phpinfo()</code> to check if PDO and <code>pdo_mysql</code> are activated
 							</li>
 						</ul>
-						<div style="text-align: center;" class="fragment"><figure><img src="assets/07/phpinfo.jpg" alt="" title="" width="500" /></figure></div>
+						<div style="text-align: center;" class="fragment"><figure><img src="assets/07/phpinfo.jpg" alt="" title="" width="600" /></figure></div>
 					</section>
 
 
@@ -249,7 +255,7 @@
 
 						<ul>
 							<li class="fragment">
-								We use a <code>config.php</code> to store our credentials in
+								We'll use a <code>config.php</code> to store our credentials in
 
 								<pre class="bigger"><code class="language-php">&lt;?php
 
@@ -262,8 +268,13 @@
 
 //EOF</code></pre>
 							</li>
-							<li class="fragment">Edit the file if needed (location: <code>/assets/07/examples</code>)</li>
-							<li class="fragment">SQL Dumps of the used databases can also be found in that folder</li>
+							<li class="fragment" style="margin-top: 1em;">
+								The config is used throughout the next code examples
+								<ul class="fragment">
+									<li>Edit the file if needed (location: <code>/assets/07/examples</code>)</li>
+								</ul>
+							</li>
+							<li class="fragment">SQL Dumps of the used databases also in that folder</li>
 						</ul>
 					</section>
 
@@ -271,25 +282,26 @@
 						<h2>Connecting (1)</h2>
 
 						<ul>
-							<li class="fragment">Connect using <code>mysqli_connect()</code></li>
-							<li class="fragment">Select database using <code>mysqli_select_db()</code></li>
+							<li class="fragment">
+								Connect using by creating a new instance of <code>PDO</code>
+							</li>
+							<li class="fragment">
+								Parameters:
+								<ol>
+									<li>A <abbr title="Data Source Name">DSN</abbr>, containing the database host and schema</li>
+									<li>The username to use when connecting to the DBMS</li>
+									<li>The password to use when connecting to the DBMS</li>
+								</ol>
+							</li>
 						</ul>
 						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01.php">&lt;?php
 
 	require_once 'config.php';
 
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS)
-		or die ('Could not connect to database server');
+	// Make Connection
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
 
-	// If connection succeeded, we end up here.
-	// If not, the die() above gets interpreted
-	echo 'Connected';
-
-	// Select database &quot;fotofactory&quot;
-	@mysqli_select_db($dbhandler, DB_NAME_FF)
-		or die ('Could not select database');
-
-	echo ' and selected the DB';
+	echo 'Connected to the database';
 
 	// ... your query magic here
 
@@ -297,68 +309,17 @@
 					</section>
 
 					<section>
-						<h2>Connecting (2)</h2>
-
-						<ul>
-							<li class="fragment">Connect and selecting database in one line is possible</li>
-						</ul>
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01b.php">&lt;?php
-
-	require_once 'config.php';
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
-		or die ('Could not connect to database server or access database');
-
-	echo 'Connected and selected the DB (in one go)';
-
-	// ... your query magic here
-
-//EOF</code></pre></div>
-					</section>
-
-					<section>
-						<h2>Connecting (3)</h2>
+						<h2>Disconnecting?</h2>
 
 						<ul>
 							<li class="fragment">
-								Why store the connection in a variable?
+								Not needed
 								<ul>
-									<li class="fragment">Needed to run queries on</li>
-									<li class="fragment">Needed to catch errors</li>
-									<li class="fragment">Needed to disconnect</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Practical use case?
-								<ul>
-									<li class="fragment">A setup where multiple MySQL servers are used: you write on one connection, and read from an other connection</li>
-									<li class="fragment">Example: Wikipedia uses a Master-Slave MySQL setup: writes happen on the master, reads on the slaves</li>
+									<li class="fragment">When the script has finished, the variable dies with it</li>
 								</ul>
 							</li>
 						</ul>
-					</section>
 
-					<section>
-						<h2>Disconnecting</h2>
-
-						<ul>
-							<li class="fragment">use <code>mysqli_close()</code></li>
-						</ul>
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/01c.php">&lt;?php
-
-	require_once 'config.php';
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF)
-		or die ('Could not connect to database server or access database');
-
-	echo 'Connected and selected the DB (in one go)';
-
-	// ... your query magic here
-
-	@mysqli_close($dbhandler);
-
-//EOF</code></pre></div>
-						<footer class="fragment">Note: If you don't, the connection gets closed automatically when the script has finished</footer>
 					</section>
 
 				</section>
@@ -383,48 +344,53 @@
 
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02.php">&lt;?php
 
+	// Include config
 	require_once 'config.php';
 
-	$dbhandler = mysqli_connect(DB_HOST, DB_USER, 'wrongpass');
+	// Make Connection
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
 
-//EOF</code></pre>
+	echo 'Connected to the database';
 
-							<pre class="bigger"><code>Warning: mysqli_connect() [function.mysqli-connect]: (28000/1045): Access denied for user 'root'@'localhost' (using password: YES) in /Users/bramus/Dropbox/Kaho/../assets/07/examples/02.php on line 5</code></pre>
+	// ... your query magic here
+</code></pre>
+
+							<pre class="bigger"><code>Fatal error: Uncaught exception 'PDOException' with message 'SQLSTATE[42000] [1049] Unknown database 'does_not_exist'' in /Users/bramus/Dropbox/Kaho/.../assets/07/examples/02.php:7 Stack trace: #0 /Users/bramus/Dropbox/Kaho/.../assets/07/examples/02.php(7): PDO->__construct('mysql:host=loca...', 'root', 'Azerty123') #1 {main} thrown in /Users/bramus/Dropbox/Kaho/Lesactiviteiten/WS1 - Serverside/2013-2014/slidedeck/assets/07/examples/02.php on line 7</code></pre>
 						</div>
 					</section>
 
 					<section>
-						<h2>Showing errors on screen</h2>
+						<h2>Don't show errors on screen!</h2>
 						<ul>
 							<li class="fragment">
-								Is a huge security issue!
+								Showing errors on screen is a huge security issue!
 								<ul>
+									<li class="fragment">Users can get a glimpse of your DB credentials</li>
 									<li class="fragment">Users can get a glimpse of your DB layout</li>
 									<li class="fragment">Users know the physical location of your website</li>
 								</ul>
 							</li>
 						</ul>
-						<div class="fragment"><figure class="zoomable-20"><img src="assets/07/tomorrowland.jpg" alt="" title="" width="400" /><figcaption>Example: Tomorrowland website</figcaption></figure></div>
+						<div class="fragment"><figure class="zoomable-20"><img src="assets/07/tomorrowland.jpg" alt="" title="" width="300" /><figcaption>Example: Tomorrowland website</figcaption></figure></div>
 					</section>
 
 					<section>
 						<h2>Catching Errors</h2>
 						<ul>
 							<li class="fragment">
-								Suppress errors with <code>@</code> and catch 'm yourself
+								An exception will be thrown when PDO cannot connect to the database server or access database.
+								<ul>
+									<li class="fragment">&rarr; Use a <code>try/catch</code> struct</li>
+								</ul>
 
 								<div class="fragment">
 
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02b.php">&lt;?php
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02b.php">try {
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+} catch (Exception $e) {
+	exit('Could not connect to database server or access database');
+}</code></pre>
 
-	require_once 'config.php';
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, 'wrongpass', DB_NAME_FF)
-		or die ('Could not connect to database server or access database');
-
-//EOF</code></pre>
-
-							<pre class="bigger"><code>Could not connect to database server or access database</code></pre>
 						</div>
 
 							</li>
@@ -438,7 +404,7 @@
 						<h2>Userfriendly error messages</h2>
 						<ul>
 							<li class="fragment">
-								Better is to show the user a user-friendly error message, in a nice layout
+								Better: Show user-friendly messages on screen
 
 								<div class="fragment">
 
@@ -451,51 +417,57 @@
 
 	require_once 'config.php';
 
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, 'wrongpass', DB_NAME_FF)
-		or showDbError('connect');
+	try {
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+	} catch (Exception $e) {
+		showDbError('connect');
+	}
 
 //EOF</code></pre>
 
 								</div>
 
 							</li>
-							<li class="fragment">
-								The referrenced error page will show a proper error message based on the <code>$_GET</code> parameters, in the layout of the website
-							</li>
+						</ul>
 					</section>
 
 					<section>
 						<h2>Logging errors</h2>
 						<ul>
 							<li class="fragment">
-								As a developer I'm not interested in a userfriendly error message, I want to see the actual error
-								<ul class="fragment">
-									<li>Use <code>mysqli_connect_error()</code> to get the error while connecting</li>
-									<li>Use <code>mysqli_error()</code> to get all other errors</li>
+								As a developer I'm not interested in a userfriendly error message, I want to see the actual error in a logfile
+								<ul>
+									<li class="fragment">&rarr; Pass the Exception message into <code>showDbError()</code> and log it in a file/db</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								Log the errors in <code>showDbError()</code> before jumping to the error page
+						</ul>
 
-								<div class="fragment">
+						<div class="fragment">
 
-									<pre class="bigger"><code class="language-php">&lt;?php
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02d.php">&lt;?php
 
-	function showDbError($type) {
-		// @TODO: Log errors to a file
+	function showDbError($type, $msg) {
+		file_put_contents(
+			__DIR__ . '/error_log',
+			PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg,
+			FILE_APPEND
+		);
 		header('location: error.php?type=db&amp;detail=' . $type);
 		exit();
 	}
 
-	// ...</code></pre>
+	try {
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+	} catch (Exception $e) {
+		showDbError('connect', $e->getMessage());
+	}</code></pre>
 
-								</div>
+						</div>
 
-							</li>
 					</section>
 
 					<section>
-						<h2>Course Convention</h2>
+						<h2>Summary / Course Convention</h2>
 						<ul>
 							<li class="fragment">
 								Never ever show errors on screen on a published site
@@ -518,290 +490,43 @@
 					</section>
 
 					<section>
-						<h2>Executing Queries</h2>
-
-						<ul>
-							<li class="fragment">Via <code>mysqli_query()</code></li>
-							<li class="fragment">
-								Parameters
-								<ul>
-									<li>The connection <code>$dbhandler</code></li>
-									<li>An SQL <code>$query</code></li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Example
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	echo '&lt;p&gt;This example outputs nothing&lt;/p&gt;';
-
-	@mysqli_close($dbhandler);
-
-//EOF</code></pre>
-							</li>
-						</ul>
-					</section>
-
-					<section>
 						<h2>Types of Queries</h2>
 
 						<ul>
 							<li class="fragment">
-								Two types of queries. Queries that:
+								Essentially, we have two types of queries. Queries that:
 								<ol>
-									<li>Yield a resultset (e.g. <code>SELECT</code>, <code>SHOW</code>, <code>DESCRIBE</code>, <code>EXPLAIN</code>, &hellip;)</li>
-									<li>Yield no resultset (e.g. <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>DROP</code>, &hellip;)</li>
+									<li class="fragment">Yield a resultset (e.g. <code>SELECT</code>, <code>SHOW</code>, <code>DESCRIBE</code>, <code>EXPLAIN</code>, &hellip;)</li>
+									<li class="fragment">Yield no resultset (e.g. <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>DROP</code>, &hellip;)</li>
 								</ol>
 							</li>
-							<li class="fragment">
-								Result of <code>mysqli_query()</code>
-								<ul>
-									<li class="fragment">
-										If a query fails <em>(faulty query)</em>, PHP will return <code>false</code>
-									</li>
-									<li class="fragment">
-										If a query succeeds, PHP will return
-										<ul>
-											<li>A <em>resultset</em> if the query yields a resultset</li>
-											<li><code>true</code> if the query yields no resultset</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								The returned resultset may contain 0 rows, and the returned <code>true</code> only indicates that the query was executed
-								<ul>
-									<li class="fragment">Based on the type of query you'll need to post-process it to get the actual rows or to see what was changed/inserted
-								</ul>
-							</li>
 						</ul>
 					</section>
 
 					<section>
-						<h2>Processing a returned resultset</h2>
-
+						<h2>Executing Queries</h2>
 						<ul>
 							<li class="fragment">
-								Extra fetch function is needed to iterate the resultset
+								Depending on the type of query, use one of these functions
+								<div class="fragment">
+									<ol style="margin-top: 1em;">
+										<li>Use <code>PDO::query()</code><small><a href="http://www.php.net/manual/en/pdo.query.php">&#9873;</a></small> for queries that yield a resultset</li>
+									</ol>
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03.php">$stmt = $db->query('SELECT * FROM collections WHERE user_id = 2');
+var_dump($stmt);</code></pre>
+								</div>
+								<div class="fragment">
+									<ol start="2">
+										<li>Use <code>PDO::exec()</code><small><a href="http://www.php.net/manual/en/pdo.exec.php">&#9873;</a></small> for queries that yield no resultset</li>
+									</ol>
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03b.php">$stmt = $db->exec('DELETE FROM collections WHERE user_id = 10');
+var_dump($stmt);</code></pre>
+								</div>
 							</li>
-							<li class="fragment">
-								Four possible functions to walk the result
-								<ol>
-									<li><code>mysqli_fetch_row()</code> &mdash; fetches the current row as a <strong>numeric array</strong> and moves the pointer forward</li>
-									<li><code>mysqli_fetch_assoc()</code> &mdash; fetches the current row as <strong>an associative array</strong> and moves the pointer forward</li>
-									<li><code>mysqli_fetch_array()</code> &mdash; fetches the current row as both a <strong>numeric array</strong> and <strong>an associative array</strong> and moves the pointer forward</li>
-									<li><code>mysqli_fetch_object()</code> &mdash; fetches the current row as an <strong>object</strong> and moves the pointer forward</li>
-								</ol>
-							</li>
-							<li class="fragment">
-								Use <code>mysqli_num_rows()</code> to get the number of rows returned
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>mysqli_fetch_row() example</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03b.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-
-		while ($row = mysqli_fetch_row($result)) {
-			// Outputs &lt;p&gt;id - name&lt;/p&gt;
-			echo '&lt;p&gt;' . $row[0] . '-' . $row[1] . '&lt;/p&gt;';
-		}
-
-	}
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>mysqli_fetch_assoc() example</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03c.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-
-		while ($row = mysqli_fetch_assoc($result)) {
-			// Outputs &lt;p&gt;id - name&lt;/p&gt;
-			echo '&lt;p&gt;' . $row['id'] . '-' . $row['name'] . '&lt;/p&gt;';
-		}
-
-	}
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>mysqli_fetch_object() example</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03d.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		echo '&lt;p&gt;Got ' . mysqli_num_rows($result) . ' rows returned:&lt;/p&gt;';
-
-		while ($row = mysqli_fetch_object($result)) {
-			// Outputs &lt;p&gt;id - name&lt;/p&gt;
-			echo '&lt;p&gt;' . $row-&gt;id . '-' . $row-&gt;name . '&lt;/p&gt;';
-		}
-
-	}
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>What to choose</h2>
-
-						<ul>
-							<li class="fragment">
-								Preference goes to <code>mysqli_fetch_assoc()</code>
-								<ul>
-									<li class="fragment">
-										Result is more readable than <code>mysqli_fetch_row()</code>
-										<ul>
-											<li><code>$row[1]</code> vs. <code>$row['name']</code></li>
-										</ul>
-									</li>
-									<li class="fragment">
-										Faster than <code>mysqli_fetch_array()</code>
-										<ul>
-											<li>At 1000 selects <code>mysqli_fetch_assoc()</code> is 10% faster</li>
-										</ul>
-									</li>
-									<li class="fragment">
-										Code easily adjustable when query changes
-										<ul>
-											<li>If you select an extra field, you don't need to chang the indices in <code>$row</code></li>
-											<li><code>$row[1]</code> might need to change to <code>$row[2]</code> where <code>$row['name']</code> remains unchanged</li>
-										</ul>
-									</li>
-								</ul>
+							<li class="fragment" style="margin-top: 1em;">
+								Depending on the type of query, we'll need to do some more things to get an actual result we can use <em>(See further)</em>
 							</li>
 						</ul>
-					</section>
-
-					<section>
-						<h2>Processing a query with no resultset</h2>
-
-						<ul>
-							<li class="fragment">
-								Extra functions are needed to get extra information
-								<ul>
-									<li class="fragment">Use <code>mysqli_affected_rows()</code> to get to know how many rows were affected by the query</li>
-									<li class="fragment">Use <code>mysqli_insert_id()</code> to get the know the last auto_increment value</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>mysqli_affected_rows() example</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03e.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'UPDATE collections SET user_id = ROUND(RAND()*10) WHERE id != 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		echo '&lt;p&gt;' . mysqli_affected_rows($dbhandler) . ' were affected&lt;/p&gt;';
-
-	}
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>mysqli_insert_id() example</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03f.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'INSERT INTO collections (name, user_id) VALUES ("TestColl", 2)';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		echo '&lt;p&gt;Row inserted with ID' . mysqli_insert_id($dbhandler) . '&lt;/p&gt;';
-
-	}
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>Free up memory with mysqli_free_result()</h2>
-
-						<div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03g.php">&lt;?php
-
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF);
-
-	$query = 'SELECT id, name FROM collections WHERE user_id = 2';
-
-	$result = @mysqli_query($dbhandler, $query);
-
-	if ($result !== false) { // Yes, we have one or more rows returned
-
-		// &hellip; process rows here
-
-	}
-
-	// Free up some memory (and tell how much memory is used before and after)
-	echo memory_get_usage() . PHP_EOL;
-	mysqli_free_result($result);
-	echo memory_get_usage() . PHP_EOL;
-
-	// &hellip; your other code here
-
-	@mysqli_close($dbhandler);</code></pre>
-						</div>
 					</section>
 
 				</section>
@@ -812,52 +537,51 @@
 				<section>
 
 					<section>
-						<h2>Securing Queries</h2>
+						<h2>Working with query parameters</h2>
 					</section>
 
 					<section>
-						<h2>Securing Queries?</h2>
+						<h2>Working with query parameters</h2>
 
 						<ul>
-							<li class="fragment">Never pass user input directly into a query, <strong>always</strong> secure the passed in data</li>
-							<li class="fragment">
+							<li class="fragment">When using user input as parameters for a query, don't pass it in directly, <strong>always</strong> secure the passed in data first</li>
+							<li class="fragment" style="margin-top: 1em;">
 								If you don't, users can perform SQL Injection
 								<ul>
 									<li>Just as XSS, <a href="http://blogs.msdn.com/b/ie/archive/2012/09/10/xss-trends-and-internet-explorer.aspx">SQL Injection is a real world and big problem</a>!</li>
 									<li><em>&ldquo;SQL injection is the most pernicious vulnerability in human computer history&rdquo;</em> (<a href="http://blog.imperva.com/2011/09/sql-injection-by-the-numbers.html">source</a>)</li>
 								</ul>
 							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Let's take a closer look on the next few slides &hellip;
+							</li>
 						</ul>
 
-						<footer class="fragment">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</footer>
+						<footer class="fragment"><em style="color: #F55;">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</em></footer>
 
 					</section>
 
 					<section>
-						<h2>(insecure) example</h2>
+						<h2>(Insecure) Example</h2>
 
 						<ul>
 							<li class="fragment">
-								Detailpage of a product. Url: <code>detail.php?id=X</code>
+								Detailpage of a collection. Url: <code>detail.php?id=X</code>
 
 								<pre class="bigger"><code class="language-php">&lt;?php
 
 &hellip;
 
-	$id = $_GET['id']; // get ID from URL
-	$dbhandler = &hellip;; // open database connection
+	// Get ID from URL
+	$id = isset($_GET['id']) ? $_GET['id'] : 0;
 
-	// get product from DB
-	$result = @mysqli_query($dbhandler,
-		'SELECT * FROM products WHERE id = ' . $id
-	) or showDbError('query');
+	// Get collection from database
+	$stmt = $db->query('SELECT * FROM collections WHERE id = ' . $id);
 
-	// product found, show it
-	&hellip;
+	// Handle result
 
 &hellip;
-
-// EOF</code></pre>
+</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -866,26 +590,22 @@
 						<h2>Problem #1</h2>
 
 						<ul>
-							<li class="fragment">Omitting the id from the URL results in a error</li>
-							<li class="fragment">Fix: check with <code>isset()</code> if a param is set!</li>
+							<li class="fragment">
+								Changing the URL param to a string will break the query
+								<ul>
+									<li>When visiting <code>detail.php?id=test</code> the query will become broken: <code class="nok" style="white-space: nowrap;">SELECT * FROM collections WHERE id = test</code> is an invalid query</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Fix: add quotes in your query around the value
+								<ul>
+									<li><code class="ok">SELECT * FROM products WHERE id = &quot;test&quot;</code> is a valid query</li>
+								</ul>
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php">$stmt = $db->query('SELECT * FROM collections WHERE user_id = &quot;' . $id . '&quot;');</code></pre>
+								</div>
+							</li>
 						</ul>
-
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php">&lt;?php
-
-&hellip;
-
-	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
-	$dbhandler = &hellip;; // open database connection
-
-	$result = @mysqli_query($dbhandler,
-		'SELECT * FROM products WHERE id = ' . $id
-	) or showDbError('query');
-
-&hellip;
-
-// EOF</code></pre>
-						</div>
 					</section>
 
 					<section>
@@ -893,110 +613,171 @@
 
 						<ul>
 							<li class="fragment">
-								Changing the URL param to a string will break the query
+								Changing the URL param to a string containing a quote breaks the query
 								<ul>
-									<li>When visiting <code>detail.php?id=test</code> the query will become <code class="nok">SELECT * FROM products WHERE id = test</code>, which is not a valid query</li>
+									<li>When visiting <code>detail.php?id=te&quot;st</code> the query will become broken: <code class="nok" style="white-space: nowrap;">SELECT * FROM products WHERE id = &quot;te&quot;st&quot;</code> is an invalid query</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								Fix: add quotes in your query
-								<ul>
-									<li><code class="ok">SELECT * FROM products WHERE id = &quot;test&quot;</code> is a valid query</li>
-								</ul>
-							</li>
-						</ul>
-
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php">&lt;?php
-
-&hellip;
-
-	$id = isset($_GET['id']) ? $_GET['id'] : 0; // get ID from URL
-	$dbhandler = &hellip;; // open database connection
-
-	$result = @mysqli_query($dbhandler,
-		'SELECT * FROM products WHERE id = &quot;' . $id . '&quot;'
-	) or showDbError('query');
-
-&hellip;
-
-// EOF</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>Problem #3</h2>
-
-						<ul>
-							<li class="fragment">
-								Changing the URL param to a string with a quote in breaks the query
-								<ul>
-									<li>When visiting <code>detail.php?id=te&quot;st</code> the query will become <code class="nok">SELECT * FROM products WHERE id = &quot;te&quot;st&quot;</code>, which is not a valid query</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Fix: use <code>addslashes()</code>
+							<li class="fragment" style="margin-top: 0.5em;">
+								Possible fix: use <code>addslashes()</code>
 								<ul>
 									<li><code class="ok">SELECT * FROM products WHERE id = &quot;te\&quot;st&quot;</code> is a valid query</li>
 								</ul>
+
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php">$stmt = $db->query('SELECT * FROM collections WHERE user_id = &quot;' . addslashes($id) . '&quot;');</code></pre>
+								</div>
+							</li>
+							<li class="fragment" style="margin-top: 0.5em;">
+								Possible fix: cast <code>$id</code> to an integer
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php">$stmt = $db->query('SELECT * FROM collections WHERE id = ' . (int) $id);</code></pre>
+								</div>
+								<ul>
+									<li class="fragment">Won't work if you expect a string though!</li>
+								</ul>
 							</li>
 						</ul>
-
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php">&lt;?php
-
-&hellip;
-
-	$result = @mysqli_query($dbhandler,
-		'SELECT * FROM products WHERE id = &quot;' . addslashes($id) . '&quot;'
-	) or showDbError('query');
-
-&hellip;
-
-// EOF</code></pre>
-						</div>
 					</section>
 
 					<section>
-						<h2>Problem #3 (variant)</h2>
+						<h2>Problem #2 (variant)</h2>
 
 						<ul>
 							<li class="fragment">
 								Changing the URL param to a <em>dangerous</em> string that resembles SQL allows SQL injection
 								<div class="fragment" style="text-align: center; padding-top: 20px">
 									<figure>
-										<img src="assets/07/littlebobbytables.jpg" alt="" title="" />
+										<img src="assets/07/littlebobbytables.jpg" alt="" title="" width="500" />
 										<figcaption><a href="http://xkcd.com/327/">XKCD: Exploits of a mom</a></figcaption>
 									</figure>
 								</div>
 							</li>
 							<li class="fragment">
-								Fix: use <code>addslashes()</code>
+								Fix: use <code>addslashes()</code>? <span class="fragment">Alas, no dice:</span>
+								<ul class="fragment">
+									<li>Multibyte character used with certain DB encodings break stuff</li>
+									<li>See <a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a> for detailed explanation</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
 
 					<section>
-						<h2>Problem #4</h2>
+						<h2>What now?</h2>
 
 						<ul>
 							<li class="fragment">
-								Turns out, <code>addslashes()</code> isn't sufficient enough to prevent SQL Injection
-								<ul>
-									<li>Multibyte character used with certain DB encodings break stuff</li>
-									<li>See <a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a> for detailed explanation</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Fix: use <code>mysqli_real_escape_string()</code> instead of <code>addslashes()</code>
+								Two options
+								<ol>
+									<li>Manually escape all parameters</li>
+									<li>Use prepared statements</li>
+								</ol>
 							</li>
 						</ul>
+					</section>
 
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler,
-	'SELECT * FROM products WHERE id = &quot;' . mysqli_real_escape_string($dbhandler, $id) . '&quot;'
-) or showDbError('query');</code></pre>
-						</div>
+					<section>
+						<h2>Manually escaping parameters</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDO::quote()</code><small><a href="http://www.php.net/manual/en/pdo.quote.php">&#9873;</a></small> to escape a parameter properly
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04.php">$stmt = $db->query('SELECT * FROM collections WHERE id = ' . $db->quote($userId, PDO::PARAM_INT));</code></pre>
+							</li>
+							<li class="fragment">
+								Note
+								<ul>
+									<li class="fragment">
+										Charset must be set on the DSN!
+										<pre class="bigger"><code class="language-php">	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+</code></pre>
+									</li>
+									<li class="fragment">
+										<code>PDO::quote()</code> will add quotes around the value where needed
+										<pre class="bigger"><code class="language-php">$stmt = $db->query('SELECT * FROM collections WHERE name = ' . $db->quote($name, PDO::PARAM_STR));</code></pre>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Prepared Statements (1)</h2>
+						<ul>
+							<li class="fragment">
+								Mingling parameters into your query is confusing
+								<ul>
+									<li class="fragment">
+										&rarr; Prepared statements overcome this
+									</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Prepared statements also prevent XSS, but you <strong>MUST</strong> enable it manually onto the connection using <code style="white-space: nowrap; font-size: 70%;">$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>
+								<pre class="bigger"><code class="language-php">// Make Connection
+try {
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch (Exception $e) {
+	showDbError('connect', $e->getMessage());
+}</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Prepared Statements (2)</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDO::prepare()</code><small><a href="http://www.php.net/manual/en/pdo.quote.php">&#9873;</a></small> to <em>prepare</em> a query with placeholders
+								<pre class="bigger"><code class="language-php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em">
+								The result is an instance of <code>PDOStatement</code><small><a href="http://www.php.net/manual/en/class.pdostatement.php">&#9873;</a></small>. With it:
+								<ul>
+									<li class="fragment">Bind values onto the placeholders</li>
+									<li class="fragment">Execute it</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Using Prepared Statements (1)</h2>
+						<ul>
+							<li class="fragment">
+								Bind values onto the placeholders using <code>PDOStatement::bindValue</code><small><a href="http://www.php.net/manual/en/pdostatement.bindvalue.php">&#9873;</a></small>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+$stmt->bindValue(1, $id, PDO::PARAM_INT);
+$stmt->execute();</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Alternative: named placeholders
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04c.php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = :id');
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();</code></pre>
+							</li>
+						</ul>
+						<footer class="fragment"><em>Note: You call execute on the statement, not on <code>$db</code></em></footer>
+					</section>
+
+					<section>
+						<h2>Using Prepared Statements (2)</h2>
+						<ul>
+							<li class="fragment">
+								Also possible <em>(shorter, preferred)</em>:
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04d.php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+$stmt->execute(array($id));</code></pre>
+								<ul>
+									<li class="fragment">Cannot be used with named placeholders</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								No matter what type of query is, the call is always <code>PDOStatement::execute</code><small><a href="http://www.php.net/manual/en/pdostatement.execute.php">&#9873;</a></small>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$stmt = $db->prepare('INSERT INTO collections (name, user_id) VALUES (?, ?)');
+$stmt->execute('bramus-test', 4);</code></pre>
+							</li>
+						</ul>
 					</section>
 
 					<section>
@@ -1004,12 +785,136 @@
 
 						<ul>
 							<li class="fragment">
-								<strong>Always</strong> use <code>mysqli_real_escape_string()</code> to sanitize user input and thus prevent SQL Injection
+								<strong>Always</strong> sanitize &amp; escape user input when constructing queries to prevent SQL Injection
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Preference to using <em>prepared statements</em>
+								<ul>
+									<li>More readable code</li>
+									<li><em>One function to rule them all &trade;</em></li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Remember to manually force <strong>real prepared statements</strong>!
+								<pre class="bigger"><code class="language-php">$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code></pre>
 							</li>
 						</ul>
 
-						<footer class="fragment">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</footer>
+						<footer class="fragment"><em style="color: #F55;">!! If you don't prevent SQL Injection in the assignments or your exam, you will fail them !!</em></footer>
+
 					</section>
+
+				</section>
+
+
+				<section>
+
+					<section>
+						<h2>Processing queries</h2>
+					</section>
+
+					<section>
+						<h2>Processing queries</h2>
+
+						<ul>
+							<li class="fragment">We can now properly write queries</li>
+							<li class="fragment" style="margin-top: 1em;">
+								As said before: depending on the type of query, we'll need to do some more things to get an actual result we can use
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Fetching an entire resultset</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDOStatement::fetchAll</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchall.php">&#9873;</a></small> to fetch then entire resultset into an array
+								<ul>
+									<li class="fragment">Pass in a <em>fetch style</em> to shape the contents of that array</li>
+								</ul>
+							</li>
+						</ul>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05.php">$stmt =$db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?');
+$stmt->execute(array(2, 'russia'));
+$collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+echo '&lt;pre&gt;';
+var_dump($collections);
+echo '&lt;/pre&gt;';</code></pre>
+						</div>
+						<div class="fragment">
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05b.php">$collections = $stmt->fetchAll(PDO::FETCH_OBJ);</code></pre>
+						</div>
+					</section>
+
+					<section>
+						<h2>Fetching a single row</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDOStatement::fetch</code><small><a href="http://www.php.net/manual/en/pdostatement.fetch.php">&#9873;</a></small> to fetch the returned rows one bye one
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05c.php">$stmt =$db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?');
+$stmt->execute(array(2, 'russia'));
+
+while ($collection = $stmt->fetch(PDO::FETCH_ASSOC)) {
+	var_dump($collection);
+}</code></pre>
+								</div>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Use case: queries that yield one row
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05d.php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+$stmt->execute(array(1));
+
+$collection = $stmt->fetch(PDO::FETCH_ASSOC);
+var_dump($collection);</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Fetching a single field</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDOStatement::fetchColumn</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchColumn.php">&#9873;</a></small> to fetch the value of a column from the first row
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05e.php">$stmt = $db->prepare('SELECT name, user_id FROM collections WHERE id = ?');
+$stmt->execute(array(1));
+var_dump($stmt->fetchColumn());</code></pre>
+								</div>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Use an index to define which column you want
+								<div class="fragment">
+									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05f.php">$stmt = $db->prepare('SELECT name, user_id FROM collections WHERE id = ?');
+$stmt->execute(array(1));
+var_dump($stmt->fetchColumn(1));</code></pre>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Fetching meta information</h2>
+						<ul>
+							<li class="fragment">
+								Use <code>PDO::lastInsertId()</code><small><a href="http://www.php.net/manual/en/pdo.lastinsertid.php">&#9873;</a></small> to know the last inserted id (<code>AUTO_INCREMENT</code>) after executing an <code>INSERT</code> query
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/06.php">$stmt = $db->prepare('INSERT INTO collections(name, user_id) VALUES (?,?)');
+$stmt->execute(array('Trip to Amsterdam', 10));
+
+echo 'Created album with ID ' . $db->lastInsertId();</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em">
+								Use <code>PDOStatement::rowCount()</code><small><a href="http://www.php.net/manual/en/pdostatement.rowcount.php">&#9873;</a></small> to know the number of affected rows made by <code>UPDATE</code> and <code>DELETE</code> queries
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/07.php">$stmt = $db->prepare('DELETE FROM collections WHERE user_id = ?');
+$stmt->execute(array(10));
+
+echo 'Deleted ' . $stmt->rowCount() . ' rows';</code></pre>
+							</li>
+						</ul>
+					</section>
+
 
 				</section>
 
@@ -1030,8 +935,8 @@
 							<li class="fragment">
 								A set of often used methods / tips to help you working with databases
 								<ol>
+									<li class="fragment">UTF-8</li>
 									<li class="fragment">Working with dates and time</li>
-									<li class="fragment">Use of <code>sprintf()</code> / prepared statements</li>
 									<li class="fragment">Joins over loops</li>
 									<li class="fragment">Passwords</li>
 								</ol>
@@ -1040,36 +945,41 @@
 					</section>
 
 					<section>
-						<h2>Best Practice #1<br /><br />Working with dates and time</h2>
+						<h2>Best Practice #1<br /><br />UTF-8</h2>
 					</section>
 
-
 					<section>
-						<h2>Dates in PHP</h2>
-
+						<h2>UTF-8</h2>
 						<ul>
 							<li class="fragment">
-								Current timestamp accessible with <code>time()</code>
-							</li>
-							<li class="fragment">
-								Convert a timestamp to a readable format with <code>date()</code>
-								<ul>
+								In short: Use <code>UTF-8</code>, everywhere.
+								<ol>
 									<li class="fragment">
-										Examples
-										<pre class="bigger"><code class="language-php">date('Y-m-d H:i:s', $someDate); // 1983-05-26 23:45:00
-date('j/n/y h:i:s A', $someDate); // 26/5/83 11:45:00 PM
-date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
+										DB Schema and Tables: use <code>utf8_general_ci</code>
+										<pre class="bigger"><code>CREATE DATABASE `mydb`
+DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</code></pre>
+										<pre class="bigger"><code>CREATE TABLE IF NOT EXISTS `records` (
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(255) NOT NULL,
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</code></pre>
 									</li>
-									<li class="fragment">If no timestamp is given, the current time is taken</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Convert a datestring to a timestamp with <code>strtotime()</code>
-								<ul>
-									<li class="fragment">Does not only accept fixed dates such as <code>26/12/1983</code> but also accepts relative dates such as <code>tomorrow</code>, <code>+1 week</code>,  <code>next monday</code>, etc.</li>
-								</ul>
+									<li class="fragment">
+										DB Connection
+										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);</code></pre>
+									</li>
+									<li class="fragment">
+										HTML charset
+										<pre class="bigger"><code class="language-html dontrun">&lt;meta charset=&quot;utf-8&quot; /&gt;</code></pre>
+									</li>
+								</ol>
 							</li>
 						</ul>
+					</section>
+
+					<section>
+						<h2>Best Practice #2<br /><br />Working with dates and time</h2>
 					</section>
 
 
@@ -1115,7 +1025,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 									<li>Our choice: let webserver (thus PHP) decide what time it is</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Store dates in a readable format in your database
 								<ul>
 									<li class="fragment">
@@ -1125,21 +1035,7 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 										Use <code>datetime</code> as the field type
 										<ul>
 											<li>Beware: does not contain timezone information!</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Convert dates in PHP, not in your queries (unless necessary)
-								<ul>
-									<li class="fragment">
-										Prevents complex queries
-									</li>
-									<li class="fragment">
-										Examples
-										<ul>
-											<li>When storing dates: <code>$data['publish_date'] = date('Y-m-d H:i:s');</code></li>
-											<li>When displaying (parts of) dates: <code>$month = date('m', strtottime($dbResult['publish_date']));</code></li>
+											<li>Sidenote: If you ever were to make a timezone aware app store all dates/times as UTC in your DB</li>
 										</ul>
 									</li>
 								</ul>
@@ -1152,169 +1048,30 @@ date('D, F d, Y', $someDate); // Thu, May 26, 1983</code></pre>
 						<h2>Date &amp; time best practices (2)</h2>
 						<ul>
 							<li class="fragment">
-								Don't be too specific when retrieving items after/before a given date
-								<pre class="bigger"><code class="language-php">$result = @mysqli_query($dbhandler, 'SELECT * FROM blogposts WHERE publish_date &gt; &quot;'. date('Y-m-d H:i:s'). '&quot;') or showDbError('query');</code></pre>
+								Convert dates in PHP, not in your queries (unless necessary)
 								<ul>
-									<li>Very specific example</li>
+									<li class="fragment">
+										Prevents complex queries
+									</li>
+									<li class="fragment">
+										Examples
+										<ul>
+											<li>Storing dates: <code>$data['publish_date'] = (new Datetime())->format('Y-m-d H:i:s');</code></li>
+											<li>Displaying dates: <code>$month = (new Datetime($dbResult['publish_date']))->format('m')</code></li>
+										</ul>
+									</li>
 								</ul>
 							</li>
-							<li class="fragment">Reason: MySQL Query Cache</li>
-							<li class="fragment">Fix: Round your dates to the minute or 5 minutes if the script allows it</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Best Practice #2<br /><br />Use sprintf()<br />or<br />prepared statements</h2>
-					</section>
-
-
-					<section>
-						<h2>The why and how of sprintf()</h2>
-
-						<ul>
-							<li class="fragment">
-								Cast query parameters to their proper type
+							<li class="fragment" style="margin-top: 1em;">
+								Don't be too specific when retrieving items after/before a given date. Bad example:
+								<pre class="bigger"><code class="language-php">$stmt = $db->prepare('SELECT * FROM blogposts WHERE publish_date ?');
+$stmt->execute(array((new DateTime())->format('Y-m-d H:i:s')));</code></pre>
 								<ul>
-									<li>If you expect an integer, you must cast it to being one</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								When using <code>sprintf()</code> the parameter will be casted automatically
-								<ul>
-									<li><code>sprintf()</code> allows you to tuck strings into another, in a certain type</li>
-									<li>Usage: <code>sprintf($stringWithDirectives, $param1, $param 2, &hellip;)</code></li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Bonus advantages of <code>sprintf()</code>
-								<ul>
-									<li>Code is less prone to syntax errors</li>
-									<li>Code is more readable</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Better <small style="vertical-align: baseline;">(but not mandatory for this course)</small>: Prepared Statements
-								<ul>
-									<li>Added bonus: Automatically protects you against SQL Injection</li>
+									<li class="fragment">MySQL Query Cache won't cache this</li>
+									<li class="fragment">Fix: Round your dates to the minute or 5 minutes if the script allows it</li>
 								</ul>
 							</li>
 						</ul>
-					</section>
-
-
-					<section>
-						<h2>Sprintf example (1)</h2>
-
-						<ul>
-							<li class="fragment">
-								Sans <code>sprintf()</code>
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04.php">$name = 'bramus';
-$status = 'Just received the trophy &quot;Marksman of the year&quot;';
-$date = time();
-
-$query 	= 'INSERT INTO statuses (name, status, datum) '
-. 'VALUES ('
-. '&quot;' . 	mysqli_real_escape_string($dbhandler, $name) . '&quot;, '
-. '&quot;' . 	mysqli_real_escape_string($dbhandler, $status) . '&quot;, '
-. 'FROM_UNIXTIME(' . mysqli_real_escape_string($dbhandler, $date) . ')'
-.')';
-
-@mysqli_query($dbhandler, $query) or showDbError('query');
-
-$query = 'SELECT * FROM statuses '
-. 'WHERE name = &quot;' . mysqli_real_escape_string($dbhandler,  $name) . '&quot;'
-. 'AND datum &lt;= FROM_UNIXTIME(' . mysqli_real_escape_string($dbhandler,  $date) . ')'
-.' ORDER BY id DESC';
-
-// ...</code></pre>
-							</li>
-						</ul>
-					</section>
-
-
-					<section>
-						<h2>Sprintf example (2)</h2>
-
-						<ul>
-							<li class="fragment">
-								With <code>sprintf()</code>
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$name = 'bramus';
-$status = 'Just received the trophy &quot;Marksman of the year&quot;';
-$date = time();
-
-$query 	= sprintf('INSERT INTO statuses (name, status, datum) VALUES ("%s", "%s", FROM_UNIXTIME(%d))',
-	mysqli_real_escape_string($dbhandler, $name),
-	mysqli_real_escape_string($dbhandler, $status),
-	mysqli_real_escape_string($dbhandler, (int) $date)
-);
-
-@mysqli_query($dbhandler, $query) or showDbError('query');
-
-$query = sprintf('SELECT * FROM statuses WHERE name = "%s" AND datum <= FROM_UNIXTIME(%d) ORDER BY id DESC',
-	mysqli_real_escape_string($dbhandler, $name),
-	mysqli_real_escape_string($dbhandler, (int) $date)
-);
-
-// ...</code></pre>
-							</li>
-						</ul>
-					</section>
-
-
-					<section>
-						<h2>sprintf directives</h2>
-
-						<ul>
-							<li class="fragment">
-								Only 3 importants ones
-								<ul>
-									<li><code>%s</code> &mdash; string</li>
-									<li><code>%d</code> &mdash; integer</li>
-									<li><code>%f</code> &mdash; float</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Full directive reference: <a href="http://php.net/sprintf">http://php.net/sprintf</a>
-							</li>
-						</ul>
-					</section>
-
-
-					<section>
-						<h2>Prepared Statement example</h2>
-
-						<div style="position: relative;">
-							<div id="statementwarning">
-								<h2>BE WARNED</h2>
-								<p>Code is overwhelming and beyond the scope of this course.<br />Watch at your own risk ;-)</p>
-								<p><span>(click to dismiss)</span></p>
-							</div>
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04c.php">$name = 'bramus';
-$status = 'Just received the trophy &quot;Marksman of the year&quot;';
-$date = time();
-
-$query 	= @mysqli_prepare($dbhandler, 'INSERT INTO statuses (name, status, datum) VALUES (?, ?, FROM_UNIXTIME(?))');
-@mysqli_stmt_bind_param($query, 'ssi', $name, $status, $date);
-
-@mysqli_stmt_execute($query) or showDbError('query');
-@mysqli_stmt_close($query);
-
-$query 	= mysqli_prepare($dbhandler, 'SELECT * FROM statuses WHERE name = ? AND datum &lt;= FROM_UNIXTIME(?) ORDER BY id DESC');
-@mysqli_stmt_bind_param($query, 'si', $name, $date);
-
-@mysqli_stmt_execute($query) or showDbError('query');
-@mysqli_stmt_bind_result($query, $r_id, $r_name, $r_status, $r_datum);
-@mysqli_stmt_store_result($query);
-
-echo '&lt;p&gt;Got ' . mysqli_stmt_num_rows($query) . ' rows:&lt;/p&gt;';
-
-while ($row = mysqli_stmt_fetch($query)) {
-	echo '&lt;p&gt;' . $r_id . ' - ' . $r_name . ' - ' .
-		 date('d/m/Y H:i:s', strtotime($r_datum)) . ': ' . $r_status . '&lt;/p&gt;';
-}
-
-@mysqli_stmt_close($query);</code></pre>
-						</div>
 					</section>
 
 					<section>
@@ -1345,23 +1102,21 @@ while ($row = mysqli_stmt_fetch($query)) {
 							<li class="fragment">
 								Execute queries inside a loop
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
-$dbHandler = &hellip;;
 
-$blog = 'SELECT id, title, content FROM blogs WHERE id = &quot;' . $id . '&quot;';
+$stmt = $db->prepare('SELECT id, title, content FROM blogs WHERE id = ?');
+$stmt->execute(array($id));
+$blogpost = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// &hellip; fetch and show blogpost
-
-$comments = 'SELECT id, blog_id, comment, publishdate, author_id
-FROM comments WHERE blog_id = &quot;' . $id . '&quot;';
-
-// &hellip; fetch comments into array
+$stmt = $db->prepare('SELECT id, blog_id, comment, publishdate, author_id FROM comments WHERE blog_id = ?');
+$stmt->execute(array($id));
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($comments as $c) {
-
-	$authorInfo = 'SELECT * FROM authors WHERE id = &quot;' . $c['author_id'] . '&quot;';
+	$stmt = $db->prepare('SELECT * FROM authors WHERE id = ?');
+	$stmt->execute(array($c['author_id']));
+	$author = $stmt->fetch(PDO::FETCH_ASSOC);
 
 	// &hellip; show comment + author info
-
 }</code></pre>
 								<ul>
 									<li>
@@ -1382,20 +1137,17 @@ foreach ($comments as $c) {
 							<li class="fragment">
 								Use a JOIN to minimize the number of executed queries
 								<pre class="bigger"><code class="language-php">$id = (int) isset($_GET['id']) ? $_GET['id'] : 0;
-$dbHandler = &hellip;;
 
-$blog = 'SELECT id, title, content FROM blogs WHERE id = &quot;' . $id . '&quot;';
+$stmt = $db->prepare('SELECT id, title, content FROM blogs WHERE id = ?');
+$stmt->execute(array($id));
+$blogpost = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// &hellip; fetch and show blogpost
-
-$comments = 'SELECT c.id, c.blog_id, c.comment, c.publishdate, c.author_id, a.name, a.email, a.url FROM comments AS c INNER JOIN authors AS a ON c.author_id = a.id WHERE c.blog_id = &quot;' . $id . '&quot;';
-
-// &hellip; fetch comments into array
+$stmt = $db->prepare('SELECT c.id, c.blog_id, c.comment, c.publishdate, c.author_id, a.name, a.email, a.url FROM comments AS c INNER JOIN authors AS a ON c.author_id = a.id WHERE c.blog_id = ?');
+$stmt->execute(array($id));
+$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($comments as $c) {
-
 	// &hellip; show comment + author info
-
 }</code></pre>
 								<ul>
 									<li>
@@ -1425,90 +1177,33 @@ foreach ($comments as $c) {
 							</li>
 						</ul>
 
-						<footer class="fragment">!! If you don't encrypt your passwords in the assignments or your exam, you will fail them !!</footer>
+						<footer class="fragment"><em style="color: #F55;">!! If you don't encrypt your passwords in the assignments or your exam, you will fail them !!</em></footer>
 					</section>
 
 					<section>
 						<h2>Encrypt passwords (2)</h2>
 						<ul>
 							<li class="fragment">
-								Basic encryption: Use <code>md5()</code> or <code>sha1()</code>
+								Use <code>crypt()</code><small><a href="http://php.net/crypt">&#9873;</a></small>
 								<ul>
-									<li>
-										Problem: encryption is always the same
-										<ul>
-											<li>e.g. <code>md5('test')</code> is always <code>098f6bcd4621d373cade4e832627b4f6</code></li>
-											<li>Can easily be decrypted, or searched for with Google! (see <a href="https://github.com/juuso/BozoCrack">BozoCrack</a>)</li>
-										</ul>
+									<li class="fragment">Cannot be decrypted and uses <em>salts</em></li>
+									<li class="fragment">
+										Encrypting a password:
+										<pre class="bigger"><code class="language-php">echo crypt('bramus'); // store this into your DB</code></pre>
 									</li>
-									<li>
-										Fix: add an extra <em>salt</em> (a secret, long, and complex string) to the string before encrypting
+									<li class="fragment">
+										Verifying a password:
+										<pre class="bigger"><code class="language-php">$pass = isset($_POST['password']) ? $_POST['password'] : '';
+$encrypted = '$1$B7.GKnm5$WjRbbLV.9ryoLbP8VWf4R.'; // bramus
+
+if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 									</li>
 								</ul>
 							</li>
 							<li class="fragment">
-								Better encryption: Use <code>crypt()</code> or <code>hash()</code>
-								<ul>
-									<li>
-										Unlike the methods above, the salt can be different per encrypted password
-									</li>
-								</ul>
+								<code>md5()</code><small><a href="http://php.net/md5">&#9873;</a></small> and <code>sha1()</code><small><a href="http://php.net/sha1">&#9873;</a></small> are outdated/too weak, don't use them
 							</li>
-							<li class="fragment">To validate a password, encrypt it and compare it to the stored hash</li>
-						</ul>
-					</section>
-
-				</section>
-
-
-
-
-				<section>
-
-					<section>
-						<h2>And now?</h2>
-					</section>
-
-
-					<section>
-						<h2>Now: Practice!</h2>
-						<ul>
-							<li class="fragment">See lab assignment</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Advanced Webscripting: DBAL</h2>
-						<ul>
-							<li class="fragment">
-								Later on we'll evolve towards a Database Access Layer
-								<ul>
-									<li class="fragment">
-										Class that handles most for us, including the basic CRUD actions
-										<ul class="fragment">
-											<li>CRUD = Create, Read, Update, Delete</li>
-											<li>Some specific functions such as <code>getNumRows()</code>, <code>getPairsAsArray()</code></li>
-											<li>What this means to us: Write less queries!</li>
-										</ul>
-									</li>
-									<li class="fragment">
-										Depending on the type of query, we'll get a different result
-										<ul class="fragment">
-											<li><code>SELECT</code>: Resultset, as an array</li>
-											<li><code>INSERT</code>: The inserted ID</li>
-											<li><code>UPDATE</code>/<code>DELETE</code>: The number of affected rows</li>
-										</ul>
-									</li>
-									<li class="fragment">
-										Debugging, error handling, and code performance
-										<ul class="fragment">
-											<li>Keep track of executed queries</li>
-											<li>Use of exceptions</li>
-											<li>Singleton Pattern</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
+							<li class="fragment">Since PHP 5.5, use <code>password_hash</code><small><a href="http://php.net/password_hash">&#9873;</a></small></li>
 						</ul>
 					</section>
 
@@ -1545,45 +1240,6 @@ foreach ($comments as $c) {
 
 				</section>
 
-
-
-
-				<section>
-
-					<section>
-						<h2>Want more?</h2>
-					</section>
-
-					<section>
-						<h2 style="font-size: 180%">There's always room for improvement</h2>
-
-						<ul>
-							<li class="fragment">
-								Learn to work with the OO based version of <code>mysqli</code>
-							</li>
-							<li class="fragment">
-								Use <a href="http://mattbango.com/notebook/web-development/prepared-statements-in-php-and-mysqli/">Prepared Statements with <code>mysqli</code></a>
-								<ul>
-									<li>If used properly this will automatically protect against SQL Injection</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								<a href="http://www.kitebird.com/articles/php-pdo.html">Learn to work with <code>pdo_mysql</code></a>
-								<ul>
-									<li>Don't forget to call <code>$dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code> to make sure your prepared statements are real <em>(<a href="http://stackoverflow.com/a/60496">source</a>)</em></li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Use a Database Abstraction Layer (DAL), or take it a step further and use an Object Relational Mapper (ORM)
-								<ul>
-									<li>Example: <a href="http://www.doctrine-project.org/">Doctrine</a></li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-				</section>
-
 				<!-- The END -->
 				<section>
 					<section>
@@ -1601,7 +1257,9 @@ foreach ($comments as $c) {
 					<section>
 						<h2>Sources</h2>
 						<ul>
-
+							<li><a href="http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers">http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers</a></li>
+							<li><a href="http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/">http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/</a></li>
+							<li><a href="http://www.kitebird.com/articles/php-pdo.html">http://www.kitebird.com/articles/php-pdo.html</a></li>
 						</ul>
 					</section>
 				</section>

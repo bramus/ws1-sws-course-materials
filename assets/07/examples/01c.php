@@ -3,15 +3,16 @@
 	// Include config
 	require_once 'config.php';
 
-	// Connect to database server "localhost" with username "root" and password "Azerty123" + select the DB "fotofactory"
-	$dbhandler = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME_FF) or die ('Could not connect to database server or access database');
-		
-	// If connection succeeded, we end up here. If not, the die() above gets interpreted
-	echo 'Connected and selected';
-	
+	// Make Connection
+	try {
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch (Exception $e) {
+		exit('Could not connect to database');
+	}
+
+	echo 'Connected to the database';
+
 	// ... your query magic here
-	
-	// Close the connection $dbhandler
-	@mysqli_close($dbhandler);
 
 //EOF
