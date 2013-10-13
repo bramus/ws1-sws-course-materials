@@ -1,0 +1,234 @@
+
+<html>
+<head>
+	<title>PHP: PDO and MySQL</title>
+	<style>
+		.main div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666; }
+		.main pre { border: 0.125em dotted #333; padding: 1em; width: 80%; overflow: scroll; }
+		a {color: #0066FF;}
+		.main a, a.higher { text-decoration: none; font-size: 70%; vertical-align: top; padding: 1em; margin: -1em; }
+		.info, .warning { font-style: italic; }
+		.info { opacity: 0.75; }
+		.warning-sign { font-size: 2em; font-style: normal;}
+	</style>
+</head>
+<body>
+
+<h1>PHP: PDO<a href="http://www.php.net/manual/en/class.pdo.php" class="higher">&#9873;</a> and MySQL</h1>
+
+<section class="info">
+	<p>This page forms the code summary of <a href="../07.databases.html">07.databases.html</a>, part of the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at KaHo Sint-Lieven, Ghent, Belgium. The materials and this summary were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>. The materials and this summary may be used freely, as long as credit to Bramus is present and a clear an upfront link to <a href="http://www.ikdoeict.be/">ikdoeict.be</a> remains in place. Suggestions and additions may be mailed to Bramus, or sent via <a href="https://github.com/bramus/ws1-sws-course-materials">a pull request on GitHub</a>.</p>
+</section>
+
+<section class="main">
+<h2>Establishing a Database Connection<a href="http://www.php.net/manual/en/pdo.construct.php">&#9873;</a></h2>
+
+<div><pre class="source"><code>&lt;?php
+
+// Include config + functions used throughout the project
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/functions.php';
+
+// Make Connection
+try {
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch (Exception $e) {
+	showDbError('connect', $e->getMessage());
+}</code></pre></div>
+
+<p>Put this in <code>functions.php</code></p>
+<div><pre class="source"><code>// Error Logging and User Redirects
+function showDbError($type, $msg) {
+    file_put_contents(__DIR__ . '/error_log_mysql', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
+    header('location: error.php?type=db&amp;detail=' . $type);
+    exit();
+}</code></pre></div>
+
+
+<h2>Building and executing queries, the basic edition</h2>
+
+<p class="warning"><span class="warning-sign">&#9888;</span> Don't use this, use <strong>prepared statements</strong> (see below) instead. Contents only placed here for reference/context.</p>
+
+<h3>Use <code>PDO::query()</code><a href="http://www.php.net/manual/en/pdo.query.php">&#9873;</a> to execute queries that return a resultset (SELECT, DESCRIBE, SHOW, etc.)</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->query(
+	'SELECT * FROM collections WHERE user_id = ' . $db->quote(2, PDO::PARAM_INT) . ' OR name = ' . $db->quote('russia', PDO::PARAM_STR)
+);</code></pre></div>
+
+<p>Don't forget to use <code>PDO::quote()</code><a href="http://www.php.net/manual/en/pdo.quote.php">&#9873;</a> to prevent SQL Injection!</p>
+
+<p>Use a <em>fetch function</em> to fetch the data (see further)</p>
+
+<h3>Use <code>PDO::exec()</code><a href="http://www.php.net/manual/en/pdo.exec.php">&#9873;</a> to execute queries that do not return resultsets (UPDATE, DELETE, INSERT, etc)</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->exec(
+	'DELETE FROM collections WHERE user_id = ' . $db->quote(20, PDO::PARAM_INT)
+);</code></pre></div>
+
+<p>Don't forget to use <code>PDO::quote()</code><a href="http://www.php.net/manual/en/pdo.quote.php">&#9873;</a> to prevent SQL Injection!</p>
+
+<p>Use an extra function to fetch meta information about the result (see further)</p>
+
+<h2>Building and executing queries, using Prepared Statements</h2>
+
+<p>In short: Use <code>PDO::prepare()</code><a href="http://www.php.net/manual/en/pdo.prepare.php">&#9873;</a> to get a <code>PDOStatement</code>, bind parameters onto it using <code>PDOStatement::bindValue()</code><a href="http://www.php.net/manual/en/pdostatement.bindvalue.php">&#9873;</a>, and then execute that statement using <code>PDOStatement::execute()</code><a href="http://www.php.net/manual/en/pdostatement.execute.php">&#9873;</a></p>
+
+<h3>Binding parameters one by one</h3>
+
+<p class="warning"><span class="warning-sign">&#9888;</span> Don't use this, <strong>bind all parameters in one go</strong> (see below) instead. Contents only placed here for reference/context.</p>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE user_id = :user_id OR name = :name');
+$stmt->bindValue(':user_id', 2, PDO::PARAM_INT);
+$stmt->bindValue(':name', 'russia', PDO::PARAM_STR);
+$stmt->execute();</code></pre></div>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?');
+$stmt->bindValue(1, 2, PDO::PARAM_INT);
+$stmt->bindValue(2, 'russia', PDO::PARAM_STR);
+$stmt->execute();</code></pre></div>
+
+<h3>Binding all parameters in one go</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?');
+$stmt->execute(array(2, 'russia'));</code></pre></div>
+
+<h2>Processing the results of queries</h2>
+
+<h3>Processing queries that produce resultsets (SELECT, DESCRIBE, SHOW, etc.)</h3>
+
+<p>In short: Use a <em>fetch function</em> to retrieve data from the statement.</p>
+
+<h3>Fetch rows one by one using <code>PDOStatement::fetch()</code><a href="http://www.php.net/manual/en/pdostatement.fetch.php">&#9873;</a></h3>
+
+<p>One row returned:</p>
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
+$stmt->execute(array(1));
+$collection = $stmt->fetch(PDO::FETCH_ASSOC);
+
+var_dump($collection);</code></pre><pre class="result">array(3) {
+	'id' =>
+	string(1) "1"
+	'name' =>
+	string(6) "russia"
+	'user_id' =>
+	string(1) "4"
+}</pre></div>
+
+<p>Use a while loop to iterate multiple returned rows:</p>
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE id != ?');
+$stmt->execute(array(1));
+
+while ($collection = $stmt->fetch(PDO::FETCH_ASSOC)) {
+	var_dump($collection);
+}</code></pre></div>
+
+<p>Other interesting <em>Fetch Types</em>: <code>PDO::FETCH_OBJ</code>, <code>PDO::FETCH_NUM</code> and <code>PDO::FETCH_GROUP</code></p>
+
+<h3>Fetch all rows using <code>PDOStatement::fetchAll()</code><a href="http://www.php.net/manual/en/pdostatement.fetchall.php">&#9873;</a></h3>
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?);
+$stmt->execute(array(2, 'russia'));
+
+$collections = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+var_dump($collections);</code></pre><pre class="result">array(3) {
+	[0] =>
+	array(3) {
+		'id' =>
+		string(1) "1"
+		'name' =>
+		string(6) "russia"
+		'user_id' =>
+		string(1) "4"
+	}
+	[1] =>
+	array(3) {
+		'id' =>
+		string(1) "2"
+		'name' =>
+		string(6) "serbia"
+		'user_id' =>
+		string(1) "2"
+	}
+	[2] =>
+	array(3) {
+		'id' =>
+		string(1) "4"
+		'name' =>
+		string(8) "TestColl"
+		'user_id' =>
+		string(1) "2"
+	}
+}</pre></div>
+
+<p>Other interesting <em>Fetch Types</em>: <code>PDO::FETCH_OBJ</code>, <code>PDO::FETCH_NUM</code> and <code>PDO::FETCH_GROUP</code></p>
+
+<h3>Fetch a single value/column (from the first row) using <code>PDOStatement::fetchColumn()</code><a href="http://www.php.net/manual/en/pdostatement.fetchcolumn.php">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT name, user_id FROM collections WHERE user_id = ? OR name = ?');
+$stmt->execute(array(2, 'russia'));
+
+$value = $stmt->fetchColumn();
+
+var_dump($value);</code></pre><pre class="result">string(6) "russia"
+</pre></div>
+
+<p>Add a numeric index (starting from 0) to define which column you want to extract</p>
+
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('SELECT name, user_id FROM collections WHERE user_id = ? OR name = ?');
+$stmt->execute(array(2, 'russia'));
+
+$value = $stmt->fetchColumn(1);
+
+var_dump($value);</code></pre><pre class="result">string(1) "4"
+</pre></div>
+
+
+<h2>Processing queries that do not produce resultsets (UPDATE, DELETE, INSERT, etc)</h2>
+
+<p>In short: Use an extra function to fetch meta information about the result</p>
+
+
+<h3>Use <code>PDOStatement::rowCount()</code><a href="http://www.php.net/manual/en/pdostatement.rowcount.php">&#9873;</a> to get to know the number of affected rows made by <code>UPDATE</code> and <code>DELETE</code> queries</h3>
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('UPDATE collections SET name = REVERSE(name) WHERE user_id = ?');
+$stmt->execute(array(2));
+$affectedRows = $stmt->rowCount();
+
+var_dump($affectedRows);</code></pre><pre class="result">int(2)
+</pre></div>
+
+<h3>Use <code>PDO::lastInsertId()</code><a href="http://www.php.net/manual/en/pdo.lastinsertid.php">&#9873;</a> to get to know the last inserted id (<code>AUTO_INCREMENT</code>)</h3>
+<div><pre class="source"><code>&lt;?php
+
+$stmt = $db->prepare('INSERT INTO collections (name,user_id) VALUES (?,?)');
+$stmt->execute(array('testalbum', 2));
+$insertId = $db->lastInsertId();
+
+var_dump($insertId);</code></pre><pre class="result">string(1) "5"
+</pre></div>
+</section>
+</body>
+</html>
