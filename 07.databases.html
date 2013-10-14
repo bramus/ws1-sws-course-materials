@@ -785,7 +785,7 @@ $stmt->execute(array($id));</code></pre>
 							<li class="fragment" style="margin-top: 1em;">
 								No matter what type of query is, the call is always <code>PDOStatement::execute</code><small><a href="http://www.php.net/manual/en/pdostatement.execute.php">&#9873;</a></small>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$stmt = $db->prepare('INSERT INTO collections (name, user_id) VALUES (?, ?)');
-$stmt->execute('bramus-test', 4);</code></pre>
+$stmt->execute(array('bramus-test', 4));</code></pre>
 							</li>
 						</ul>
 					</section>
