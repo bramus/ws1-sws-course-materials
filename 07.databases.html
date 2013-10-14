@@ -515,6 +515,31 @@ var_dump($stmt);</code></pre>
 						</ul>
 					</section>
 
+					<section>
+						<h2>Executing Faulty Queries</h2>
+						<ul>
+							<li class="fragment">
+								When you write a faulty query <em>(wrong syntax, inexistent table referenced, etc)</em> it will fail silently
+								<ul>
+									<li class="fragment">
+										As a developer, you don't want this; you want to know where you messed up and fix it.
+									</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Call <code>PDO::setAttribute()</code><small><a href="http://www.php.net/manual/en/pdo.setattribute.php">&#9873;</a></small> to change the error mode so that exceptions are thrown when a faulty query is executed
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03c.php">try {
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (Exception $e) {
+	showDbError('connect', $e->getMessage());
+}
+
+$stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pre>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
 
