@@ -8,7 +8,7 @@
 	function showDbError($type, $msg) {
 
 		// Log it (for the developer)
-		file_put_contents(__DIR__ . '/error_log', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
+		file_put_contents(__DIR__ . '/error_log_mysql', PHP_EOL . (new DateTime())->format('Y-m-d H:i:s') . ' : ' . $msg, FILE_APPEND);
 
 		// Redirect to nice error page (for the visitor)
 		header('location: error.php?type=db&detail=' . $type);
