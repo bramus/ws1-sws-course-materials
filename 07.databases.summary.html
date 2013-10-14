@@ -38,6 +38,13 @@ try {
 	showDbError('connect', $e->getMessage());
 }</code></pre></div>
 
+<p>Put this in <code>config.php</code></p>
+<div><pre class="source"><code>// Database config
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', 'Azerty123');
+define('DB_NAME', 'fotofactory');</code></pre></div>
+
 <p>Put this in <code>functions.php</code></p>
 <div><pre class="source"><code>// Error Logging and User Redirects
 function showDbError($type, $msg) {
