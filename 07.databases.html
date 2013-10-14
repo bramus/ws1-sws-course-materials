@@ -674,7 +674,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 												PHP's <code>addslashes()</code> does not recognize the multibyte char <code>0xbf27</code> (&#xBF27;) and treats it as two single bytes: <code>OxBF</code> (&#xBF;) and <code>0x27</code> (&#x27;) &rarr; PHP will escape that <code>0x27</code> with a backslash (<code>0x5c</code>) and we end up with the char sequence <code>0xbf5c27</code>
 											</li>
 											<li class="fragment">
-												MySQL with a GBK charset connection recognizes <code>0xbf5c</code> (&#xBF5C;) as a multibychar, leaving an unescaped <code>0x27</code> in the query (!) &rarr; Boom, you've just injected a single quote.
+												MySQL with a GBK charset connection recognizes <code>0xbf5c</code> (&#xBF5C;) as a multibyte char, leaving an unescaped <code>0x27</code> in the query (!) &rarr; Boom, you've just injected a single quote.
 											</li>
 										</ul>
 									</li>
