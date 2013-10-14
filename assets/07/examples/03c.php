@@ -18,15 +18,13 @@
 	try {
 		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
 		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 	} catch (Exception $e) {
 		showDbError('connect', $e->getMessage());
 	}
 
-	// Get collection from DB
-	$stmt = $db->prepare('DELETE FROM collections WHERE user_id = ?');
-	$stmt->execute(array(10));
+	$stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');
+	var_dump($stmt);
 
-	echo 'Deleted ' . $stmt->rowCount() . ' rows';
+	// Handle result here ....
 
 //EOF
