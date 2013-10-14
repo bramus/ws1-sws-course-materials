@@ -667,8 +667,14 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 							<li class="fragment">
 								Fix: use <code>addslashes()</code>? <span class="fragment">Alas, no dice:</span>
 								<ul class="fragment">
-									<li>Multibyte character used with certain DB encodings break stuff</li>
-									<li>See <a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a> for detailed explanation</li>
+									<li>
+										Multibyte character used with certain DB encodings break stuff:
+										<ul>
+											<li class="fragment">PHP's <code>addslashes()</code> recognizes the multibyte char <code>0xbf27</code> and doesn't escape it.
+											</li>
+											<li class="fragment">MySQL with a GBK charset connection doesn't recognize it and treats it as two single byte chars <code>0xbf</code> and <code>0x27</code>, the latter being a single quote (!)</li>
+										</ul>
+									</li>
 								</ul>
 							</li>
 						</ul>
@@ -679,6 +685,9 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 
 						<ul>
 							<li class="fragment">
+								Sanitize the parameters using the MySQL connection
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
 								Two options
 								<ol>
 									<li>Manually escape all parameters</li>
@@ -1301,6 +1310,7 @@ if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 							<li><a href="http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers">http://wiki.hashphp.org/PDO_Tutorial_for_MySQL_Developers</a></li>
 							<li><a href="http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/">http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/</a></li>
 							<li><a href="http://www.kitebird.com/articles/php-pdo.html">http://www.kitebird.com/articles/php-pdo.html</a></li>
+							<li><a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a></li>
 						</ul>
 					</section>
 				</section>
