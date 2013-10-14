@@ -672,8 +672,8 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 							<li class="fragment">
 								Changing the URL param to a <em>dangerous</em> string that resembles SQL allows SQL injection
 								<div class="fragment" style="text-align: center; padding-top: 20px">
-									<figure>
-										<img src="assets/07/littlebobbytables.jpg" alt="" title="" width="500" />
+									<figure class="zoomable-20">
+										<img src="assets/07/littlebobbytables.jpg" alt="" title="" width="400" />
 										<figcaption><a href="http://xkcd.com/327/">XKCD: Exploits of a mom</a></figcaption>
 									</figure>
 								</div>
@@ -682,11 +682,14 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 								Fix: use <code>addslashes()</code>? <span class="fragment">Alas, no dice:</span>
 								<ul class="fragment">
 									<li>
-										Multibyte character used with certain DB encodings break stuff:
+										Multibyte characters used with certain DB encodings break stuff:
 										<ul>
-											<li class="fragment">PHP's <code>addslashes()</code> recognizes the multibyte char <code>0xbf27</code> and doesn't escape it.
+											<li class="fragment">
+												PHP's <code>addslashes()</code> does not recognize the multibyte char <code>0xbf27</code> (&#xBF27;) and treats it as two single bytes: <code>OxBF</code> (&#xBF;) and <code>0x27</code> (&#x27;) &rarr; PHP will escape that <code>0x27</code> with a backslash (<code>0x5c</code>) and we end up with the char sequence <code>0xbf5c27</code>
 											</li>
-											<li class="fragment">MySQL with a GBK charset connection doesn't recognize it and treats it as two single byte chars <code>0xbf</code> and <code>0x27</code>, the latter being a single quote (!)</li>
+											<li class="fragment">
+												MySQL with a GBK charset connection recognizes <code>0xbf5c</code> (&#xBF5C;) as a multibychar, leaving an unescaped <code>0x27</code> in the query (!) &rarr; Boom, you've just injected a single quote.
+											</li>
 										</ul>
 									</li>
 								</ul>
