@@ -656,7 +656,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 
 						<ul>
 							<li class="fragment">
-								Changing the URL param to a <em>dangerous</em> string that resembles SQL allows SQL injection
+								Changing the URL param to a <em>dangerous</em> string that resembles SQL results in <strong>SQL injection</strong>
 								<div class="fragment" style="text-align: center; padding-top: 20px">
 									<figure class="zoomable-20">
 										<img src="assets/07/littlebobbytables.jpg" alt="" title="" width="400" />
@@ -671,7 +671,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 										Multibyte characters used with certain DB encodings break stuff:
 										<ul>
 											<li class="fragment">
-												PHP's <code>addslashes()</code> does not recognize the multibyte char <code>0xbf27</code> (&#xBF27;) and treats it as two single bytes: <code>OxBF</code> (&#xBF;) and <code>0x27</code> (&#x27;) &rarr; PHP will escape that <code>0x27</code> with a backslash (<code>0x5c</code>) and we end up with the char sequence <code>0xbf5c27</code>
+												PHP's <code>addslashes()</code> does not recognize the multibyte char <code>0xbf27</code> (&#xBF27;) and treats it as two single bytes: <code>0xBF</code> (&#xBF;) and <code>0x27</code> (&#x27;) &rarr; PHP will escape that <code>0x27</code> with a backslash (<code>0x5c</code>) and we end up with the char sequence <code>0xbf5c27</code>
 											</li>
 											<li class="fragment">
 												MySQL with a GBK charset connection recognizes <code>0xbf5c</code> (&#xBF5C;) as a multibyte char, leaving an unescaped <code>0x27</code> in the query (!) &rarr; Boom, you've just injected a single quote.
@@ -746,6 +746,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 										<pre class="bigger"><code class="language-php">// Make Connection
 try {
 	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (Exception $e) {
 	showDbError('connect', $e->getMessage());
@@ -779,7 +780,7 @@ try {
 						<h2>Using Prepared Statements (1)</h2>
 						<ul>
 							<li class="fragment">
-								Bind values onto the placeholders using <code>PDOStatement::bindValue</code><small><a href="http://www.php.net/manual/en/pdostatement.bindvalue.php">&#9873;</a></small>
+								Bind values onto the placeholders using <code>PDOStatement::bindValue()</code><small><a href="http://www.php.net/manual/en/pdostatement.bindvalue.php">&#9873;</a></small>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/04b.php">$stmt = $db->prepare('SELECT * FROM collections WHERE id = ?');
 $stmt->bindValue(1, $id, PDO::PARAM_INT);
 $stmt->execute();</code></pre>
@@ -806,7 +807,7 @@ $stmt->execute(array($id));</code></pre>
 								</ul>
 							</li>
 							<li class="fragment" style="margin-top: 1em;">
-								No matter what type of query is, the call is always <code>PDOStatement::execute</code><small><a href="http://www.php.net/manual/en/pdostatement.execute.php">&#9873;</a></small>
+								No matter what type of query is, the call is always <code>PDOStatement::execute()</code><small><a href="http://www.php.net/manual/en/pdostatement.execute.php">&#9873;</a></small>
 								<pre class="bigger"><code class="language-php">$stmt = $db->prepare('INSERT INTO collections (name, user_id) VALUES (?, ?)');
 $stmt->execute(array('bramus-test', 4));</code></pre>
 							</li>
@@ -861,7 +862,7 @@ $stmt->execute(array('bramus-test', 4));</code></pre>
 						<h2>Fetching an entire resultset</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>PDOStatement::fetchAll</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchall.php">&#9873;</a></small> to fetch then entire resultset into an array
+								Use <code>PDOStatement::fetchAll()</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchall.php">&#9873;</a></small> to fetch then entire resultset into an array
 								<ul>
 									<li class="fragment">Pass in a <em>fetch style</em> to shape the contents of that array</li>
 								</ul>
@@ -885,7 +886,7 @@ echo '&lt;/pre&gt;';</code></pre>
 						<h2>Fetching a single row</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>PDOStatement::fetch</code><small><a href="http://www.php.net/manual/en/pdostatement.fetch.php">&#9873;</a></small> to fetch the returned rows one bye one
+								Use <code>PDOStatement::fetch()</code><small><a href="http://www.php.net/manual/en/pdostatement.fetch.php">&#9873;</a></small> to fetch the returned rows one bye one
 								<div class="fragment">
 									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05c.php">$stmt =$db->prepare('SELECT * FROM collections WHERE user_id = ? OR name = ?');
 $stmt->execute(array(2, 'russia'));
@@ -910,7 +911,7 @@ var_dump($collection);</code></pre>
 						<h2>Fetching a single field</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>PDOStatement::fetchColumn</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchColumn.php">&#9873;</a></small> to fetch the value of a column from the first row
+								Use <code>PDOStatement::fetchColumn()</code><small><a href="http://www.php.net/manual/en/pdostatement.fetchColumn.php">&#9873;</a></small> to fetch the value of a column from the first row
 								<div class="fragment">
 									<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/05e.php">$stmt = $db->prepare('SELECT name, user_id FROM collections WHERE id = ?');
 $stmt->execute(array(1));
