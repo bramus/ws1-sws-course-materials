@@ -1,0 +1,239 @@
+
+<html>
+<head>
+	<title>PHP: Forms</title>
+	<style>
+		.main div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666; }
+		.main pre { border: 0.125em dotted #333; padding: 1em; width: 80%; overflow: scroll; }
+		a {color: #0066FF;}
+		.main a, a.higher { text-decoration: none; font-size: 70%; vertical-align: top; padding: 1em; margin: -1em; }
+		a.normal { font-size: 100%; vertical-align: inherit; padding: 0; margin: 0;}
+		.info, .warning { font-style: italic; }
+		.info { opacity: 0.75; }
+		.warning-sign { font-size: 2em; font-style: normal;}
+	</style>
+</head>
+<body>
+
+<h1>PHP: Forms</h1>
+
+<section class="info">
+	<p>This page forms the code summary of <a href="03.forms.html">03.forms.html</a>, part of the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at KaHo Sint-Lieven, Ghent, Belgium. The materials and this summary were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>. The materials and this summary may be used freely, as long as credit to Bramus is present and a clear an upfront link to <a href="http://www.ikdoeict.be/">ikdoeict.be</a> remains in place. Suggestions and additions may be mailed to Bramus, or sent via <a href="https://github.com/bramus/ws1-sws-course-materials">a pull request on GitHub</a>.</p>
+</section>
+
+<section class="main">
+
+<h2>General remarks</h2>
+
+<p>A PHP file typically consists of two parts:</code></p>
+<ul>
+	<li>A PHP code block with param fetching and logic <em>(e.g. form handling)</em> at the top.</li>
+	<li>An HTML block with some PHP for displaying only (!) at the bottom.</li>
+</ul>
+
+<h2>Processing a form</h2>
+
+<h3>Use <code>isset()</code><a href="http://www.php.net/isset">&#9873;</a> to extract parameters from <code>$_GET</code>/<code>$_POST</code></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+	$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
+	$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
+	$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
+	$cont = isset($_GET['cont']) ? (int) $_GET['cont'] : 0;
+	$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
+	$remark = isset($_GET['remark']) ? (string) $_GET['remark'] : '';
+
+// &hellip;</code></pre></div>
+
+<h3>Persisting a form</h3>
+
+<p class="warning"><span class="warning-sign">&#9888;</span> Always use <code>htmlentities()</code> when outputting something on screen. If you don't, visitors will be able to perform an XSS attack!</p>
+
+<div><pre class="source"><code>&lt;?php
+
+	// Get values from $_GET, or provide a default one if not set
+	$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
+	$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
+	$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
+	$cont = isset($_GET['cont']) ? (int) $_GET['cont'] : 0;
+	$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
+	$remark = isset($_GET['remark']) ? (string) $_GET['remark'] : '';
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;Testform&lt;/title&gt;
+	&lt;meta charset=&quot;UTF-8&quot; /&gt;
+	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+
+		&lt;fieldset&gt;
+
+			&lt;h2&gt;Testform&lt;/h2&gt;
+
+			&lt;dl class=&quot;clearfix&quot;&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;&lt;?php echo htmlentities($name); ?&gt;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;pass&quot;&gt;Password&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;password&quot; id=&quot;pass&quot; name=&quot;pass&quot; value=&quot;&lt;?php echo htmlentities($pass); ?&gt;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+
+				&lt;dt&gt;&lt;label&gt;Gender&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd&gt;
+					&lt;label for=&quot;gender_male&quot;&gt;&lt;input type=&quot;radio&quot; class=&quot;option&quot; name=&quot;gender&quot; id=&quot;gender_male&quot; value=&quot;male&quot;&lt;?php if ($gender == 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;Male&lt;/label&gt;
+					&lt;label for=&quot;gender_female&quot;&gt;&lt;input type=&quot;radio&quot; class=&quot;option&quot; name=&quot;gender&quot; id=&quot;gender_female&quot; value=&quot;female&quot;&lt;?php if ($gender == 'female') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;Female&lt;/label&gt;
+				&lt;/dd&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;cont&quot;&gt;Continent&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd&gt;
+					&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
+						&lt;option value=&quot;0&quot;&lt;?php if ($cont === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
+						&lt;option value=&quot;1&quot;&lt;?php if ($cont === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
+						&lt;option value=&quot;2&quot;&lt;?php if ($cont === 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
+						&lt;option value=&quot;3&quot;&lt;?php if ($cont === 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
+						&lt;option value=&quot;4&quot;&lt;?php if ($cont === 4) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Asia&lt;/option&gt;
+						&lt;option value=&quot;5&quot;&lt;?php if ($cont === 5) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Europe&lt;/option&gt;
+						&lt;option value=&quot;6&quot;&lt;?php if ($cont === 6) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Oceania&lt;/option&gt;
+					&lt;/select&gt;
+				&lt;/dd&gt;
+
+				&lt;dt&gt;&lt;label&gt;Meals&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd&gt;
+					&lt;label for=&quot;meal0&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;option&quot; name=&quot;meals[]&quot; id=&quot;meal0&quot; value=&quot;breakfast&quot;&lt;?php if (in_array('breakfast', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;breakfast&lt;/label&gt;
+					&lt;label for=&quot;meal1&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;option&quot; name=&quot;meals[]&quot; id=&quot;meal1&quot; value=&quot;lunch&quot;&lt;?php if (in_array('lunch', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;lunch&lt;/label&gt;
+					&lt;label for=&quot;meal2&quot;&gt;&lt;input type=&quot;checkbox&quot; class=&quot;option&quot; name=&quot;meals[]&quot; id=&quot;meal2&quot; value=&quot;dinner&quot;&lt;?php if (in_array('dinner', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;dinner&lt;/label&gt;
+				&lt;/dd&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;remark&quot;&gt;Remark&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd class=&quot;text&quot;&gt;&lt;textarea name=&quot;remark&quot; id=&quot;remark&quot; rows=&quot;5&quot; cols=&quot;40&quot;&gt;&lt;?php echo htmlentities($remark); ?&gt;&lt;/textarea&gt;&lt;/dd&gt;
+
+				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
+				&lt;/dt&gt;
+
+			&lt;/dl&gt;
+
+		&lt;/fieldset&gt;
+
+	&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<h3>Formchecking</h3>
+
+<p class="warning"><span class="warning-sign">&#9888;</span> Always use <code>urlencode()</code> when passing parameters into URLs</p>
+
+<p class="warning"><span class="warning-sign">&#9888;</span> Always use <code>exit()</code> after redirecting using <code>header()</code> to prevent further execution of the script.</p>
+
+<div><pre class="source"><code>&lt;?php
+
+	// initial values
+	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
+	$msgName = '*';
+
+	// form is sent: perform formchecking!
+	if (isset($_POST['btnSubmit'])) {
+
+		$allOk = true;
+
+		// name not empty
+		if (trim($name) == '') {
+			$msgName = 'Please enter your name';
+			$allOk = false;
+		}
+
+		// end of form check. If $allOk still is true, then the form was sent in correctly
+		if ($allOk === true) {
+			header('Location: formchecking_thanks.php?name=' . urlencode($name));
+		}
+
+	}
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;Testform&lt;/title&gt;
+	&lt;meta charset=&quot;UTF-8&quot; /&gt;
+	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+		&lt;fieldset&gt;
+
+			&lt;h2&gt;Testform&lt;/h2&gt;
+
+			&lt;dl class=&quot;clearfix&quot;&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;name&quot;&gt;Name&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd class=&quot;text&quot;&gt;
+					&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot; value=&quot;&lt;?php echo htmlentities($name); ?&gt;&quot; class=&quot;input-text&quot; /&gt;
+					&lt;span class=&quot;message error&quot;&gt;&lt;?php echo $msgName; ?&gt;&lt;/span&gt;
+				&lt;/dd&gt;
+
+				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
+				&lt;/dt&gt;
+
+			&lt;/dl&gt;
+
+		&lt;/fieldset&gt;
+
+	&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<h3>Working with file uploads</h3>
+
+<p class="warning"><span class="warning-sign">&#8505;</span> Inputs with <code>type=&quot;file&quot;</code> cannot be persisted.</p>
+
+<div><pre class="source"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;Testform&lt;/title&gt;
+	&lt;meta charset=&quot;UTF-8&quot; /&gt;
+	&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+
+
+		&lt;fieldset&gt;
+
+			&lt;h2&gt;Testform&lt;/h2&gt;
+
+			&lt;dl class=&quot;clearfix&quot;&gt;
+
+				&lt;dt&gt;&lt;label for=&quot;image&quot;&gt;Image&lt;/label&gt;&lt;/dt&gt;
+				&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;file&quot; id=&quot;image&quot; name=&quot;image&quot; value=&quot;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
+
+				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
+				&lt;/dt&gt;
+
+			&lt;/dl&gt;
+
+		&lt;/fieldset&gt;
+
+	&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<p>In <a href="05.files.and.folders.html" class="normal">05.files.and.folders.html</a> we'll see how to handle an upload</p>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,181 @@
+
+<html>
+<head>
+	<title>PHP: Files and Folders</title>
+	<style>
+		.main div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666; }
+		.main pre { border: 0.125em dotted #333; padding: 1em; width: 80%; overflow: scroll; }
+		a {color: #0066FF;}
+		.main a, a.higher { text-decoration: none; font-size: 70%; vertical-align: top; padding: 1em; margin: -1em; }
+		.info, .warning { font-style: italic; }
+		.info { opacity: 0.75; }
+		.warning-sign { font-size: 2em; font-style: normal;}
+	</style>
+</head>
+<body>
+
+<h1>PHP: Files and Folders</h1>
+
+<section class="info">
+	<p>This page forms the code summary of <a href="05.files.and.folders.html">05.files.and.folders.html</a>, part of the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at KaHo Sint-Lieven, Ghent, Belgium. The materials and this summary were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>. The materials and this summary may be used freely, as long as credit to Bramus is present and a clear an upfront link to <a href="http://www.ikdoeict.be/">ikdoeict.be</a> remains in place. Suggestions and additions may be mailed to Bramus, or sent via <a href="https://github.com/bramus/ws1-sws-course-materials">a pull request on GitHub</a>.</p>
+</section>
+
+<section class="main">
+
+<h2>File and Folder Operations</h2>
+
+<h3>Loop a directory using <code>DirectoryIterator</code><a href="http://php.net/manual/en/class.directoryiterator.php">&#9873;</a></h3>
+<div><pre class="source"><code>&lt;?php
+
+    $myBaseDir = __DIR__;
+    try {
+        $di = new DirectoryIterator($myBaseDir);
+    } catch (Exception $e) {
+        echo 'There was an error: ' . $e->getMessage();
+    }
+
+    foreach ($di as $file) {
+        // exclude . and .. + we don't want directories
+        if (!$file->isDot() &amp;&amp; !$file->isDir()) {
+            echo $file . '&lt;br /&gt;' . PHP_EOL;
+        }
+    }
+
+// EOF</code></pre></div>
+
+<h3>Fetch file info using <code>SplFileInfo</code><a href="http://be1.php.net/manual/en/class.splfileinfo.php">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+    $filename = __DIR__ . '/testfile.txt';
+    $fi = new SplFileInfo($filename);
+
+    echo 'The file ' . $fi->getFileName() . ' was last modified on ' . date('Y-m-d H:i:s', $fi->getMTime()) . PHP_EOL;
+
+    echo 'The file ' . $fi->getFileName() . ' is ' . ($fi->isDir() ? '' : 'not') . ' a directory' . PHP_EOL;
+
+    echo 'The file ' . $fi->getFileName() . ' is ' . ($fi->isFile() ? '' : 'not') . ' a file' . PHP_EOL;
+
+    echo 'The file ' . $fi->getFileName() . ' is ' . ($fi->isLink() ? '' : 'not') . ' a shortcut' . PHP_EOL;
+
+// EOF</code></pre></div>
+
+<h3>Delete a file using <code>unlink()</code><a href="http://www.php.net/unlink">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+	unlink(__DIR__ . '/testfile2.txt');
+
+// EOF</code></pre></div>
+
+<h3>Copy a file using <code>copy()</code><a href="http://www.php.net/copy">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+	copy(__DIR__ . '/testfile.txt', __DIR__ . '/copiedfile.txt');
+
+// EOF</code></pre></div>
+
+<h3>Rename or move a file using <code>rename()</code><a href="http://www.php.net/rename">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;?php
+
+	rename(__DIR__ . '/copiedfile.txt', __DIR__ . '/testfile2.txt');
+
+// EOF</code></pre></div>
+
+<h2>Reading File Contents</h2>
+
+<h3>Use <code>SplFileObject</code><a href="http://be1.php.net/manual/en/class.splfileobject.php">&#9873;</a> to read a file line by line</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+    $lines = new SPLFileObject(__DIR__ . '/testfile.txt');
+
+    // Loop through our array, show line and line numbers too.
+    foreach ($lines as $line_num => $line) {
+        echo '&lt;strong&gt;#' . $line_num . ':&lt;/strong&gt; ' . $line . '&lt;br /&gt;' . PHP_EOL;
+    }
+
+// EOF</code></pre></div>
+
+<h3>Use <code>file_get_contents()</code><a href="http://www.php.net/file_get_contents">&#9873;</a> to read a file entirely</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+    echo file_get_contents(__DIR__ . '/testfile.txt');
+
+// EOF</code></pre></div>
+
+<h2>Writing File Contents</h2>
+
+<h3>Use <code>file_put_contents()</code><a href="http://www.php.net/file_put_contents">&#9873;</a> to overwrite the entire contents of a file</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+    echo file_put_contents(__DIR__ . '/testfile2.txt', 'hello!' . PHP_EOL);
+
+// EOF</code></pre></div>
+
+<h3>Use <code>file_put_contents()</code><a href="http://www.php.net/file_put_contents">&#9873;</a> with the <code>FILE_APPEND</code> flag to add content at the end of a file</h3>
+
+<div><pre class="source"><code>&lt;?php
+
+    file_put_contents(__DIR__ . '/testfile2.txt', 'hello!' . PHP_EOL, FILE_APPEND);
+
+// EOF</code></pre></div>
+
+
+<h2>Handling file uploads</h2>
+
+<h3>Find info about the uploaded files in the <em>superglobal</em> <code>$_FILES</code><a href="http://www.php.net/manual/en/reserved.variables.files.php">&#9873;</a></h3>
+
+<p>Given you've just uploaded a file using an input named <code>avatar</code></p>
+
+<div><pre class="source"><code>&lt;?php
+
+	var_dump($_FILES);
+
+// EOF</code></pre></div>
+
+<div><pre class="source"><code>array(1) {
+	'avatar' =>
+	 array(3) {
+		'name' =>
+		string(8) "test.jpg"
+		'tmp_name' =>
+		string(15) "/tmp/1234567890"
+		'size' =>
+		string(3) "560"
+	}
+}</code></pre></div>
+
+<h3>Move the file after upload to its final location using <code>move_uploaded_file()</code><a href="http://www.php.net/manual/en/reserved.variables.files.php">&#9873;</a></h3>
+
+<div><pre class="source"><code>&lt;php
+
+	if (isset($_FILES['avatar'])) {
+
+		echo '&lt;p&gt;Uploaded file: ' . $_FILES['avatar']['name'] . '&lt;/p&gt;';
+		echo '&lt;p&gt;Temp location: ' . $_FILES['avatar']['tmp_name'] . '&lt;/p&gt;';
+		echo '&lt;p&gt;Size: ' . $_FILES['avatar']['size'] . '&lt;/p&gt;';
+
+		if (!in_array((new SplFileInfo($_FILES['avatar']['name']))->getExtension(), array('jpeg', 'jpg', 'png', 'gif'))) {
+			exit('&lt;p&gt;Invalid extension. Only .jpeg, .jpg, .png or .gif allowed&lt;/p&gt;');
+		}
+
+		@move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . DIRECTORY_SEPARATOR . $_FILES['avatar']['name'])
+		or die('&lt;p&gt;Error while saving file in the uploads folder&lt;/p&gt;');
+
+		echo '&lt;p&gt;&lt;img src=' . $_FILES['avatar']['name'] . ' alt="" /&gt;&lt;p&gt;';
+	}
+
+?&gt;
+
+&lt;form action="&lt;?php echo $_SERVER['PHP_SELF'];?&gt;" method="post" enctype="multipart/form-data"&gt;
+    &lt;input type="file" name="avatar" id="avatar" /&gt;&lt;input type="submit" /&gt;
+&lt;/form&gt;</code></pre></div>
+
+</section>
+</body>
+</html>
