@@ -164,7 +164,7 @@
 					</section>
 
 					<section>
-						<h2>Basic PHP page</h2>
+						<h2>Typical PHP page</h2>
 
 						<ul>
 							<li class="fragment">
@@ -177,31 +177,32 @@
 						</ul>
 
 						<div class="fragment">
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/01/01.php">&lt;?php
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/01/01.php">&lt;?php
 
 	// define our vars (fixed or via calculations)
 	$title = 'testpage';
 	$userName = 'bramus';
 	$weatherToday = 'cloudy';
 
-?&gt;&lt;html&gt;
+?&gt;&lt;!doctype html&gt;
+&lt;html&gt;
 &lt;head&gt;
-  &lt;title&gt;&lt;?php echo $title; ?&gt;&lt;/title&gt;
+  &lt;title&gt;&lt;?php echo htmlentities($title); ?&gt;&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  Hi there &lt;?php echo $userName; ?&gt;, the weather today is &lt;?php echo $weatherToday; ?&gt;.
+  Hi there &lt;?php echo htmlentities($userName); ?&gt;, the weather today is &lt;?php echo htmlentities($weatherToday); ?&gt;.
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
 						</div>
 					</section>
 
 					<section>
-						<h2>Introducing Templates (1)</h2>
+						<h2>Introducing Templates</h2>
 						<ul>
 							<li class="fragment">
-								Pretty straightforward to split out the HTML from our PHP logic:
+								Split out the HTML from our PHP logic:
 								<ol>
-									<li class="fragment">Put all the HTML into a separate file and provide <em>locations</em> where to show variables</li>
+									<li class="fragment">Put all the HTML into a separate file and provide <em>named placeholders</em> where to show variables</li>
 									<li class="fragment">In the remaining PHP code, keep the logic in place. Add code to load in the template and <em>assign</em> values to the template variables</li>
 								</ol>
 							</li>
@@ -212,7 +213,7 @@
 										Give the template file a <code>.tpl</code> extension
 									</li>
 									<li class="fragment">
-										Put variables between <code>{}</code> in the template, e.g. <code>{$firstName}</code>
+										Put variables between <code>{{ </code> and <code> }}</code> in the template, e.g. <code>{{ firstName }}</code>
 									</li>
 								</ul>
 							</li>
@@ -220,139 +221,97 @@
 					</section>
 
 					<section>
-						<h2>Example</h2>
+						<h2>Basic Execution</h2>
 
-						<pre class="bigger"><code class="language-html dontrun">&lt;html&gt;
+						<div class="fragment"><pre class="bigger"><code class="language-html dontrun">&lt;html&gt;
 &lt;head&gt;
-  &lt;title&gt;{$title}&lt;/title&gt;
+  &lt;title&gt;{{ title }}&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  Hi there {$user}, the weather today is {$weather}.
+  Hi there {{ user }}, the weather today is {{ weather }}.
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+&lt;/html&gt;</code></pre></div>
 
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/02/02.php">&lt;?php
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/02/02.php"><span class="fragment">&lt;?php
 
-	$title = 'testpage';
-	$userName = 'bramus';
-	$weatherToday = 'cloudy';
+$title = 'testpage';
+$userName = 'bramus';
+$weatherToday = 'cloudy';
 
-	$tplContent = file_get_contents('02.tpl');
+</span><span class="fragment">$tplContent = </span><span class="fragment">file_get_contents(__DIR__ . '/02.tpl');
 
-	$tplContent = str_replace('{$title}', $title, $tplContent);
-	$tplContent = str_replace('{$user}', $userName, $tplContent);
-	$tplContent = str_replace('{$weather}', $weatherToday, $tplContent);
+</span><span class="fragment">$tplContent = </span><span class="fragment">str_replace('{{ title }}', htmlentities($title), $tplContent);
+</span><span class="fragment">$tplContent = str_replace('{{ user }}', htmlentities($userName), $tplContent);
+</span><span class="fragment">$tplContent = str_replace('{{ weather }}', htmlentities($weatherToday), $tplContent);
 
-	echo $tplContent;</code></pre>
+</span><span class="fragment">echo $tplContent;</span></code></pre></div>
 
 					</section>
 
 					<section>
-						<h2>That's basically it!</h2>
+						<h2>OO Execution (1)</h2>
 						<ul>
 							<li class="fragment">
-								Successful separation of a template and PHP logic
-							</li>
-							<li class="fragment">
-								Of course we can and will improve things
-								<ul>
-									<li class="fragment">Introduction of a <code>Template</code> class, to work in a more modern way</li>
-									<li class="fragment">Introduction of conditional blocks <em>(options)</em>, to let our templates show X or Y depending on a condition (think <code>if</code>)</li>
-									<li class="fragment">Introduction of (nested) iterations, to work with loops in our templates (think <code>for</code> and <code>foreach</code>)</li>
-									<li class="fragment">Introduction of modifiers, to manipulate assigned variables from within our template (think <code>htmlentities</code>)</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
+								Let's put this logic into a <em>(very basic)</em> class
+								<pre class="bigger" style="height: 380px; overflow-y: scroll;"><code class="language-php">&lt;?php
 
-				</section>
+class Template {
 
+	private $content;
 
+	public function __construct($template = null) {
+		if($template) $this-&gt;loadTemplate($template);
+	}
 
-				<section>
+	public function loadTemplate($template) {
+		$this-&gt;content = file_get_contents($template);
+	}
 
-					<section>
-						<h2>Basic Template Class</h2>
-					</section>
-
-					<section>
-						<h2>Usage Goal</h2>
-
-						<ul>
-							<li class="fragment">
-								Have a class that takes care or our assignments
-								<div class="fragment">
-									<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/03/03.php">&lt;?php
-
-	require_once 'template.php'; // our template class
-
-	$title = 'testpage';
-	$userName = 'bramus';
-	$weatherToday = 'cloudy';
-
-	$tpl = new Template('03.tpl');
-
-	$tpl-&gt;assign('title', $title);
-	$tpl-&gt;assign('user', $userName);
-	$tpl-&gt;assign('weather', $weatherToday);
-
-	$tpl-&gt;display();
+	public function render($data) {
+		foreach ($data as $key =&gt; $value) {
+			$this-&gt;content = str_replace(
+				'{{ '. $key .' }}', htmlentities($value),
+				$this-&gt;content
+			);
+		}
+		return $this-&gt;content;
+	}
+}
 
 // EOF</code></pre>
-								</div>
 							</li>
 						</ul>
+						<footer class="fragment"><em>Note: this class doesn't do any checking yet!</em></footer>
 					</section>
 
 					<section>
-						<h2>Class Functionality</h2>
-						<ul>
-							<li class="fragment">Load in a given <code>.tpl</code> file and store the raw content</li>
-							<li class="fragment">Keep track of the assigned values on an internal array</li>
-							<li class="fragment">When <code>display()</code> is called, perform all string replaces (viz. <em>parse the template</em>) and output the content with <code>echo</code></li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Class Inner workings</h2>
+						<h2>OO Execution (2)</h2>
 						<ul>
 							<li class="fragment">
-								A debug session
-								<div class="hastooltip">
+								Class usage:
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/03/03.php">&lt;?php
 
-									<figure>
-										<img src="assets/08/debug-03.png" class="noborder" width="810" height="487" alt="" title="" />
-									</figure>
+	// includes &amp; requires
+	require_once __DIR__ . '/includes/classes/template.php';
 
-									<div class="tooltip">
-										<div>
-											<p>Start a debug session and step into the code. Take a close look at the <code>$replacements</code> datamember as <code>assign()</code> is called, and at <code>$content</code> as <code>parseReplacements()</code> is looping over <code>$replacements</code></p>
-<!--
-											<ul>
-												<li>
-													Datamembers
-													<ul>
-														<li><code>$content</code> &mdash; the content of the template</li>
-														<li><code>$loaded</code> &amp; <code>$parsed</code> &mdash; status vars tracking if a tpl is loaded/parsed</li>
-														<li><code>$replacements</code> &mdash; array containing all values to parse in the template</li>
-													</ul>
-												</li>
-												<li>
-													Functions
-													<ul>
-														<li><code>__construct()</code> &amp; <code>setTemplate()</code> &mdash; loads in the template</li>
-														<li><code>assign()</code> &mdash; stores an assignment on <code>$replacements</code></li>
-														<li><code>display()</code> &amp; <code>echo</code>s the parsed content</li>
-														<li><code>getContent()</code> &mdash; Returns <code>$content</code>. Invokes <code>parse()</code> if not parsed yet</li>
-														<li><code>parse()</code> &mdash; performs the parsing. Calls <code>parseReplacements()</code></li>
-														<li><code>parseReplacements()</code> &mdash; Loops <code>$replacements</code> and performs the string replaces</li>
-													</ul>
-												</li>
-											</ul>
--->
-										</div>
-									</div>
-								</div>
+	// define our vars (fixed or via calculations)
+	$title = 'testpage';
+	$userName = 'bramus';
+	$weatherToday = 'cloudy';
+
+	// load template
+	$tpl = new Template();
+	$tpl-&gt;loadTemplate(__DIR__ . '/03.tpl');
+
+	// render template with our data
+	// @note The template class with automatically prevent XSS for us :-)
+	echo $tpl-&gt;render(array(
+		'title' =&gt; $title,
+		'user' =&gt; $userName,
+		'weather' =&gt; $weatherToday
+	));
+
+// EOF</code></pre>
 							</li>
 						</ul>
 					</section>
@@ -361,10 +320,16 @@
 						<h2>That's basically it!</h2>
 						<ul>
 							<li class="fragment">
-								Successful rewrite to a class based system
+								We've successfully separated the PHP logic and rendering of our HTML.
 							</li>
 							<li class="fragment">
-								No new functionality added
+								The <code>Template</code> class is very basic. Possible improvements:
+								<ul>
+									<li class="fragment">Introduction of conditional blocks <em>(think <code>if</code>)</em> in our templates</li>
+									<li class="fragment">Introduction of iterations <em>(think <code>for</code> and <code>foreach</code>)</em>, to work with loops in our templates</li>
+									<li class="fragment">Introduction of modifiers, to manipulate assigned variables from within our template (think <code>ucfirst</code>)</li>
+									<li class="fragment">&hellip;</li>
+								</ul>
 							</li>
 						</ul>
 					</section>
@@ -466,547 +431,6 @@ if ($weatherToday == 'cloudy') {
 						<ul>
 							<li class="fragment">
 								Not that hard, right?
-							</li>
-						</ul>
-					</section>
-
-				</section>
-
-
-
-				<section>
-
-					<section>
-						<h2>Iterations</h2>
-					</section>
-
-					<section>
-						<h2>Iterations</h2>
-						<ul>
-							<li class="fragment">
-								Newsitems on a website are basically repeated blocks of HTML. Our template engine needs to work with loops (<code>for</code>/<code>foreach</code>) too.</li>
-							<li class="fragment">
-								We'll introduce <em>iterations</em> in our <code>Template</code> class
-								<ul>
-									<li class="example">Wrapped between <code>{iteration:iName}</code> and <code>{/iteration:iName}</code> in our <code>.tpl</code></li>
-									<li class="example">Assigned variables should only be assigned in the loop</li>
-									<li class="example">Options in loops should also be possible</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Template iteration example</h2>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iLecturers}
-	&lt;li&gt;{$lecturer} {option:oItsme}-- Oh, that's me!{/option:oItsme}&lt;/li&gt;
-	{/iteration:iLecturers}
-&lt;/ul&gt;</code></pre>
-						</div>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/05/05.php">&lt;?php
-
-	$lecturers = array('rogier.vanderlinde (WT/WS1/WS2/WP)', 'bramus.vandamme (WT/WS1/WS2/WMD)', &hellip;);
-
-	$tpl = new Template('05.tpl');
-
-	$tpl-&gt;setIteration('iLecturers');
-	foreach($lecturers as $lecturer) {
-		$tpl-&gt;assignIteration('lecturer', $lecturer);
-		if (strstr($lecturer,'bramus.vandamme') !== false)
-			$tpl-&gt;assignIterationOption('oItsme');
-		$tpl-&gt;refillIteration('iLecturers');
-	}
-	$tpl-&gt;parseIteration('iLecturers');
-
-	$tpl-&gt;display();</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>Extended Class Functionality</h2>
-						<ul>
-							<li class="fragment">
-								Control loops
-								<ul>
-									<li class="fragment">Activate an iteration (before the loop) with <code>setIteration()</code></li>
-									<li class="fragment">Refill an iteration (in the loop) with <code>refillIteration()</code></li>
-									<li class="fragment">Parse an iteration (after the loop) with <code>parseIteration()</code></li>
-								</ul>
-							</li>
-							<li class="fragment">Assign values inside loops with <code>assignIteration()</code></li>
-							<li class="fragment">Assign options inside iterations with <code>assignIterationOption()</code></li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Class Inner workings</h2>
-						<ul>
-							<li class="fragment">
-								A debug session
-								<div class="hastooltip">
-
-									<figure>
-										<img src="assets/08/debug-05.png" class="noborder" width="810" height="487" alt="" title="" />
-									</figure>
-
-									<div class="tooltip">
-										<div>
-											<p>An iteration basically is a subtemplate: it has the same datamembers as the template to keep track of the <code>$replacements</code> and <code>$options</code>.</p>
-											<p>Internally it works with a <code>$content_temp</code> which it manipulates in each loop. At the start of a loop the content is reset to the original tpl code (<code>$content_stack</code>)</p>
-											<p>When calling <code>$refillIteration()</code> the parsed code is appended to <code>$content_parsed</code>. Finally, whe <code>parseIteration()</code> is called, the value <code>$content_parsed</code> is placed into the template where the iteration is.</p>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Phew!</h2>
-						<ul>
-							<li class="fragment">
-								If you don't fully understand the inner workings, don't worry about it too much.
-							</li>
-						</ul>
-					</section>
-
-				</section>
-
-
-
-				<section>
-
-					<section>
-						<h2>Nested Iterations</h2>
-					</section>
-
-					<section>
-						<h2>Template nested iteration example</h2>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iLecturers}
-	&lt;li&gt;
-		{$lecturer}
-		&lt;ul&gt;
-			{iteration:iCourses}
-			&lt;li&gt;{$course}&lt;/li&gt;
-			{/iteration:iCourses}
-		&lt;/ul&gt;
-	&lt;/li&gt;
-	{/iteration:iLecturers}
-&lt;/ul&gt;</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>Template nested iteration example</h2>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/06/06.php">$lecturers = array(
-	'rogier.vanderlinde' =&gt; array('WT','WS1','WS2','WP'),
-	'bramus.vandamme' =&gt; array('WT','WS1','WS2','WMD'),
-	&hellip;
-);
-
-$tpl-&gt;setIteration('iLecturers');
-
-foreach($lecturers as $lecturer =&gt; $courses) {
-
-	$tpl-&gt;assignIteration('lecturer', $lecturer);
-
-	// iteration iCourse inside the iteration iLecturers
-	$tpl-&gt;setIteration('iCourses','iLecturers');
-	foreach ($courses as $course) {
-		$tpl-&gt;assignIteration('course', $course);
-		$tpl-&gt;refillIteration('iCourses');
-	}
-	$tpl-&gt;parseIteration('iCourses');
-
-	// back to outer iteration
-	$tpl-&gt;refillIteration('iLecturers');
-
-}
-
-$tpl-&gt;parseIteration('iLecturers');
-
-$tpl-&gt;display();</code></pre>
-						</div>
-					</section>
-
-					<section>
-						<h2>Extended Class Functionality</h2>
-						<ul>
-							<li class="fragment">
-								Code to control loops remains the same
-								<ul>
-									<li class="fragment">Only difference is that <code>setIteration()</code> now accepts an extra parameter to tell the parent iteration it is contained in</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Class Inner workings</h2>
-						<ul>
-							<li class="fragment">
-								A debug session
-								<div class="hastooltip">
-
-									<figure>
-										<img src="assets/08/debug-06.png" class="noborder" width="810" height="487" alt="" title="" />
-									</figure>
-
-									<div class="tooltip">
-										<div>
-											<p>In the class, nested iterations are stored on the same level as iterations. Because iterations are parsed immediately this is possible</p>
-											<p>Extra code is added to check if the parent iteration is known in the Template instance.</p>
-											<p><code>parseIteration()</code> checks if a parent is set: if there is it is pared in the parent, if not, it's parsed in the template content.</p>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Double Phew!</h2>
-						<ul>
-							<li class="fragment">
-								Yeah!
-							</li>
-						</ul>
-					</section>
-
-				</section>
-
-
-
-				<section>
-
-					<section>
-						<h2>Extras</h2>
-					</section>
-
-					<section>
-						<h2>Modifiers</h2>
-						<ul>
-							<li class="fragment">
-								Modifiers allow manipulation of assigned variables from within the template
-								<ul>
-									<li class="fragment">Assign a variable once, and show it in various ways in the template</li>
-									<li class="fragment">Add multiple modifiers in your template, separated by <code>|</code>, example: <code>{$var|htmlentities}</code></li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Accepted modifiers
-								<ul>
-									<li>htmlentities, urlencode</li>
-									<li>ucfirst, ucwords</li>
-									<li>uppercase, lowercase</li>
-									<li>addslashes, stripslashes</li>
-									<li>ltrim, rtrim, shuffle</li>
-									<li>nl2br</li>
-									<li>repeat, truncate, truncateHtml</li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Modifiers example</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucfirst}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucwords}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;</code></pre>
-						<pre class="bigger"><code class="language-php">$tpl-&gt;assign('var', 'i am a variable which has been set');</code></pre>
-					</section>
-
-					<section>
-						<h2>Comments</h2>
-						<ul>
-							<li class="fragment">Comments are also allowed in templates.
-								<ul>
-									<li>Place comments between <code>{*</code> and <code>*}</code></li>
-									<li>Multiline comments allowed</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								When the content is parsed, the comments are stripped out in the same manner unassigned options are stripped
-							</li>
-						</ul>
-					</section>
-
-					<section>
-						<h2>Helper Functions</h2>
-						<ul>
-							<li class="fragment">
-								Also included in the final <code>Template</code> class are some extra helper functions
-								<ul>
-									<li class="fragment"><code>deAssignOption()</code> &mdash; undo an assignment of an option</li>
-									<li class="fragment"><code>iterationExists()</code> &mdash; checks if an iteration exists in the <code>.tpl</code></li>
-									<li class="fragment"><code>optionExists()</code> &mdash; checks if an option exists in the <code>.tpl</code></li>
-								</ul>
-							</li>
-						</ul>
-					</section>
-
-				</section>
-
-
-
-				<section>
-
-					<section>
-						<h2>Templates Recap</h2>
-					</section>
-
-					<section>
-						<h2>Template Creation</h2>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'includes'
-             . DIRECTORY_SEPARATOR . 'classes'
-             . DIRECTORY_SEPARATOR . 'template.php';
-
-$tpl = new Template(__DIR__  . DIRECTORY_SEPARATOR . '07.tpl');
-
-// Your magic code here
-
-$tpl->display();</code></pre>
-					</section>
-
-					<section>
-						<h2>Variable assigment &amp; Modifiers</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucfirst}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|ucwords}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-	&lt;li&gt;&amp;ldquo;&lt;em&gt;{$var|substring:0:10|uppercase}&lt;/em&gt;&amp;rdquo;&lt;/li&gt;
-&lt;/ul&gt;</code></pre>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$tpl-&gt;assign('var', 'i am a variable which has been set');</code></pre>
-					</section>
-
-					<section>
-						<h2>Option</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;p&gt;
-	Option assigned?: {option:oAssigned}Yes, I am assigned{/option:oAssigned}
-&lt;/p&gt;</code></pre>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$tpl-&gt;assignOption('oAssigned');</code></pre>
-					</section>
-
-					<section>
-						<h2>Single Iteration</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iSingle}
-	&lt;li&gt;I've been spawned by an iteration!&lt;/li&gt;
-	{/iteration:iSingle}
-&lt;/ul&gt;</code></pre>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$tpl-&gt;setIteration('iSingle');
-
-for ($i = 0; $i &lt; 10; $i++) {
-	$tpl-&gt;refillIteration('iSingle');
-}
-
-$tpl-&gt;parseIteration('iSingle');</code></pre>
-					</section>
-
-					<section>
-						<h2>Single Iteration with values</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iSingleWithValue}
-	&lt;li&gt;
-		I've been spawned by an iteration and I have a local variable:
-		&lt;em&gt;{$varInIteration}&lt;/em&gt; and also can access a global variable,
-		such as $var: &lt;em&gt;{$var}&lt;/em&gt;
-	&lt;/li&gt;
-	{/iteration:iSingleWithValue}
-&lt;/ul&gt;</code></pre>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$aSingleValues = array('one', 'two', 'three', 'four');
-
-$tpl-&gt;setIteration('iSingleWithValue');
-
-foreach ($aSingleValues as $singleValue) {
-
-	$tpl-&gt;assignIteration('varInIteration', $singleValue);
-	$tpl-&gt;refillIteration();
-
-}
-
-$tpl-&gt;parseIteration();</code></pre>
-					</section>
-
-					<section>
-						<h2>Nested Iteration with values (1)</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iNestedOuter}
-	&lt;li&gt;
-		{$varInNestedOuter}
-		&lt;ul&gt;
-			{iteration:iNestedInner}
-			&lt;li&gt;{$varInNestedInner}&lt;/li&gt;
-			{/iteration:iNestedInner}
-		&lt;/ul&gt;
-	&lt;/li&gt;
-	{/iteration:iNestedOuter}
-&lt;/ul&gt;</code></pre>
-					</section>
-
-					<section>
-						<h2>Nested Iteration with values (2)</h2>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$aNestedValues = array(
-	'first' =&gt; array('1.1', '1.2', '1.3'),
-	'second' =&gt; array('2.1', '2.2'),
-	'third' =&gt; array('3.1', '3.2', '3.3', '3.4')
-);
-
-$tpl-&gt;setIteration('iNestedOuter');
-
-foreach ($aNestedValues as $nestedKey =&gt; $nestedValue) {
-
-	$tpl-&gt;assignIteration('varInNestedOuter', $nestedKey);
-
-	$tpl-&gt;setIteration('iNestedInner', 'iNestedOuter');
-	foreach ($nestedValue as $innerValue) {
-		$tpl-&gt;assignIteration('varInNestedInner', $innerValue);
-		$tpl-&gt;refillIteration();
-	}
-	$tpl-&gt;parseIteration();
-
-	$tpl-&gt;refillIteration('iNestedOuter');
-
-}
-
-$tpl-&gt;parseIteration('iNestedOuter');</code></pre>
-					</section>
-
-					<section>
-						<h2>Option in iteration</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iSingleWithValueAndOption}
-	&lt;li&gt;
-		I've been spawned by an iteration and I am
-		&lt;i&gt;{option:oOdd}odd{/option:oOdd}{option:oEven}even{/option:oEven}&lt;/i&gt;
-		($i = &lt;i&gt;{$i}&lt;/i&gt;)
-	&lt;/li&gt;
-	{/iteration:iSingleWithValueAndOption}
-&lt;/ul&gt;</code></pre>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-
-$tpl-&gt;setIteration('iSingleWithValueAndOption');
-
-for ($i = 0; $i &lt; 10; $i++) {
-
-	if ($i%2 == 1) $tpl-&gt;assignIterationOption('oOdd');
-	else $tpl-&gt;assignIterationOption('oEven');
-
-	$tpl-&gt;assignIteration('i', $i);
-	$tpl-&gt;refillIteration('');
-
-}
-
-$tpl-&gt;parseIteration('');</code></pre>
-					</section>
-
-					<section>
-						<h2>Option in nested iteration (1)</h2>
-						<pre class="bigger"><code class="language-html dontrun">&lt;ul&gt;
-	{iteration:iNestedOuterWithOption}
-	&lt;li&gt;
-		{$varInNestedOuter}
-		{option:oHasSecondLevel}
-			&lt;ul&gt;
-				{iteration:iNestedInnerWithOption}
-				&lt;li&gt;
-					{$varInNestedInner}
-					{option:oHasExtraInSecondLevel}
-						with option assigned
-					{/option:oHasExtraInSecondLevel}!
-				&lt;/li&gt;
-				{/iteration:iNestedInnerWithOption}
-			&lt;/ul&gt;
-		{/option:oHasSecondLevel}
-	&lt;/li&gt;
-	{/iteration:iNestedOuterWithOption}
-&lt;/ul&gt;</code></pre>
-					</section>
-
-					<section>
-						<h2>Option in nested iteration (2)</h2>
-						<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/07/07.php">&lt;?php
-$aNestedValues = array(
-	'first' =&gt; array('1.1', '1.2', '1.3'),
-	'second' =&gt; array(),
-	'third' =&gt; array('3.1', '3.2', '3.3', '3.4')
-);
-
-$tpl-&gt;setIteration('iNestedOuterWithOption');
-
-foreach ($aNestedValues as $nestedKey =&gt; $nestedValue) {
-	$tpl-&gt;assignIteration('varInNestedOuter', $nestedKey);
-	if (sizeof((array) $nestedValue) &gt; 0) {
-		$tpl-&gt;assignIterationOption('oHasSecondLevel');
-
-		$tpl-&gt;setIteration('iNestedInnerWithOption', 'iNestedOuterWithOption');
-		foreach ($nestedValue as $innerValue) {
-			$tpl-&gt;assignIteration('varInNestedInner', $innerValue);
-			if (strpos($innerValue, '2') !== false)
-				$tpl-&gt;assignIterationOption('oHasExtraInSecondLevel');
-			$tpl-&gt;refillIteration();
-		}
-		$tpl-&gt;parseIteration();
-	}
-	$tpl-&gt;refillIteration('iNestedOuterWithOption');
-}
-
-$tpl-&gt;parseIteration('iNestedOuterWithOption');</code></pre>
-					</section>
-
-				</section>
-
-
-
-				<section>
-
-					<section>
-						<h2>Want more?</h2>
-					</section>
-
-					<section>
-						<h2>Want more?</h2>
-						<ul>
-							<li class="fragment">
-								Many template engines exists, all have some outstanding features that fall outside the scope of this course
-								<ul>
-									<li class="fragment">Control structures in the template itself (<code>if</code>/<code>else</code>/<code>for</code>/...)</li>
-									<li class="fragment">Caching <em>(final HTML and/or optimized PHP code)</em></li>
-									<li class="fragment">Includes &amp; Inheritance/blocks</li>
-									<li class="fragment">&hellip;</li>
-								</ul>
-							</li>
-							<li class="fragment">
-								Worth checking out
-								<ul>
-									<li class="fragment">Standalone template engines: <a href="http://www.smarty.net/">Smarty</a>, <a href="https://github.com/Spoon/Template">Spoon Template Component</a>, <a href="http://twig.sensiolabs.org/">Twig</a> (<em>recommended!</em>), &hellip;</li>
-									<li class="fragment">The template engine / views engine included in frameworks such as <a href="http://framework.zend.com/">Zend Framework</a>, <a href="http://cakephp.org/">CakePHP</a>, <a href="http://www.yiiframework.com/">YII</a>, etc.</li>
-								</ul>
 							</li>
 						</ul>
 					</section>
