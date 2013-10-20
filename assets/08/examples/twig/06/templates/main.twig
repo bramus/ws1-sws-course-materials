@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head>
+  <title>Twig Filters Demo</title>
+</head>
+<body>
+	<p>The value of <em>title</em> is {{ title }}</p>
+	<p>{{ tagline|replace({'like':'love', 'Twig':'you'}) }}</p>
+	<p>Today: {{ curdate|date("d/m/Y") }}</p>
+	<p>{{ name|upper|reverse }}</p>
+</body>
+</html>

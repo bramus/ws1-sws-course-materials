@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title>Twig Tags Demo</title>
+</head>
+<body>
+	<h1>Twig Tags Demo</h1>
+	<h2>My name</h2>
+	<div>
+		<p>{{ name }}</p>
+	</div>
+
+	<h2>My web colleagues</h2>
+	<div>
+		{% for colleague in colleagues %}
+		<h3>
+			{{ colleague.name }}
+			{% if colleague.city %}<em>({{ colleague.city }})</em>{% endif %}
+		</h3>
+		<div>
+			{% if colleague.courses %}
+			<p>You might know him from:</p>
+			<ul>
+				{% for course in colleague.courses %}
+				<li>{{ course }}</li>
+				{% endfor %}
+			</ul>
+			{% else %}
+			<p>(He's not teaching any web courses)</p>
+			{% endif %}
+		</div>
+		{% endfor %}
+	</div>
+</body>
+</html>

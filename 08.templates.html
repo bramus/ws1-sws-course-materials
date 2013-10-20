@@ -33,11 +33,12 @@
 				color: gainsboro;
 			}
 
-			li > code, li em > code, li del > code, li ins > code, p > code {
+			li > code, li em > code, li del > code, li ins > code, p > code, footer > code, footer em > code {
 				background: #3F3F3F;
 				padding: 2px 4px;
 				box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 				font-size: 80%;
+				font-style: normal;
 			}
 
 			del code, code.nok {
@@ -409,7 +410,7 @@ class Template {
 						</ol>
 
 
-						<footer class="fragment"><em>(*) In Webscripting 2 we'll learn how to include Twig using Composer</em></footer>
+						<footer class="fragment"><em>(*) In <a href="http://bramus.github.io/ws2-sws-course-materials/">Webscripting2</a> we'll learn how to include Twig using Composer</em></footer>
 					</section>
 
 					<section>
@@ -435,7 +436,7 @@ $twig = new Twig_Environment($loader);</code></pre>
 							</li>
 						</ol>
 
-						<footer class="fragment"><em>(*) In Webscripting 2 we'll talk about autoloaders and PSR-0 in detail</em></footer>
+						<footer class="fragment"><em>(*) In <a href="http://bramus.github.io/ws2-sws-course-materials/">Webscripting2</a> we'll talk about autoloaders and PSR-0 in detail</em></footer>
 					</section>
 
 					<section>
@@ -473,10 +474,251 @@ echo $tpl->render(array(
 					<section>
 						<h2>Exploring Twig</h2>
 					</section>
+
+					<section>
+						<h2>Template Comments</h2>
+						<ul>
+							<li class="fragment">
+								Wrap template comments between <code>{# </code> and <code> #}</code> inside your <code>.twig</code> file.
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Example: <code>{# I am a template comment! #}</code><small><a href="http://twig.sensiolabs.org/doc/templates.html#comments">&#9873;</a></small>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Template comments won't be rendered, not even in HTML comments.
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Variable Filters (1)</h2>
+						<ul>
+							<li class="fragment">
+								Use a <code>|</code> followed by a <em>filter</em> in the template to modify a parameter before it is displayed
+								<ul>
+									<li class="fragment">Example: <code>{{ firstname|upper }}</code><small><a href="http://twig.sensiolabs.org/doc/filters/upper.html">&#9873;</a></small> will render <code>firstname</code> in uppercase.</li>
+									<li class="fragment">List of filters: <a href="http://twig.sensiolabs.org/doc/filters/index.html">http://twig.sensiolabs.org/doc/filters/index.html</a></li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Filters can be combined: <code>{{ firstname|upper|reverse }}</code>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Filters can accept arguments: <code>{{ firstname|slice(0,4) }}</code><small><a href="http://twig.sensiolabs.org/doc/filters/slice.html">&#9873;</a></small>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Default filter applied: <code>escape</code><small><a href="http://twig.sensiolabs.org/doc/filters/escape.html">&#9873;</a></small> <em>(aliased to <code>e</code>)</em>
+								<ul>
+									<li>Escapes the parameter to prevent XSS</li>
+									<li>
+										Use <code>raw</code><small><a href="http://twig.sensiolabs.org/doc/filters/raw.html">&#9873;</a></small> filter to show a variable unaltered
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Variable Filters (2)</h2>
+						<ul>
+							<li class="fragment">
+								Example:
+								<pre class="bigger"><code class="language-html dontrun">&lt;p&gt;The value of &lt;em&gt;title&lt;/em&gt; is {{ title }}&lt;/p&gt;
+&lt;p&gt;{{ tagline|replace({'like':'love', 'Twig':'you'}) }}&lt;/p&gt;
+&lt;p&gt;Today: {{ curdate|date(&quot;d/m/Y&quot;) }}&lt;/p&gt;
+&lt;p&gt;{{ name|upper|reverse }}&lt;/p&gt;</code></pre>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/06/index.php">echo $tpl-&gt;render(array(
+	'title' =&gt; 'The title &lt;script&gt;alert(&quot;XSS?&quot;);&lt;/script&gt;',
+	'tagline' =&gt; 'I like Twig',
+	'curdate' =&gt; new DateTime(),
+	'name' =&gt; 'Bramus'
+));</code></pre>
+							</li>
+						</ul>
+						<p class="fragment" style="margin-top: 1em;">Full list of filters: <a href="http://twig.sensiolabs.org/doc/filters/index.html">http://twig.sensiolabs.org/doc/filters/index.html</a></p>
+					</section>
+
+					<section>
+						<h2>Associative Arrays</h2>
+
+						<ul>
+							<li class="fragment">
+								Twig plays nice with associative arrays
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/05/index.php">// define our vars (fixed or via calculations)
+$greeting = 'Good afternoon';
+$user = array(
+	'firstname' =&gt; 'Bramus',
+	'lastname' =&gt; 'Van Damme',
+	'city' =&gt; 'Vinkt'
+);
+
+// load template
+$tpl = $twig->loadTemplate('main.twig');
+
+// render template with our data
+echo $tpl->render(array(
+	'greeting' =&gt; $greeting,
+	'user' =&gt; $user
+));</code></pre>
+								<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/05/index.php">{{ greeting }} {{ user.firstname }} {{ user.lastname }}.<br />How's the weather in {{ user.city }}?</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Multi-Dimensional Assoc. Arrays (1)</h2>
+						<ul>
+							<li class="fragments">
+								Twig also plays nice with multi-dimensional assoc. arrays &hellip;
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/07/index.php">$lecturers = array(
+	array(
+		'name' =&gt; 'Rogier van der Linde', 'city' =&gt; 'Ghent',
+		'courses' =&gt; array('Webtechnology', 'Webdesign &amp; Usability', 'Webscripting 1', 'Webprogramming')
+	), array(
+		'name' =&gt; 'Kevin Picalausa', 'city' =&gt; 'Ghent',
+		'courses' =&gt; array('Webscripting 2', 'Webprogramming')
+	), array(
+		'name' =&gt; 'Davy De Winne', 'city' =&gt; 'Schellebelle',
+		'courses' =&gt; array('Webtechnology', 'Webdesign &amp; Usability', 'Webscripting 2')
+	), array(
+		'name' =&gt; 'Joske Vermeulen'
+	)
+);
+
+echo $tpl-&gt;render(array(
+	'name' =&gt; 'Bramus Van Damme',
+	'colleagues' =&gt; $lecturers
+));</code></pre>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Multi-Dimensional Assoc. Arrays (2)</h2>
+						<ul>
+							<li class="fragments">
+							 	&hellip; just use <code>for</code><small><a href="http://twig.sensiolabs.org/doc/tags/for.html">&#9873;</a></small> and <code>if</code><small><a href="http://twig.sensiolabs.org/doc/tags/if.html">&#9873;</a></small> tags in your template
+
+								<pre class="bigger"><code class="language-html dontrun"  data-overlay-example="assets/08/examples/twig/07/index.php">{% for colleague in colleagues %}
+&lt;h3&gt;
+	{{ colleague.name }}
+	{% if colleague.city %}&lt;em&gt;({{ colleague.city }})&lt;/em&gt;{% endif %}
+&lt;/h3&gt;
+&lt;div&gt;
+	{% if colleague.courses %}
+	&lt;p&gt;You might know him from:&lt;/p&gt;
+	&lt;ul&gt;
+		{% for course in colleague.courses %}
+		&lt;li&gt;{{ course }}&lt;/li&gt;
+		{% endfor %}
+	&lt;/ul&gt;
+	{% else %}
+	&lt;p&gt;(He's not teaching any web courses)&lt;/p&gt;
+	{% endif %}
+&lt;/div&gt;
+{% endfor %}</code></pre>
+							</li>
+						</ul>
+						<footer class="fragment"><em>Beware: tags must be wrapped between <code>{% </code> and <code> %}</code></em></footer>
+					</section>
+
+					<section>
+						<h2>More Array goodiness (1)</h2>
+						<ul>
+							<li class="fragment">
+								Looping the array <code>$courses</code> using <code>for-else-endfor</code><small><a href="http://twig.sensiolabs.org/doc/tags/for.html#the-else-clause">&#9873;</a></small>
+
+								<div class="columns">
+									<div class="column column-12">
+										<pre class="bigger"><code class="language-php">echo $tpl-&gt;render(array(
+	'courses' => array(
+		'JPW235' =&gt; 'Webscripting1',
+		'JPW213' =&gt; 'Webscripting2',
+		'JPW218' =&gt; 'Web &amp; Mobile',
+	)
+);</code></pre>
+									</div>
+									<div class="column column-12">
+										<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/08/index.php">&lt;ul&gt;
+{% for val in courses %}
+	&lt;li&gt;{{ val }}&lt;/li&gt;
+{% else %}
+	&lt;li&gt;(array is empty)&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre>
+									</div>
+								</div>
+								<br style="clear: both;" />
+							</li>
+							<li class="fragment">Iterating the keys<small><a href="http://twig.sensiolabs.org/doc/tags/for.html#iterating-over-keys">&#9873;</a></small> / keys &amp; values<small><a href="http://twig.sensiolabs.org/doc/tags/for.html#iterating-over-keys-and-values">&#9873;</a></small>:
+								<div class="columns">
+									<div class="column column-12">
+										<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/08/index.php">&lt;ul&gt;
+{% for k in courses|keys %}
+	&lt;li&gt;key: {{ k }}&lt;/li&gt;
+{% else %}
+	&lt;li&gt;(no items in the array)&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre>
+									</div>
+									<div class="column column-12">
+										<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/08/index.php">&lt;ul&gt;
+{% for key, val in courses %}
+	&lt;li&gt;{{ key }} = {{ val }}&lt;/li&gt;
+{% else %}
+	&lt;li&gt;(no items in the array)&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>More Array goodiness (2)</h2>
+						<ul>
+							<li class="fragment">
+								Use the <code>loop</code> variable<small><a href="http://twig.sensiolabs.org/doc/tags/for.html#the-loop-variable">&#9873;</a></small> inside iterations:
+								<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/08/index.php">&lt;ul&gt;
+{% for val in courses %}
+	&lt;li&gt;
+		{{ val }}
+		&lt;ul&gt;
+			&lt;li&gt;&lt;code&gt;loop.index&lt;/code&gt;: {{ loop.index }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.index0&lt;/code&gt;: {{ loop.index0 }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.revindex&lt;/code&gt;: {{ loop.revindex }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.revindex0&lt;/code&gt;: {{ loop.revindex0 }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.first&lt;/code&gt;: {{ loop.first }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.last&lt;/code&gt;: {{ loop.last }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.length&lt;/code&gt;: {{ loop.length }}&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre>
+							</li>
+							<li class="fragment">
+								It's also possible to create your own sequences
+								<pre class="bigger"><code class="language-html dontrun">&lt;p&gt;{% for i in 0..10 %}{{ i }}{% endfor %}&lt;/p&gt;
+&lt;p&gt;{% for letter in 'a'..'z' %}{{ letter }}{% endfor %}&lt;/p&gt;</code></pre>
+							</li>
+						</ul>
+					</section>
+
 				</section>
 
+				<section>
+					<section>
+						<h2>Getting Pratical</h2>
+					</section>
 
+					<!-- caching -->
 
+					<!-- inheritance -->
+
+					<!-- variables in templates // set -->
+
+				</section>
 
 
 				<!-- The END -->
@@ -487,6 +729,23 @@ echo $tpl->render(array(
 							<em><a href="http://www.ikdoeict.be/">ikdoeict.be</a> &mdash; <a href="mailto:bramus.vandamme@kahosl.be">bramus.vandamme@kahosl.be</a></em>
 						</footer>
 					</section>
+				</section>
+
+
+
+				<!-- Summary -->
+				<section id="summary">
+
+					<section>
+						<h2>Code summary</h2>
+
+						<p style="margin-top: 5.5em;"><em>A code-only summary of this chapter available is at <a href="08.templates.summary.html">08.templates.summary.html</a></em></p>
+						<footer>
+							<em>Note: not all information from these slides can be found in this summary!</em>
+						</footer>
+
+					</section>
+
 				</section>
 
 
