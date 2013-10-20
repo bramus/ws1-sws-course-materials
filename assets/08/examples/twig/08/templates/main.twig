@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+  <title>Twig Arrays Demo</title>
+</head>
+<body>
+	<h1>Twig Arrays Demo</h1>
+
+	<h2>for-else-endfor</h2>
+	<div>
+		<ul>
+		{% for val in courses %}
+			<li>{{ val }}</li>
+		{% else %}
+			<li>(array is empty)</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<h2>extracting the keys:</h2>
+	<div>
+		<ul>
+		{% for k in courses|keys %}
+			<li>key: {{ k }}</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<h2>extracting the keys &amp; values:</h2>
+	<div>
+		<ul>
+		{% for key, val in courses %}
+			<li>{{ key }} = {{ val }}</li>
+		{% else %}
+			<li>(no items in the array)</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<h2>loopcounters:</h2>
+	<div>
+		<ul>
+		{% for val in courses %}
+			<li>
+				{{ val }}
+				<ul>
+					<li><code>loop.index</code>: {{ loop.index }}</li>
+					<li><code>loop.index0</code>: {{ loop.index0 }}</li>
+					<li><code>loop.revindex</code>: {{ loop.revindex }}</li>
+					<li><code>loop.revindex0</code>: {{ loop.revindex0 }}</li>
+					<li><code>loop.first</code>: {{ loop.first }}</li>
+					<li><code>loop.last</code>: {{ loop.last }}</li>
+					<li><code>loop.length</code>: {{ loop.length }}</li>
+				</ul>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+</body>
+</html>
