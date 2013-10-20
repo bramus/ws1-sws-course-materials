@@ -123,6 +123,13 @@
 				margin-bottom: 0;
 			}
 
+			figure.zoomable-20:hover {
+				-moz-transform: scale(2);
+				-o-transform: scale(2);
+				-webkit-transform: scale(2);
+				transform: scale(2);
+			}
+
 		</style>
 
 	</head>
@@ -160,7 +167,7 @@
 				<section>
 
 					<section>
-						<h2>Introduction</h2>
+						<h2>Introducing Templates</h2>
 					</section>
 
 					<section>
@@ -177,7 +184,7 @@
 						</ul>
 
 						<div class="fragment">
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/01/01.php">&lt;?php
+							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/01/index.php">&lt;?php
 
 	// define our vars (fixed or via calculations)
 	$title = 'testpage';
@@ -232,13 +239,13 @@
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></div>
 
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/02/02.php"><span class="fragment">&lt;?php
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/02/index.php">&lt;?php
 
 $title = 'testpage';
 $userName = 'bramus';
 $weatherToday = 'cloudy';
 
-</span><span class="fragment">$tplContent = </span><span class="fragment">file_get_contents(__DIR__ . '/02.tpl');
+$tplContent = <span class="fragment">file_get_contents(__DIR__ . '/templates/main.tpl');
 
 </span><span class="fragment">$tplContent = </span><span class="fragment">str_replace('{{ title }}', htmlentities($title), $tplContent);
 </span><span class="fragment">$tplContent = str_replace('{{ user }}', htmlentities($userName), $tplContent);
@@ -289,7 +296,7 @@ class Template {
 						<ul>
 							<li class="fragment">
 								Class usage:
-								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/03/03.php">&lt;?php
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/idea/03/index.php">&lt;?php
 
 	// includes &amp; requires
 	require_once __DIR__ . '/includes/classes/template.php';
@@ -299,36 +306,42 @@ class Template {
 	$userName = 'bramus';
 	$weatherToday = 'cloudy';
 
-	// load template
+<span class="fragment">	// load template
 	$tpl = new Template();
-	$tpl-&gt;loadTemplate(__DIR__ . '/03.tpl');
+	$tpl-&gt;loadTemplate(__DIR__ . '/templates/main.tpl');
 
-	// render template with our data
+</span><span class="fragment">	// render template with our data
 	// @note The template class with automatically prevent XSS for us :-)
-	echo $tpl-&gt;render(array(
+	</span><span class="fragment">echo $tpl-&gt;render(array(
 		'title' =&gt; $title,
 		'user' =&gt; $userName,
 		'weather' =&gt; $weatherToday
-	));
+	));</span><span class="fragment">
 
-// EOF</code></pre>
+// EOF</span></code></pre>
 							</li>
 						</ul>
 					</section>
 
 					<section>
-						<h2>That's basically it!</h2>
+						<h2>Cool! What now?</h2>
 						<ul>
 							<li class="fragment">
 								We've successfully separated the PHP logic and rendering of our HTML.
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								The <code>Template</code> class is very basic. Possible improvements:
 								<ul>
-									<li class="fragment">Introduction of conditional blocks <em>(think <code>if</code>)</em> in our templates</li>
-									<li class="fragment">Introduction of iterations <em>(think <code>for</code> and <code>foreach</code>)</em>, to work with loops in our templates</li>
-									<li class="fragment">Introduction of modifiers, to manipulate assigned variables from within our template (think <code>ucfirst</code>)</li>
+									<li class="fragment">Support <code>if</code> structures in our templates</li>
+									<li class="fragment">Support <code>for</code> and <code>foreach</code> structures in our templates</li>
+									<li class="fragment">Variable modifiers <em>(filters)</em> within our template (think <code>ucfirst</code>)</li>
 									<li class="fragment">&hellip;</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								We could implement this ourselves &hellip;
+								<ul>
+									<li class="fragment">&hellip; yet some bright minds have already pondered on the subject and have come up with a robust solution</li>
 								</ul>
 							</li>
 						</ul>
@@ -341,100 +354,112 @@ class Template {
 				<section>
 
 					<section>
-						<h2>Conditional blocks</h2>
+						<h2>Introducing Twig</h2>
+
+						<p><img src="assets/08/splash-twig.jpg" width="900" alt="" /></p>
+
 					</section>
 
 					<section>
-						<h2>Conditional blocks</h2>
+						<h2>Twig</h2>
 						<ul>
 							<li class="fragment">
-								Most likely you'll have content on your site which can or cannot be displayed depending on a variable
+								PHP Templating Library
 								<ul>
-									<li class="example">Example: If a user is logged in, a message on your site could read <em>Welcome $name</em>. If he's not logged in, it could read <em>Please log in</em></li>
-									<li class="example">It'd be stupid to have two separate templates for this</li>
+									<li>= Set of classes to working with templates</li>
+									<li>Website: <a href="http://twig.sensiolabs.org/">http://twig.sensiolabs.org/</a></li>
+									<li>Documentation: <a href="http://twig.sensiolabs.org/documentation">http://twig.sensiolabs.org/documentation</a></li>
 								</ul>
 							</li>
-							<li class="fragment">In essence, we want our template to respond to an <code>if</code> statement.</li>
-							<li class="fragment">
-								We'll introduce <em>options</em> in our <code>Template</code> class
+							<li class="fragment" style="margin-top: 1em;">
+								Why Twig and not X?
 								<ul>
-									<li class="example">Wrapped between <code>{option:oName}</code> and <code>{/option:oName}</code> in our <code>.tpl</code></li>
-									<li class="example">Not shown by default, you have to enabled it from within the <code>.php</code></li>
+									<li>Modern code, Template oriented syntax, Fast, Supports caching, Template Inheritance, Flexible, Extensible, &hellip;</li>
+									<li class="fragment">Twig prevents XSS as it <em>escapes</em> variables by default</li>
 								</ul>
 							</li>
 						</ul>
+
 					</section>
 
 					<section>
-						<h2>Template option example</h2>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-html dontrun">Hi there {$user}, the weather today is {$weather}.
+						<h2>Obtaining Twig</h2>
 
-{option:oCloudy}
-&lt;img src=&quot;weather/cloudy.png&quot; alt=&quot;&quot; title=&quot;&quot; /&gt;&lt;br /&gt;
-It might be a good idea to bring your umbrella with you
-{/option:oCloudy}
+						<ol>
+							<li class="fragment">
+								Download<small>(*)</small> Twig from <a href="https://github.com/fabpot/Twig/tags">https://github.com/fabpot/Twig/tags</a>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Place the <code>Twig</code> folder from the <code>.zip</code> into the <code>includes/</code> folder of your project
+								<div style="text-align: center;"><figure class="zoomable-20"><img src="assets/08/twig-ondisk.jpg" width="200" alt="" title="" /><figcaption>Twig on disk</figcaption></figure></div>
+							</li>
+						</ol>
 
-{option:oSunny}
-&lt;img src=&quot;weather/sunny.png&quot; alt=&quot;&quot; title=&quot;&quot; /&gt;&lt;br /&gt;
-Wear a hat!
-{/option:oSunny}</code></pre>
-						</div>
-						<div class="fragment">
-							<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/04/04.php">&lt;?php
 
-$tpl = new Template('04.tpl');
-
-$tpl-&gt;assign('title', $title);
-$tpl-&gt;assign('user', $userName);
-$tpl-&gt;assign('weather', $weatherToday);
-
-if ($weatherToday == 'cloudy') {
-	$tpl-&gt;assignOption('oCloudy');
-} else {
-	$tpl-&gt;assignOption('oSunny');
-}</code></pre>
-						</div>
+						<footer class="fragment"><em>(*) In Webscripting 2 we'll learn how to include Twig using Composer</em></footer>
 					</section>
 
 					<section>
-						<h2>Extended Class Functionality</h2>
-						<ul>
-							<li class="fragment">Show an option with <code>assignOption()</code></li>
-						</ul>
+						<h2>Using Twig into your project</h2>
+
+						<ol>
+							<li class="fragment">
+								Instead of manually including each class that ships with Twig, just include the Twig autoloader<small>(*)</small>.
+								<pre class="bigger"><code class="language-php">require_once __DIR__ . '/includes/Twig/Autoloader.php';
+Twig_Autoloader::register();</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								<em>Bootstrap</em> Twig, pointing it to the <code>templates/</code> folder
+								<pre class="bigger"><code class="language-php">$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
+$twig = new Twig_Environment($loader);</code></pre>
+							</li>
+
+							<li class="fragment" style="margin-top: 1em;">
+								Load in your template and render it <em>(see next slide)</em>
+								<ul>
+									<li>We'll rename our <code>.tpl</code> files to <code>.twig</code></li>
+								</ul>
+							</li>
+						</ol>
+
+						<footer class="fragment"><em>(*) In Webscripting 2 we'll talk about autoloaders and PSR-0 in detail</em></footer>
 					</section>
 
 					<section>
-						<h2>Class Inner workings</h2>
+						<h2>Your first Twig Template</h2>
+
 						<ul>
 							<li class="fragment">
-								A debug session
-								<div class="hastooltip">
-
-									<figure>
-										<img src="assets/08/debug-04.png" class="noborder" width="810" height="487" alt="" title="" />
-									</figure>
-
-									<div class="tooltip">
-										<div>
-											<p>Assigning an option is basically stripping away the <code>{option:oName}</code> and <code>{/option:oName}</code> around it so that the HTML is left over.</p>
-											<p>Before displaying, the class will clean up the unassigned options by searching for all <code>{option:oName}</code>-<code>{/option:oName}</code> leftovers and deleting those entirely (template tags + inner content).</p>
-										</div>
-									</div>
-								</div>
+								The syntax of our <del><code>.tpl</code></del> <ins><code>.twig</code></ins> file hasn't changed
+								<pre class="bigger"><code class="language-html dontrun">&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  Hi there {{ user }}, the weather today is {{ weather }}.
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								The PHP code is quite similar
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/04/index.php">// Assuming we've already included and bootstrapped Twig
+
+$tpl = $twig->loadTemplate('main.twig');
+echo $tpl->render(array(
+	'title' => $title,
+	'user' => $userName,
+	'weather' => $weatherToday
+));</code></pre>
 						</ul>
+
 					</section>
 
+				</section>
+
+				<section>
 					<section>
-						<h2>That's basically it!</h2>
-						<ul>
-							<li class="fragment">
-								Not that hard, right?
-							</li>
-						</ul>
+						<h2>Exploring Twig</h2>
 					</section>
-
 				</section>
 
 
