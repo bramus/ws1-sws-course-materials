@@ -712,11 +712,102 @@ echo $tpl-&gt;render(array(
 						<h2>Getting Pratical</h2>
 					</section>
 
-					<!-- caching -->
+					<section>
+						<h2>Configuring Twig</h2>
+						<ul>
+							<li class="fragment">
+								Twig can be configured during its boostrapping phase<small><a href="http://twig.sensiolabs.org/doc/api.html#environment-options">&#9873;</a></small>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Example: enable caching
+								<pre class="bigger"><code class="language-php">$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
+$twig = new Twig_Environment($loader, array(
+	'cache' =&gt; __DIR__ . '/cache',
+	'auto_reload' =&gt; true // set to false on production
+));</code></pre>
+							</li>
+						</ul>
+					</section>
 
-					<!-- inheritance -->
+					<section>
+						<h2>Template Inheritance (1)</h2>
+						<ul>
+							<li class="fragment">Twig supports template inheritance<small><a href="http://twig.sensiolabs.org/doc/templates.html#template-inheritance">&#9873;</a></small></li>
+							<li class="fragment" style="margin-top: 1em;">Use case: Have a parent <code>layout.twig</code> and extend it per page in your project</li>
+						</ul>
+					</section>
 
-					<!-- variables in templates // set -->
+					<section>
+						<h2>Template Inheritance (2)</h2>
+						<ol>
+							<li class="fragment">
+								Define a template as ususual, with some <em>blocks</em> in
+								<pre class="bigger"><code class="language-html dontrun">&lt;h1&gt;{{ pageTitle }}&lt;/h1&gt;
+&lt;main&gt;
+	{% block pageContent %}
+	&lt;p&gt;This is the pageContent&lt;/p&gt;
+	{% endblock %}
+&lt;/main&gt;
+{% block pageFooter %}
+&lt;footer&gt;This is the footer&lt;/footer&gt;
+{% endblock %}</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Define a second template named <code>main.twig</code>
+								<ul>
+									<li>
+										Make it extend the first template (<code>layout.twig</code>) using <code>extends</code><small><a href="http://twig.sensiolabs.org/doc/tags/extends.html">&#9873;</a></small>
+									</li>
+									<li>
+										If necessary, overwrite some blocks from the first template.
+									</li>
+								</ul>
+								<pre class="bigger"><code class="language-html dontrun">{% extends 'layout.twig' %}
+
+{% block pageContent %}
+	&lt;p&gt;Lorem ipsum dolor sit amet&lt;/p&gt;
+{% endblock %}
+</code></pre>
+							</li>
+						</ol>
+					</section>
+
+					<section>
+						<h2>Template Inheritance (3)</h2>
+						<ol start="3">
+							<li class="fragment">
+								In PHP, load up the second template and display it.
+								<ul>
+									<li>The result is a merge between the first and second template</li>
+								</ul>
+								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/09/index.php">$tpl = $twig->loadTemplate('main.twig');
+echo $twig->render(array(
+	'pageTitle' =&gt; 'Inheritance Demo'
+));</code></pre>
+							</li>
+						</ol>
+					</section>
+
+					<section>
+						<h2>Template Inheritance (4)</h2>
+						<ul>
+							<li class="fragment">
+								Override variables of the parent template from within the child template using <code>set</code><small><a href="http://twig.sensiolabs.org/doc/tags/set.html">&#9873;</a></small> in Twig
+								<pre class="bigger"><code class="language-html dontrun" data-overlay-example="assets/08/examples/twig/09/index2.php">{% extends 'layout.twig' %}
+
+{% set pageTitle = pageTitle|replace({'e': 'a'}) ~ ' (Manipulated)' %}</code></pre>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Output the parent block using <code>parent()</code><small><a href="http://twig.sensiolabs.org/doc/functions/parent.html">&#9873;</a></small>
+								<pre class="bigger"><code class="language-html dontrun">{% extends 'layout.twig' %}
+
+{% block pageStyle %}
+	{{ parent() }}
+	footer { text-align: center; padding-top: 2em; }
+{% endblock %}</code></pre>
+							</li>
+						</ul>
+					</section>
 
 				</section>
 
