@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+	<title>PHP: Templates using Twig</title>
+	<style>
+		.main div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666; }
+		.main pre { border: 0.125em dotted #333; padding: 1em; width: 80%; overflow: scroll; }
+		a {color: #0066FF;}
+		.main a, a.higher { text-decoration: none; font-size: 70%; vertical-align: top; padding: 1em; margin: -1em; }
+		a.normal { font-size: 100%; vertical-align: inherit; padding: 0; margin: 0;}
+		.info, .warning { font-style: italic; }
+		.info { opacity: 0.75; }
+		.warning-sign { font-size: 2em; font-style: normal;}
+	</style>
+</head>
+<body>
+
+<h1>PHP: Templates using Twig<a href="http://twig.sensiolabs.org" class="higher">&#9873;</a></h1>
+
+<section class="info">
+	<p>This page forms the code summary of <a href="08.templates.html">08.templates.html</a>, part of the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at KaHo Sint-Lieven, Ghent, Belgium. The materials and this summary were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>. The materials and this summary may be used freely, as long as credit to Bramus is present and a clear an upfront link to <a href="http://www.ikdoeict.be/">ikdoeict.be</a> remains in place. Suggestions and additions may be mailed to Bramus, or sent via <a href="https://github.com/bramus/ws1-sws-course-materials">a pull request on GitHub</a>.</p>
+</section>
+
+<section class="main">
+
+<h2>Structure on disk</h2>
+<ul>
+	<li>Place Twig in the <code>includes/</code> folder.</li>
+	<li>Store all templates in <code>templates/</code> and give them a <code>.twig</code> extension.</li>
+	<li>Create a <code>cache/</code> folder where templates are cached in.</li>
+</ul>
+
+<h2>Loading and displaying templates</h2>
+
+<p>PHP file</p>
+<div><pre class="source"><code>&lt;?php
+
+	// includes &amp; requires
+	require_once __DIR__ . '/includes/Twig/Autoloader.php';
+	Twig_Autoloader::register();
+
+	// Twig Bootstrap
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/templates');
+	$twig = new Twig_Environment($loader, array(
+		'cache' =&gt; __DIR__ . '/cache',
+		'auto_reload' =&gt; true // set to false on production
+	));
+
+	// Data (fetched from DB for example)
+	$user = array(
+		'id' =&gt; 1,
+		'username' =&gt; 'bramus',
+		'firstname' =&gt; 'Bramus',
+		'lastname' =&gt; 'Van Damme',
+		'email' =&gt; 'bramus.vandamme@kahosl.be',
+		'password' =&gt; '$1$oGlMhJl6$EbgQIf8kQSr6MxA3YYYpm0'
+	);
+
+	// load template
+	$tpl = $twig-&gt;loadTemplate('template.twig');
+
+	// render template with our data
+	echo $tpl->render(array(
+		'user' => $user
+	));
+
+// EOF</code></pre></div>
+
+<p>Source <code>template.twig</code></p>
+
+<div><pre class="source"><code>&lt;p&gt;Hi {{ user.firstname }} {{ user.lastname }}!&lt;/p&gt;</code></pre></div>
+
+<h2>Variable Filters</h2>
+
+<p>Variables can be filtered before display. Multiple filters can be added.</p>
+<div><pre class="source"><code>&lt;p&gt;The value of <em>title</em> is {{ title }}&lt;/p&gt;
+&lt;p&gt;{{ tagline|replace({'like':'love', 'Twig':'you'}) }}&lt;/p&gt;
+&lt;p&gt;Today: {{ curdate|date("d/m/Y") }}&lt;/p&gt;
+&lt;p&gt;{{ name|upper|reverse }}&lt;/p&gt;</code></pre></div>
+
+<p>Full list of filters at <a href="http://twig.sensiolabs.org/doc/filters/index.html" class="normal">http://twig.sensiolabs.org/doc/filters/index.html</a></p>
+
+<h2>Working with arrays</h2>
+
+<h3>Looping Arrays</h3>
+<p>PHP array</p>
+<div><pre class="source"><code>$colleagues = array(
+	array(
+		'name' =&gt; 'Rogier van der Linde',
+		'city' =&gt; 'Ghent',
+		'courses' =&gt; array('Webtechnology', 'Webdesign &amp; Usability', 'Webscripting 1', 'Webprogramming')
+	), array(
+		'name' =&gt; 'Kevin Picalausa',
+		'city' =&gt; 'Ghent',
+		'courses' =&gt; array('Webscripting 2', 'Webprogramming')
+	), array(
+		'name' =&gt; 'Davy De Winne',
+		'city' =&gt; 'Schellebelle',
+		'courses' =&gt; array('Webtechnology', 'Webdesign &amp; Usability', 'Webscripting 2')
+	), array(
+		'name' =&gt; 'Joske Vermeulen'
+	)
+);</code></pre></div>
+<p>Template code</p>
+<div><pre class="source"><code>&lt;h2&gt;My web colleagues&lt;/h2&gt;
+&lt;div&gt;
+	{% for colleague in colleagues %}
+	&lt;h3&gt;
+		{{ colleague.name }}
+		{% if colleague.city %}&lt;em&gt;({{ colleague.city }})&lt;/em&gt;{% endif %}
+	&lt;/h3&gt;
+	&lt;div&gt;
+		{% if colleague.courses %}
+		&lt;p&gt;You might know him from:&lt;/p&gt;
+		&lt;ul&gt;
+			{% for course in colleague.courses %}
+			&lt;li&gt;{{ course }}&lt;/li&gt;
+			{% endfor %}
+		&lt;/ul&gt;
+		{% else %}
+		&lt;p&gt;(He's not teaching any web courses)&lt;/p&gt;
+		{% endif %}
+	&lt;/div&gt;
+	{% endfor %}
+&lt;/div&gt;</code></pre></div>
+
+<h3>Looping Arrays and getting the Keys / Keys &amp; Values</h3>
+
+<p>Getting keys<a href="http://twig.sensiolabs.org/doc/tags/for.html#iterating-over-keys">&#9873;</a> of an array</p>
+<div><pre class="source"><code>&lt;ul&gt;
+{% for k in courses|keys %}
+	&lt;li&gt;key: {{ k }}&lt;/li&gt;
+{% else %}
+	&lt;li&gt;(no items in the array)&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre></div>
+
+<p>Getting keys &amp; Values<a href="http://twig.sensiolabs.org/doc/tags/for.html#iterating-over-keys-and-values">&#9873;</a> of an array</p>
+<div><pre class="source"><code>&lt;ul&gt;
+{% for key, val in courses %}
+	&lt;li&gt;{{ key }} = {{ val }}&lt;/li&gt;
+{% else %}
+	&lt;li&gt;(no items in the array)&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre></div>
+
+<h3>The <code>loop</code> variable<a href="http://twig.sensiolabs.org/doc/tags/for.html#the-loop-variable">&#9873;</a></h3>
+<div><pre class="source"><code>&lt;ul&gt;
+{% for val in courses %}
+	&lt;li&gt;
+		{{ val }}
+		&lt;ul&gt;
+			&lt;li&gt;&lt;code&gt;loop.index&lt;/code&gt;: {{ loop.index }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.index0&lt;/code&gt;: {{ loop.index0 }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.revindex&lt;/code&gt;: {{ loop.revindex }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.revindex0&lt;/code&gt;: {{ loop.revindex0 }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.first&lt;/code&gt;: {{ loop.first }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.last&lt;/code&gt;: {{ loop.last }}&lt;/li&gt;
+			&lt;li&gt;&lt;code&gt;loop.length&lt;/code&gt;: {{ loop.length }}&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;</code></pre></div>
+
+<h3>Generating your own sequences</h3>
+
+<div><pre class="source"><code>&lt;p&gt;{% for i in 0..10 %}{{ i }}{% endfor %}&lt;/p&gt;
+&lt;p&gt;{% for letter in 'a'..'z' %}{{ letter }}{% endfor %}&lt;/p&gt;</code></pre></div>
+
+
+<h2>Template Inheritance</h2>
+
+<p>Use <code>block</code><a href="http://twig.sensiolabs.org/doc/tags/block.html">&#9873;</a> to define a few blocks in a parent template and use <code>extends</code> in the child template to extend from it.</p>
+
+<p>In the child template, overwrite blocks from the parent template, using the same <code>block</code><a href="http://twig.sensiolabs.org/doc/tags/block.html">&#9873;</a>. Use <code>parent()</code><a href="http://twig.sensiolabs.org/doc/functions/parent.html">&#9873;</a> to render the code of the parent block. Use <code>set</code><a href="http://twig.sensiolabs.org/doc/tags/set.html">&#9873;</a> to set variables in the parent template.</p>
+
+<h3>Master/Parent template</h3>
+
+<div><pre class="source"><code>&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;{{ pageTitle }}&lt;/title&gt;
+	&lt;style&gt;
+	{% block pageStyle %}
+		div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666;}
+	{% endblock %}
+	&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1&gt;{{ pageTitle }}&lt;/h1&gt;
+	&lt;div&gt;
+		{% block pageContent %}
+		{% endblock %}
+	&lt;/div&gt;
+	{% block pageFooter %}
+	&lt;footer&gt;This is the footer&lt;/footer&gt;
+	{% endblock %}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+
+<h3>Child template</h3>
+
+<div><pre class="source"><code>{% extends 'layout.twig' %}
+
+{% set pageTitle = pageTitle|replace({'e': 'a'}) ~ ' (Manipulated)' %}
+
+{% block pageStyle %}
+	{{ parent() }}
+	footer { text-align: center; padding-top: 2em; }
+{% endblock %}
+
+{% block pageContent %}
+	&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quis neque libero, non rutrum nisi. Donec venenatis, nibh in aliquet consectetur, leo tellus elementum libero, at pretium ante enim nec tellus. Sed quis tempor erat.&lt;/p&gt;
+	&lt;p&gt;Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam a urna sit amet augue iaculis fringilla. Nulla semper nulla mauris, at pellentesque mauris. Aenean viverra dictum ullamcorper. Nam eros dui, pellentesque et ultrices vitae, adipiscing feugiat sapien. Pellentesque tincidunt eros eu sem convallis fermentum. Donec dui ante, scelerisque in sollicitudin in, consectetur vel diam.&lt;/p&gt;
+{% endblock %}</code></pre></div>
+
+<h3>Load the child template in your PHP:</h3>
+
+<div><pre class="source"><code>// load template
+$tpl = $twig-&gt;loadTemplate('child.twig');
+
+// render template with our data
+echo $tpl-&gt;render(array(
+	'pageTitle' =&gt; 'Template Inheritance'
+));</code></pre></div>
+
+</section>
+</body>
+</html>
