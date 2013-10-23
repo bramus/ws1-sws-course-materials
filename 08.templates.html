@@ -568,7 +568,7 @@ echo $tpl->render(array(
 					<section>
 						<h2>Multi-Dimensional Assoc. Arrays (1)</h2>
 						<ul>
-							<li class="fragments">
+							<li class="fragment">
 								Twig also plays nice with multi-dimensional assoc. arrays &hellip;
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/07/index.php">$lecturers = array(
 	array(
@@ -596,7 +596,7 @@ echo $tpl-&gt;render(array(
 					<section>
 						<h2>Multi-Dimensional Assoc. Arrays (2)</h2>
 						<ul>
-							<li class="fragments">
+							<li class="fragment">
 							 	&hellip; just use <code>for</code><small><a href="http://twig.sensiolabs.org/doc/tags/for.html">&#9873;</a></small> and <code>if</code><small><a href="http://twig.sensiolabs.org/doc/tags/if.html">&#9873;</a></small> tags in your template
 
 								<pre class="bigger"><code class="language-html dontrun"  data-overlay-example="assets/08/examples/twig/07/index.php">{% for colleague in colleagues %}
@@ -620,6 +620,27 @@ echo $tpl-&gt;render(array(
 							</li>
 						</ul>
 						<footer class="fragment"><em>Beware: tags must be wrapped between <code>{% </code> and <code> %}</code></em></footer>
+					</section>
+
+					<section>
+						<h2>More on if</h2>
+						<ul>
+							<li class="fragment">
+								The <code>if</code> tag in Twig works just as any other if
+								<pre class="bigger"><code class="language-html dontrun">{% if username == 'bramus' %} YOLO {% endif %}</code></pre>
+								<pre class="bigger"><code class="language-html dontrun">{% if user in ['bramus', 'rogier'] %} YOLO {% endif %}</code></pre>
+							</li>
+							<li class="fragment">
+								<code>elseif</code> is also supported
+								<pre class="bigger"><code class="language-html dontrun">{% if blogpost.visibility == 'password' %}
+    &lt;p&gt;Blogpost is password protected&lt;/p&gt;
+{% elseif blogpost.visibility == 'link' %}
+    &lt;p&gt;Blogpost is public for those who have the link&lt;/p&gt;
+{% else %}
+    &lt;p&gt;Blogpost is public for all&lt;/p&gt;
+{% endif %}</code></pre>
+							</li>
+						</ul>
 					</section>
 
 					<section>

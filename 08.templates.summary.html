@@ -182,6 +182,22 @@
 &lt;p&gt;{% for letter in 'a'..'z' %}{{ letter }}{% endfor %}&lt;/p&gt;</code></pre></div>
 
 
+<h2>More on if</h2>
+
+<p>If can also do comparisons and various checks</p>
+
+<div><pre class="source"><code>{% if username == 'bramus' %} YOLO {% endif %}</code></pre></div>
+
+<div><pre class="source"><code>{% if user in ['bramus', 'rogier'] %} YOLO {% endif %}</code></pre></div>
+
+<div><pre class="source"><code>{% if blogpost.visibility == 'password' %}
+    &lt;p&gt;Blogpost is password protected&lt;/p&gt;
+{% elseif blogpost.visibility == 'link' %}
+    &lt;p&gt;Blogpost is public for those who have the link&lt;/p&gt;
+{% else %}
+    &lt;p&gt;Blogpost is public for all&lt;/p&gt;
+{% endif %}</code></pre></div>
+
 <h2>Template Inheritance</h2>
 
 <p>Use <code>block</code><a href="http://twig.sensiolabs.org/doc/tags/block.html">&#9873;</a> to define a few blocks in a parent template and use <code>extends</code> in the child template to extend from it.</p>
@@ -237,6 +253,12 @@ $tpl = $twig-&gt;loadTemplate('child.twig');
 echo $tpl-&gt;render(array(
 	'pageTitle' =&gt; 'Template Inheritance'
 ));</code></pre></div>
+
+<h3>Inclusion of another template also possible</h3>
+
+<p>Suggested to place these partial templates into <code>templates/partials/</code></p>
+
+<div><pre class="source"><code>{% include 'partials/sidebar.twig' %}</code></pre></div>
 
 </section>
 </body>
