@@ -3,17 +3,14 @@
 	// start session (starts a new one, or continues the already started one)
 	session_start();
 
-	// define if we are logged in or not
-	$loggedIn = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
-
 	// already logged in!
-	if ($loggedIn === true) {
+	if (isset($_SESSION['user']) && ($_SERVER['user'] != false)) {
 		header('location: index.php');
 		exit();
 	}
 
 	// var to tell if we have a login error
-	$formError = false;
+	$formErrors = array();
 
 	// form submitted
 	if (isset($_POST['moduleAction']) && ($_POST['moduleAction'] == 'login')) {
@@ -23,11 +20,13 @@
 		$password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
 		// username & password are valid
+		// @note: this will most likely be the result of a query
 		if (($username != '') && ($username === $password)) {
 
-			// set loggedin state & username
-			$_SESSION['loggedin'] = true;
-			$_SESSION['name'] = $username;
+			// store user (usually returned from database) in session
+			$_SESSION['user'] = array(
+				'username' => $username
+			);
 
 			// redirect to index
 			header('location: index.php');
@@ -37,7 +36,7 @@
 
 		// username & password are not valid
 		else {
-			$formError = true;
+			$formErrors[] = 'Invalid login credentials';
 		}
 
 	}
@@ -90,7 +89,14 @@
 
 	<?php
 
-		if ($formError === true) echo '<p class="error">Invalid login credentials</p>';
+		if (sizeof($formErrors) > 0) {
+			echo '<p>Error while logging in:</p>';
+			echo '<ul>' . PHP_EOL;
+			foreach ($formErrors as $error) {
+				echo '<li>' . $error . '</li>';
+			}
+			echo '</ul>' . PHP_EOL;
+		}
 
 	?>
 
