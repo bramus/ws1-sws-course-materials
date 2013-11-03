@@ -3,11 +3,8 @@
 	// start session (starts a new one, or continues the already started one)
 	session_start();
 
-	// define if we are logged in or not
-	$loggedIn = isset($_SESSION['loggedin']) ? $_SESSION['loggedin'] : false;
-
-	// extract the name (if logged in)
-	if ($loggedIn) $name = isset($_SESSION['name']) ? $_SESSION['name'] : '';
+	// get user object from session
+	$user = isset($_SESSION['user']) ? $_SESSION['user'] : false;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -32,8 +29,8 @@
 	<h1>My login protected site</h1>
 
 	<ul>
-	<?php if ($loggedIn === true) { ?>
-		<li>You are logged in. Welcome, <?php echo htmlentities($name); ?> (<a href="logout.php">log out</a>)</li>
+	<?php if ($user) { ?>
+		<li>You are logged in. Welcome, <?php echo htmlentities($user['username']); ?> (<a href="logout.php">log out</a>)</li>
 	<?php } else { ?>
 		<li>You are not logged in. Please <a href="login.php" title="log in">log in</a></li>
 	<?php } ?>
