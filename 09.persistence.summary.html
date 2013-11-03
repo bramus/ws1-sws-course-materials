@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+	<title>PHP: Persistence</title>
+	<style>
+		.main div { padding-left: 1em; margin-left: 1em; border-left: 0.125em solid #666; }
+		.main pre { border: 0.125em dotted #333; padding: 1em; width: 80%; overflow: scroll; }
+		a {color: #0066FF;}
+		.main a, a.higher { text-decoration: none; font-size: 70%; vertical-align: top; padding: 1em; margin: -1em; }
+		a.normal { font-size: 100%; vertical-align: inherit; padding: 0; margin: 0;}
+		.info, .warning { font-style: italic; }
+		.info { opacity: 0.75; }
+		.warning-sign { font-size: 2em; font-style: normal;}
+	</style>
+</head>
+<body>
+
+<h1>PHP: Persistence</h1>
+
+<section class="info">
+	<p>This page forms the code summary of <a href="09.persistence.html">09.persistence.html</a>, part of the <strong>Webscripting1 &mdash; Serverside Webscripting</strong> course, part of the <a href="http://www.ikdoeict.be/">Professional Bachelor ICT</a> study programme, taught at KaHo Sint-Lieven, Ghent, Belgium. The materials and this summary were developed by Bram(us) Van Damme, lecturer ICT at KaHo Sint-Lieven, who blogs over at <a href="http://www.bram.us/">bram.us</a> and Twitters as <a href="http://www.twitter.com/bramus">@bramus</a>. The materials and this summary may be used freely, as long as credit to Bramus is present and a clear an upfront link to <a href="http://www.ikdoeict.be/">ikdoeict.be</a> remains in place. Suggestions and additions may be mailed to Bramus, or sent via <a href="https://github.com/bramus/ws1-sws-course-materials">a pull request on GitHub</a>.</p>
+</section>
+
+<section class="main">
+
+<h2>Cookies</h2>
+
+<h3>Reading a cookie</h3>
+
+<p>The client will send all eligible cookies available along with the <em>request head</em> and PHP will <em>automagically</em> make all sent-in cookies available in <code>$_COOKIE</code><a href="http://www.php.net/manual/en/reserved.variables.cookies.php">&#9873;</a></p>
+
+<div><pre class="source"><code>$color = (string) isset($_COOKIE['color']) ? $_COOKIE['color'] : '#FFFFFF';</code></pre></div>
+
+<h3>Setting a cookie</h3>
+
+<p>Use <code>setcookie()</code><a href="http://php.net/setcookie">&#9873;</a></p>
+<div><pre class="source"><code>setcookie('color', $value, time() + 24*60*60*7);</code></pre></div>
+<p class="warning"><span class="warning-sign">&#9888;</span> Remember that the cookie won't immediately become available in <code>$_COOKIE</code> as <code>setcookie()</code> is merely an instruction for the client to create the cookie upon receival of the generated response</p>
+
+<h3>Deleting a cookie</h3>
+
+<p>Set the cookie with an expiry date set in the past.</p>
+
+<div><pre class="source"><code>setcookie('color', $value, time() - 24*60*60*7);</code></pre></div>
+
+<h2>Sessions</h2>
+
+<h3>Starting/Continuing a session</h3>
+
+<p>Use <code>session_start()</code><a href="http://php.net/session_start">&#9873;</a> to start or continue a previous session. PHP will look for a sent-in <code>PHPSESSID</code> <em>(usually sent in automatically via a cookie)</em> and will continue that session (viz. it will populate <code>$_SESSION</code><a href="http://php.net/manual/en/reserved.variables.session.php">&#9873;</a> with the previously saved data). If <code>PHPSESSID</code> is empty a new <code>PHPSESSID</code> with empty <code>$_SESSION</code> will be generated.</p>
+
+<div><pre class="source"><code>session_start();</code></pre></div>
+
+<p class="warning"><span class="warning-sign">&#8505;</span> You only need to start the session once for the PHP file. It is recommended to start it at the very top, just beneath the includes/requires.</p>
+
+
+<p class="warning"><span class="warning-sign">&#9888;</span> All code below won't work if you don't start the session first!</p>
+
+<h3>Storing sessiondata</h3>
+
+<p>Push an entry onto <code>$_SESSION</code><a href="http://php.net/manual/en/reserved.variables.session.php">&#9873;</a>, like you would manipulate a regular array</p>
+
+<div><pre class="source"><code>$_SESSION['name'] = 'Bramus!';</code></pre></div>
+
+<h3>Getting sessiondata</h3>
+
+<div><pre class="source"><code>$name = isset($_SESSION['name']) ? $_SESSION['name'] : 'stranger';</code></pre></div>
+
+<h3>Removing sessiondata</h3>
+
+<div><pre class="source"><code>unset($_SESSION['name']);</code></pre></div>
+
+<h3>Stopping a session</h3>
+
+<div><pre class="source"><code>foreach ($_SESSION as $key => $value) unset($_SESSION[$key]);
+session_destroy();</code></pre></div>
+
+
+</section>
+</body>
+</html>
