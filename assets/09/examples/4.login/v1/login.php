@@ -4,7 +4,7 @@
 	session_start();
 
 	// already logged in!
-	if (isset($_SESSION['user']) && ($_SERVER['user'] != false)) {
+	if (isset($_SESSION['user'])) {
 		header('location: index.php');
 		exit();
 	}
