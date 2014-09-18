@@ -2,7 +2,7 @@
 
 /**
  * Copy, rename and delete
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	// Copy file

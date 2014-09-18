@@ -2,7 +2,7 @@
 
 /**
  * List the contents of a directory (files only)
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	// Our base dir

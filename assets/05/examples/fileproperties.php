@@ -2,7 +2,7 @@
 
 /**
  * Read file info
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	$filename = __DIR__ . '/testfile.txt';
