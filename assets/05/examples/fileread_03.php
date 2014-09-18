@@ -2,7 +2,7 @@
 
 /**
  * Get contents of a file into an array
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	$lines = file(__DIR__ . '/testfile.txt');

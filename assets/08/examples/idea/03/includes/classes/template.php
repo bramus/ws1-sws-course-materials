@@ -4,7 +4,7 @@
  * A (work in progress version of a) basic template class
  * Don't use this file in production as it's not the final version
  *
- * @author		Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author		Bramus Van Damme <bramus.vandamme@odisee.be>
  *
  * @version		0.1 - First version: Load in template file and render data into it
  */

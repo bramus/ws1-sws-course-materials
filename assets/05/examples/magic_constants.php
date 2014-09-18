@@ -2,7 +2,7 @@
 
 /**
  * Magic Constants
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	echo '<h2>./</h2>' . PHP_EOL;

@@ -2,7 +2,7 @@
 
 /**
  * Write data into a file
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	file_put_contents(__DIR__ . '/testfile2.txt', 'hello!' . PHP_EOL, FILE_APPEND);

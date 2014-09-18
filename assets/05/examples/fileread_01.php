@@ -2,7 +2,7 @@
 
 /**
  * Open a file and show its contents
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	// path to file (relative from this PHP file)

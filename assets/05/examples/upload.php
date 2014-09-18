@@ -2,7 +2,7 @@
 
 /**
  * Basic file upload example
- * @author Bramus Van Damme <bramus.vandamme@kahosl.be>
+ * @author Bramus Van Damme <bramus.vandamme@odisee.be>
  */
 
 	// a file was uploaded
