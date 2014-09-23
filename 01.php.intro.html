@@ -1385,11 +1385,11 @@ array(3) {
 								Use <code>readline()</code> to ask for input whilst the script is runnning
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-interactive.php">&lt;?php
 	$name = readline('What is your name? ');
-	$city = readline('Where to you live? ');
+	$city = readline('Where do you live? ');
 	echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-interactive.php
 What is your name? Bramus
-Where to you live? Vinkt
+Where do you live? Vinkt
 Hello Bramus from Vinkt</code></pre></div>
 							</li>
 						</ul>
@@ -1465,7 +1465,7 @@ stderr world</code></pre></div>
 }
 
 $name = getInput('What is your name?');
-$city = getInput('Where to you live?');
+$city = getInput('Where do you live?');
 echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 							</li>
 						</ul>
@@ -1583,13 +1583,13 @@ Zend Engine v2.4.0, Copyright (c) 1998-2013 Zend Technologies</code></pre></div>
 								</ul>
 							</li>
 							<li>
-								Curly brackets always go on the same line as the keyword
+								Curly braces always go on the same line as the keyword
 							</li>
 							<li>
-								Use <em>identical operatos</em> when comparing variables/values
+								Use <em>identical operators</em> when comparing variables/values with booleans or <code>null</code>
 							</li>
 							<li>
-								Cast variables to prevent stupid errors
+								When necessary cast variables to prevent stupid errors
 							</li>
 							<li>
 								Never use <code>$_REQUEST</code> (see 04.forms)

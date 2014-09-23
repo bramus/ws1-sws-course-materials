@@ -19,5 +19,5 @@
 	}
 
 	$name = getInput('What is your name?');
-	$city = getInput('Where to you live?');
+	$city = getInput('Where do you live?');
 	echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;
