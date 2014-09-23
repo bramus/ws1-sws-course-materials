@@ -1371,11 +1371,11 @@ array(3) {
 								Use <code>readline()</code> to ask for input whilst the script is runnning
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/01/examples/cli-interactive.php">&lt;?php
 	$name = readline('What is your name? ');
-	$city = readline('Where to you live? ');
+	$city = readline('Where do you live? ');
 	echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 								<div class="fragment"><pre class="bigger"><code class="language-php">bramus$ php cli-interactive.php
 What is your name? Bramus
-Where to you live? Vinkt
+Where do you live? Vinkt
 Hello Bramus from Vinkt</code></pre></div>
 							</li>
 						</ul>
@@ -1451,7 +1451,7 @@ stderr world</code></pre></div>
 }
 
 $name = getInput('What is your name?');
-$city = getInput('Where to you live?');
+$city = getInput('Where do you live?');
 echo 'Hello ' . $name . ' from ' . $city . PHP_EOL;</code></pre></div>
 							</li>
 						</ul>
