@@ -20,8 +20,8 @@
 				<dd class="text"><input type="file" id="image" name="image" value="" class="input-text" /></dd>
 
 				<dt class="full clearfix" id="lastrow">
+					<input type="hidden" name="moduleAction" value="processUpload" />
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>
@@ -60,7 +60,6 @@
 	    dump($_FILES);
 
 ?>
-	    
 	</div>
 
 </body>

@@ -127,8 +127,8 @@
 				&lt;dd class=&quot;text&quot;&gt;&lt;textarea name=&quot;remark&quot; id=&quot;remark&quot; rows=&quot;5&quot; cols=&quot;40&quot;&gt;&lt;?php echo htmlentities($remark); ?&gt;&lt;/textarea&gt;&lt;/dd&gt;
 
 				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processForm&quot; /&gt;
 					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
-					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
 				&lt;/dt&gt;
 
 			&lt;/dl&gt;
@@ -142,6 +142,8 @@
 
 <h3>Formchecking</h3>
 
+<p class="warning"><span class="warning-sign">&#8505;</span> Use a hidden input named <code>moduleAction</code> to check if a form was sent or not.</p>
+
 <p class="warning"><span class="warning-sign">&#9888;</span> Always use <code>urlencode()</code> when passing parameters into URLs</p>
 
 <p class="warning"><span class="warning-sign">&#9888;</span> Always use <code>exit()</code> after redirecting using <code>header()</code> to prevent further execution of the script.</p>
@@ -150,10 +152,11 @@
 
 	// initial values
 	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
+	$moduleAction = isset($_POST['moduleAction']) ? (string) $_POST['moduleAction'] : '';
 	$msgName = '*';
 
 	// form is sent: perform formchecking!
-	if (isset($_POST['btnSubmit'])) {
+	if ($moduleAction == 'processForm') {
 
 		$allOk = true;
 
@@ -195,8 +198,8 @@
 				&lt;/dd&gt;
 
 				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processForm&quot; /&gt;
 					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
-					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
 				&lt;/dt&gt;
 
 			&lt;/dl&gt;
@@ -234,8 +237,8 @@
 				&lt;dd class=&quot;text&quot;&gt;&lt;input type=&quot;file&quot; id=&quot;image&quot; name=&quot;image&quot; value=&quot;&quot; class=&quot;input-text&quot; /&gt;&lt;/dd&gt;
 
 				&lt;dt class=&quot;full clearfix&quot; id=&quot;lastrow&quot;&gt;
+					&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processUpload&quot; /&gt;
 					&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
-					&lt;input type=&quot;submit&quot; id=&quot;btnCancel&quot; name=&quot;btnCancel&quot; value=&quot;Cancel&quot; /&gt;
 				&lt;/dt&gt;
 
 			&lt;/dl&gt;

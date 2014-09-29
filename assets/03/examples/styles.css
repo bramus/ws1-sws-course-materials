@@ -89,6 +89,10 @@
 		border: 1px solid #999999;
 	}
 
+	form + form {
+		margin-top: 40px;
+	}
+
 	form h2 {
 		width: 640px;
 		padding: 0 10px;

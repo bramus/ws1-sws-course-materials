@@ -40,6 +40,11 @@
 		echo '<p>Hello ' . htmlentities(stripPostSlashes($_GET['name'])). '</p>';
 	}
 
+	// Age completed
+	else if (isset($_GET['age'])) {
+		echo '<p>Hello, ' . htmlentities(stripPostSlashes($_GET['age'])). ' year old stranger</p>';
+	}
+
 	// Name not completed
 	else {
 		echo '<p>Hello, stranger</p>';
