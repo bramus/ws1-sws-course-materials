@@ -1038,6 +1038,67 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 					</section>
 
 					<section>
+						<h2>Pro tip: hidden action field</h2>
+						<ul>
+							<li class="fragment">Don't trust on the button being submitted and include a hidden <code>moduleAction</code> field</li>
+							<li class="fragment">Bonus: it affords to have one page process multiple forms</li>
+						</ul>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking_multipleforms.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
+
+	// initial values
+	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
+	$age = isset($_POST['age']) ? (string) $_POST['age'] : '';
+	$moduleAction = isset($_POST['moduleAction']) ? (string) $_POST['moduleAction'] : '';
+	$msgName = '*';
+	$msgAge = '*';
+
+	// form #1 is sent: perform formchecking!
+	if ($moduleAction == 'processName') {
+
+		// ...
+
+	}
+
+	// form #2 is sent: perform formchecking!
+	if ($moduleAction == 'processAge')) {
+
+		// ...
+
+	}
+
+	// ...
+
+?&gt;&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+...
+&lt;body&gt;
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+		...
+
+		&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processName&quot; /&gt;
+		&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+
+		...
+
+	&lt;/form&gt;
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+		...
+
+		&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processAge&quot; /&gt;
+		&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+
+		...
+
+	&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+					</section>
+
+					<section>
 						<h2>Sidenote: urlencode</h2>
 						<ul>
 							<li class="fragment">
@@ -1105,6 +1166,7 @@ exit(0); // do not forget to exit after redirect</code></pre></div>
 			&lt;dd&gt;&lt;input type=&quot;file&quot; id=&quot;image&quot; name=&quot;image&quot; value=&quot;&quot; /&gt;&lt;/dd&gt;
 
 			&lt;dt&gt;
+				&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processUpload&quot; /&gt;
 				&lt;input type=&quot;submit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
 			&lt;/dt&gt;
 
