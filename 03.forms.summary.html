@@ -152,6 +152,7 @@
 		// end of form check. If $allOk still is true, then the form was sent in correctly
 		if ($allOk === true) {
 			header('Location: formchecking_thanks.php?name=' . urlencode($name));
+			exit();
 		}
 
 	}
