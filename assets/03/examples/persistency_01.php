@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+
+	// Our logic here ...
+
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
@@ -90,7 +94,7 @@
 		dump($_GET);
 
 ?>
-		
+
 	</div>
 
 </body>

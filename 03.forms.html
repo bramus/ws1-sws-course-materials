@@ -652,58 +652,76 @@
 				</section>
 
 
+				<!-- Processing forms -->
+				<section>
+
+					<section>
+						<h2>PHP Form Processing</h2>
+					</section>
+
+					<section>
+						<h2>Sending forms</h2>
+						<ul>
+							<li class="fragment">
+								The <code>action</code> attribute defines where to send a form to
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								In PHP we'll opt to send a form itself
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Instead of typing the name of the file in manually, you can let PHP automatically output the URL of the page itself into the <code>action</code> attribute's value
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+	...
+&lt;/form&gt;</code></pre></div>
+							</li>
+						</ul>
+						<footer class="fragment"><em>&rarr; This way we can put a file anywhere on the server, it will always submit to itself</em></footer>
+					</section>
+
+					<section>
+						<h2>Default code structure</h2>
+						<ul>
+							<li class="fragment">
+								A PHP page typically consists of two parts:
+								<ol>
+									<li>PHP Logic at the top</li>
+									<li>HTML <em>(with a little PHP in between)</em> at the bottom</li>
+								</ol>
+							</li>
+							<li class="fragment" style="margin-top: 1em">
+								In the first part we'll:
+								<ul>
+									<li class="fragment">
+										Get all values from <code>$_GET</code> or <code>$_POST</code>
+									</li>
+									<li class="fragment">
+										Process the form (if it was submitted)
+									</li>
+								</ul>
+							</li>
+							<li class="fragment" style="margin-top: 1em">
+								In the second part we'll:
+								<ul>
+									<li class="fragment">
+										Put our HTML
+									</li>
+									<li class="fragment">
+										Use PHP to persist the values entered (if it was submitted)
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<footer class="fragment"><em>The line separating the two can be recognized by <code>?&gt;&lt;!DOCTYPE html&gt;</code></em></footer>
+					</section>
+				</section>
+
+
 
 				<!-- Persistency -->
 				<section>
 
 					<section>
-						<h2>Persistency</h2>
-					</section>
-
-					<section>
-						<h2>Flow / Code structure</h2>
-						<ul>
-							<li class="fragment">
-								In web development, we most of the time send a form to itself and follow this code structure
-								<ol style="margin-top: 1em;">
-									<li class="fragment">
-										extract needed variables from <code>$_GET</code>
-									</li>
-									<li class="fragment">
-										if the form was submitted
-										<ol>
-											<li class="fragment">if form <code>method</code> is <code>POST</code>: extract needed values from <code>$_POST</code>,<br />sometimes overwriting those extracted in #1</li>
-											<li class="fragment">
-												check all values for validity
-												<ul>
-													<li class="fragment">
-														the form checks out:
-														<ul>
-															<li>perform an action <em>(e.g. database insert, send an e-mail)</em></li>
-															<li>redirect to somewhere else <em>(viz. stop execution of this script)</em></li>
-														</ul>
-													</li>
-													<li class="fragment">
-														the form does not check out:
-														<ul>
-															<li>build a list of errors</li>
-															<li>continue with this script</li>
-														</ul>
-													</li>
-												</ul>
-											</li>
-										</ol>
-									</li>
-									<li class="fragment">
-										show the form
-										<ul>
-											<li>also show errors (if any)</li>
-											<li>persist values</li>
-										</ul>
-									</li>
-								</ol>
-							</li>
-						</ul>
+						<h2>Persisting form values</h2>
 					</section>
 
 					<section>
@@ -711,13 +729,7 @@
 
 						<ul>
 							<li class="fragment">
-								Persistency = After having submitted the form to itself, make it show the values you entered
-							</li>
-							<li class="fragment" style="margin-top: 1em;">
-								You can let PHP automatically output the URL of the page itself instead of typing it manually
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_01.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
-	...
-&lt;/form&gt;</code></pre></div>
+								= After having submitted the form to itself, make it show the values you entered again.
 							</li>
 							<li class="fragment" style="margin-top: 1em;">
 								Different types of inputs (text, checkbox, dropdown) require different persistency methods
@@ -733,16 +745,27 @@
 								<ul>
 									<li class="fragment">Just output the sent-in value</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_02.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_02.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
+
+	// Get variable values from $_GET
+	$name = $_GET['name'];
+	$pass = $_GET['pass'];
+	$remark = $_GET['remark'];
+
+?&gt;&lt;DOCTYPE html&gt;
+
+...
+
+&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
-		value=&quot;&lt;?php echo $_GET['name']; ?&gt;&quot; /&gt;
+		value=&quot;&lt;?php echo $name; ?&gt;&quot; /&gt;
 
 	&lt;input type=&quot;password&quot; id=&quot;pass&quot; name=&quot;pass&quot;
-			value=&quot;&lt;?php echo $_GET['pass']; ?&gt;&quot; /&gt;
+			value=&quot;&lt;?php echo $pass; ?&gt;&quot; /&gt;
 
 	&lt;textarea name=&quot;remark&quot; id=&quot;remark&quot; rows=&quot;5&quot;
-		cols=&quot;40&quot;&gt;&lt;?php echo $_GET['remark']; ?&gt;&lt;/textarea&gt;
+		cols=&quot;40&quot;&gt;&lt;?php echo $remark; ?&gt;&lt;/textarea&gt;
 
 &lt;/form&gt;</code></pre></div>
 							</li>
@@ -758,15 +781,24 @@
 									<li class="fragment">For each <code>&lt;option&gt;</code>, check if the value matches the sent-in value</em></li>
 									<li class="fragment">If so: set the <code>selected=&quot;selected&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_03.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
+
+	// Get variable values from $_GET
+	$cont = (int) $_GET['cont'];
+
+?&gt;&lt;DOCTYPE html&gt;
+
+...
+
+&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;select name=&quot;cont&quot; id=&quot;cont&quot;&gt;
-		&lt;option value=&quot;0&quot;&lt;?php if ((int) $_GET['cont'] === 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
-		&lt;option value=&quot;1&quot;&lt;?php if ((int) $_GET['cont'] === 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
-		&lt;option value=&quot;2&quot;&lt;?php if ((int) $_GET['cont'] === 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
-		&lt;option value=&quot;3&quot;&lt;?php if ((int) $_GET['cont'] === 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
-		&lt;option value=&quot;4&quot;&lt;?php if ((int) $_GET['cont'] === 4) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Asia&lt;/option&gt;
-		&lt;option value=&quot;5&quot;&lt;?php if ((int) $_GET['cont'] === 5) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Europe&lt;/option&gt;
-		&lt;option value=&quot;6&quot;&lt;?php if ((int) $_GET['cont'] === 6) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Oceania&lt;/option&gt;
+		&lt;option value=&quot;0&quot;&lt;?php if ($cont == 0) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Please select...&lt;/option&gt;
+		&lt;option value=&quot;1&quot;&lt;?php if ($cont == 1) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Africa&lt;/option&gt;
+		&lt;option value=&quot;2&quot;&lt;?php if ($cont == 2) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;America&lt;/option&gt;
+		&lt;option value=&quot;3&quot;&lt;?php if ($cont == 3) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Antarctica&lt;/option&gt;
+		&lt;option value=&quot;4&quot;&lt;?php if ($cont == 4) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Asia&lt;/option&gt;
+		&lt;option value=&quot;5&quot;&lt;?php if ($cont == 5) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Europe&lt;/option&gt;
+		&lt;option value=&quot;6&quot;&lt;?php if ($cont == 6) { echo ' selected=&quot;selected&quot;'; } ?&gt;&gt;Oceania&lt;/option&gt;
 	&lt;/select&gt;
 &lt;/form&gt;</code></pre></div>
 							</li>
@@ -782,19 +814,29 @@
 									<li class="fragment">For each radiobutton, check if the value matches the sent-in value</li>
 									<li class="fragment">If so: set the <code>checked=&quot;checked&quot;</code> attribute</li>
 								</ul>
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_04.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
 
-	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&lt;?php if ($_GET['gender']
-		 === 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
-	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;&lt;?php if ($_GET['gender']
-		 === 'female') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	// Get variable values from $_GET
+	$gender = $_GET['gender'];
+	$meals = $_GET['meals'];
+
+?&gt;&lt;DOCTYPE html&gt;
+
+...
+
+&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
+
+	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;male&quot;&lt;?php if ($gender
+		 == 'male') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+	&lt;input type=&quot;radio&quot; name=&quot;gender&quot; value=&quot;female&quot;&lt;?php if ($gender
+		 == 'female') { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
 
 	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;breakfast&quot;&lt;?php if (in_array(
-		'breakfast', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+		'breakfast', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
 	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;lunch&quot;&lt;?php if (in_array(
-		'lunch', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+		'lunch', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
 	&lt;input type=&quot;checkbox&quot; name=&quot;meals[]&quot; value=&quot;dinner&quot;&lt;?php if (in_array(
-		'dinner', $_GET['meals'])) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
+		'dinner', $meals)) { echo ' checked=&quot;checked&quot;'; } ?&gt; /&gt;
 
 &lt;/form&gt;</code></pre></div>
 							</li>
@@ -814,13 +856,13 @@
 								<ul>
 									<li class="fragment">Undefined Index</li>
 									<li class="fragment"><code>htmlentities()</code></li>
-									<li class="fragment">Magic Quotes (pre PHP 5.4)</li>
+									<li class="fragment"><del>Magic Quotes (pre PHP 5.4)</del></li>
 								</ul>
 							</li>
 					</section>
 
 					<section>
-						<h2>Pitfall: Undefined Index</h2>
+						<h2>Pitfall: Undefined Index (1)</h2>
 						<ul>
 							<li class="fragment">
 								When not suppressing errors, with exactly the same PHP code, we get a rather nasty result
@@ -839,12 +881,27 @@
 									</li>
 								</ul>
 							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Pitfall: Undefined Index (2)</h2>
+						<ul>
 							<li class="fragment">
 								Fix: check with <code>isset()</code> if a variable exists before using it
-								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
-	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
-	value=&quot;&lt;?php echo isset($_GET['name']) ? $_GET['name'] : ''; ?&gt;&quot; /&gt;
-&lt;/form&gt;</code></pre></div>
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;?php
+
+	$name = isset($_GET['name']) ? $_GET['name'] : '';
+	...
+?&gt;&lt;DOCTYPE html&gt;</code></pre></div>
+							</li>
+							<li class="fragment" style="margin-top: 1em">
+								Caution: make sure the default value has the correct type
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;?php
+
+	$meals = isset($_GET['meals']) ? (array) $_GET['meals'] : array();
+	...
+?&gt;&lt;DOCTYPE html&gt;</code></pre></div>
 							</li>
 						</ul>
 					</section>
@@ -857,9 +914,6 @@
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_06.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	(same HTML code as before)
 &lt;/form&gt;</code></pre></div>
-							</li>
-							<li class="fragment">
-								Problem: quotes break the HTML code
 								<ul>
 									<li class="fragment">
 										When entering <code>hello &quot; /&gt; test</code> we get this HTML
@@ -867,11 +921,11 @@
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								Fix: convert special characters with <code>htmlentities()</code> to their HTML safe / encoded version
+							<li class="fragment" style="margin-top: 1em;">
+								Fix: convert special characters with <code>htmlentities()</code> to their HTML safe / encoded version <strong>when outputting on screen</strong>
 								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/persistency_07.php" data-overlay-height="600">&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;get&quot;&gt;
 	&lt;input type=&quot;text&quot; id=&quot;name&quot; name=&quot;name&quot;
-	value=&quot;&lt;?php echo isset($_GET['name']) ? htmlentities($_GET['name']) : ''; ?&gt;&quot; /&gt;
+	value=&quot;&lt;?php echo htmlentities($name); ?&gt;&quot; /&gt;
 &lt;/form&gt;</code></pre></div>
 							</li>
 						</ul>
@@ -892,7 +946,7 @@
 								This kind of attack is known as <strong>cross-site scripting</strong> or <strong>XSS</strong>
 								<ul>
 									<li class="fragment">XSS is <a href="http://blogs.msdn.com/b/ie/archive/2012/09/10/xss-trends-and-internet-explorer.aspx">the most common vulnerability of websites</a>!</li>
-									<!-- <li class="fragment">Example: <a href="http://blog.twitter.com/2010/09/all-about-onmouseover-incident.html">Twitter onMouseOver incident</a></li> -->
+									<li class="fragment">Example: <a href="http://blog.twitter.com/2010/09/all-about-onmouseover-incident.html">Twitter onMouseOver incident</a></li>
 									<li class="fragment">Example: <a href="http://praetorianprefect.com/archives/2010/06/persistent-xss-on-twitter-com/">Persistent XSS on Twitter</a></li>
 								</ul>
 							</li>
@@ -900,7 +954,7 @@
 						<footer class="fragment"><em style="color: #F55;">!! If you don't prevent XSS in the assignments or your exam, you will fail them !!</em></footer>
 					</section>
 
-					<section>
+<!-- 					<section>
 						<h2>Pitfall: Magic Quotes (1)</h2>
 						<ul>
 							<li class="fragment">
@@ -977,7 +1031,7 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 						<footer class="fragment" style="line-height: 1.2;">
 							Note: Always work with the raw variables in your scripts.<br />Only use <code>htmlentities()</code> when outputting it on screen
 						</footer>
-					</section>
+					</section> -->
 
 				</section>
 
@@ -991,6 +1045,27 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 
 					<section>
 						<h2>Formchecking</h2>
+						<ul>
+							<li class="fragment">= Check all values of a sent form for validity</li>
+							<li class="fragment" style="margin-top: 1em;">
+								If all checks out
+								<ol>
+									<li>Perform an action <em>(e.g. send an e-mail, insert a record into a database, etc.)</em></li>
+									<li>Redirect to a thanks/OK page using <code>header('Location: ...');</code></li>
+								</ol>
+							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								If it doesn't check out
+								<ol>
+									<li>Build a list of error messages</li>
+									<li>Continue with the script an show the form, including its error messages</li>
+								</ol>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Why formchecking?</h2>
 						<ul>
 							<li class="fragment">
 								Don't ever trust user input
@@ -1012,62 +1087,78 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 					</section>
 
 					<section>
-						<h2>Simple Example</h2>
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking.php" data-overlay-height="600">&lt;?php
+						<h2>How to know if a form was sent? (1)</h2>
+						<ul>
+							<li class="fragment">
+								Remember: Clicked buttons are also sent
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 
-	// initial values
-	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
-	$msgName = '*';
-
-	// form is sent
+	// form was sent!
 	if (isset($_POST['btnSubmit'])) {
 
-		$allOk = true;
-
-		// name not set, or empty
-		if (trim($name) == '') {
-			$msgName = 'Please enter your name';
-			$allOk = false;
-		}
-
-		// end of form check. If $allOk still is true, then the form was sent in correctly
-		if ($allOk === true) {
-			header('Location: formchecking_thanks.php?name=' . urlencode($_POST['name']));
-			exit();
-		}
+		// @TODO: put formchecking logic here
 
 	}
 
 	...</code></pre></div>
+
+							</li>
+						</ul>
 					</section>
 
 					<section>
-						<h2>Pro tip: hidden action field</h2>
+						<h2>How to know if a form was sent? (2)</h2>
 						<ul>
-							<li class="fragment">Don't trust on the button being submitted and include a hidden <code>moduleAction</code> field</li>
-							<li class="fragment">Bonus: it affords to have one page process multiple forms</li>
-						</ul>
-						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking_multipleforms.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
+							<li class="fragment">
+								Pro-tip: Use a hidden field instead of trusting the button being clicked
+								<div class="fragment"><pre class="bigger"><code class="language-php">&lt;?php
 
-	// initial values
-	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
-	$age = isset($_POST['age']) ? (string) $_POST['age'] : '';
-	$moduleAction = isset($_POST['moduleAction']) ? (string) $_POST['moduleAction'] : '';
-	$msgName = '*';
-	$msgAge = '*';
+	$moduleAction = isset($_POST['moduleAction']) ? $_POST['moduleAction'] : '';
 
-	// form #1 is sent: perform formchecking!
+	// Form was sent!
 	if ($moduleAction == 'processName') {
-
-		// ...
-
+		// @TODO: put formchecking logic here
 	}
 
-	// form #2 is sent: perform formchecking!
+?&gt;&lt;!DOCTYPE html&gt;
+
+	...
+
+	&lt;form action=&quot;&lt;?php echo $_SERVER['PHP_SELF']; ?&gt;&quot; method=&quot;post&quot;&gt;
+
+		...
+
+		&lt;input type=&quot;hidden&quot; name=&quot;moduleAction&quot; value=&quot;processName&quot; /&gt;
+		&lt;input type=&quot;submit&quot; id=&quot;btnSubmit&quot; name=&quot;btnSubmit&quot; value=&quot;Send&quot; /&gt;
+
+		...
+
+	&lt;/form&gt;</code></pre></div>
+
+							</li>
+
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>How to know if a form was sent? (3)</h2>
+						<ul>
+							<li class="fragment" style="margin-top: 1em">
+								Bonus: it affords to have one page process multiple forms
+								<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking_multipleforms.php" data-overlay-height="600" style="height: 350px; overflow-y: scroll;">&lt;?php
+
+	// initial values
+	$moduleAction = isset($_POST['moduleAction']) ? $_POST['moduleAction'] : '';
+
+	// form #1 was sent
+	if ($moduleAction == 'processName') {
+		// @TODO: put formchecking (form #1 only) logic here
+	}
+
+	// form #2 was sent
 	if ($moduleAction == 'processAge')) {
-
-		// ...
-
+		// @TODO: put formchecking (form #2 only) logic here
 	}
 
 	// ...
@@ -1100,6 +1191,39 @@ $_COOKIE = array_map('stripPostSlashes', $_COOKIE);
 	&lt;/form&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></div>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Formchecking Example (Simplified)</h2>
+						<div class="fragment"><pre class="bigger"><code class="language-php" data-overlay-example="assets/03/examples/formchecking.php" data-overlay-height="600">&lt;?php
+
+	// initial values
+	$moduleAction = isset($_POST['moduleAction']) ? $_POST['moduleAction'] : '';
+	$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
+	$msgName = '*';
+
+	// form is sent
+	if ($moduleAction == 'processName') {
+
+		$allOk = true;
+
+		// name not set, or empty
+		if (trim($name) == '') {
+			$msgName = 'Please enter your name';
+			$allOk = false;
+		}
+
+		// end of form check.
+		// If $allOk still is true, then the form was sent in correctly
+		if ($allOk === true) {
+			header('Location: formchecking_thanks.php?name=' .urlencode($name));
+			exit();
+		}
+
+	}
+	...</code></pre></div>
 					</section>
 
 					<section>
@@ -1146,7 +1270,7 @@ exit(0); // do not forget to exit after redirect</code></pre></div>
 									<li class="fragment">Set the form <code>method</code> to <code>post</code></li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Handling file uploads
 								<ul>
 									<li>PHP will fill the <code>$_FILES</code> superglobal with info about each file sent</li>
