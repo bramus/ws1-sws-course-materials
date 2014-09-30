@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+<?php
+
+	// Disable Chrome's built-in XSS protection (education purposes)
+	header('X-XSS-Protection: 0');
+
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
