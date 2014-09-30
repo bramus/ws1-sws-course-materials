@@ -57,7 +57,6 @@
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>
