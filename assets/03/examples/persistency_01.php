@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+<?php
+
+	// Our logic here ...
+
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
@@ -52,7 +56,6 @@
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>
@@ -91,7 +94,7 @@
 		dump($_GET);
 
 ?>
-		
+
 	</div>
 
 </body>

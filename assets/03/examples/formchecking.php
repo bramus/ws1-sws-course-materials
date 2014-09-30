@@ -5,11 +5,12 @@
 	 */
 
 		// initial values
+		$moduleAction = isset($_POST['moduleAction']) ? $_POST['moduleAction'] : '';
 		$name = isset($_POST['name']) ? (string) $_POST['name'] : '';
 		$msgName = '*';
 
 		// form is sent: perform formchecking!
-		if (isset($_POST['btnSubmit'])) {
+		if ($moduleAction == 'processName') {
 
 			$allOk = true;
 
@@ -22,6 +23,7 @@
 			// end of form check. If $allOk still is true, then the form was sent in correctly
 			if ($allOk === true) {
 				header('Location: formchecking_thanks.php?name=' . urlencode($name));
+				exit();
 			}
 
 		}
@@ -50,8 +52,8 @@
 				</dd>
 
 				<dt class="full clearfix" id="lastrow">
+					<input type="hidden" name="moduleAction" value="processName" />
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>

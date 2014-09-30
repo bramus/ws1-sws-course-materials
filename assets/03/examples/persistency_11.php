@@ -1,9 +1,9 @@
 <?php
 
-	/**
-	 * Get default values
-	 */
+	// Show all errors (for educational purposes)
+	ini_set('error_reporting', E_ALL);
 
+	// Get all variables
 	$name = isset($_GET['name']) ? (string) $_GET['name'] : '';
 	$pass = isset($_GET['pass']) ? (string) $_GET['pass'] : '';
 	$gender = isset($_GET['gender']) ? (string) $_GET['gender'] : '';
@@ -43,13 +43,13 @@
 				<dt><label for="cont">Continent</label></dt>
 				<dd>
 					<select name="cont" id="cont">
-						<option value="0"<?php if ($cont === 0) { echo ' selected="selected"'; } ?>>Please select...</option>
-						<option value="1"<?php if ($cont === 1) { echo ' selected="selected"'; } ?>>Africa</option>
-						<option value="2"<?php if ($cont === 2) { echo ' selected="selected"'; } ?>>America</option>
-						<option value="3"<?php if ($cont === 3) { echo ' selected="selected"'; } ?>>Antarctica</option>
-						<option value="4"<?php if ($cont === 4) { echo ' selected="selected"'; } ?>>Asia</option>
-						<option value="5"<?php if ($cont === 5) { echo ' selected="selected"'; } ?>>Europe</option>
-						<option value="6"<?php if ($cont === 6) { echo ' selected="selected"'; } ?>>Oceania</option>
+						<option value="0"<?php if ($cont == 0) { echo ' selected="selected"'; } ?>>Please select...</option>
+						<option value="1"<?php if ($cont == 1) { echo ' selected="selected"'; } ?>>Africa</option>
+						<option value="2"<?php if ($cont == 2) { echo ' selected="selected"'; } ?>>America</option>
+						<option value="3"<?php if ($cont == 3) { echo ' selected="selected"'; } ?>>Antarctica</option>
+						<option value="4"<?php if ($cont == 4) { echo ' selected="selected"'; } ?>>Asia</option>
+						<option value="5"<?php if ($cont == 5) { echo ' selected="selected"'; } ?>>Europe</option>
+						<option value="6"<?php if ($cont == 6) { echo ' selected="selected"'; } ?>>Oceania</option>
 					</select>
 				</dd>
 
@@ -65,7 +65,6 @@
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>
@@ -104,7 +103,7 @@
 		dump($_GET);
 
 ?>
-		
+
 	</div>
 
 </body>

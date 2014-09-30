@@ -1,4 +1,14 @@
-<?php ini_set('error_reporting', 0); ?><!DOCTYPE html>
+<?php
+
+	// Suppress errors (for educational purposes)
+	ini_set('error_reporting', 0);
+
+	// Get variables
+	$name = $_GET['name'];
+	$pass = $_GET['pass'];
+	$remark = $_GET['remark'];
+
+?><!DOCTYPE html>
 <html>
 <head>
 	<title>Testform</title>
@@ -16,10 +26,10 @@
 			<dl class="clearfix">
 
 				<dt><label for="name">Name</label></dt>
-				<dd class="text"><input type="text" id="name" name="name" value="<?php echo $_GET['name']; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="text" id="name" name="name" value="<?php echo $name; ?>" class="input-text" /></dd>
 
 				<dt><label for="pass">Password</label></dt>
-				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo $_GET['pass']; ?>" class="input-text" /></dd>
+				<dd class="text"><input type="password" id="pass" name="pass" value="<?php echo $pass; ?>" class="input-text" /></dd>
 
 				<dt><label>Gender</label></dt>
 				<dd>
@@ -48,11 +58,10 @@
 				</dd>
 
 				<dt><label for="remark">Remark</label></dt>
-				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo $_GET['remark']; ?></textarea></dd>
+				<dd class="text"><textarea name="remark" id="remark" rows="5" cols="40"><?php echo $remark; ?></textarea></dd>
 
 				<dt class="full clearfix" id="lastrow">
 					<input type="submit" id="btnSubmit" name="btnSubmit" value="Send" />
-					<input type="submit" id="btnCancel" name="btnCancel" value="Cancel" />
 				</dt>
 
 			</dl>
@@ -91,7 +100,7 @@
 		dump($_GET);
 
 ?>
-		
+
 	</div>
 
 </body>
