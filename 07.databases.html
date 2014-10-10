@@ -1233,6 +1233,15 @@ foreach ($comments as $c) {
 									<li>If you don't, it's very easy for a hacker to steal lots of passwords if he ever got access to your database</li>
 								</ul>
 							</li>
+							<li class="fragment" style="margin-top: 1em;">
+								Beware of old code/examples:
+								<ul>
+									<li class="fragment">
+										<code>md5()</code><small><a href="http://php.net/md5">&#9873;</a></small> and <code>sha1()</code><small><a href="http://php.net/sha1">&#9873;</a></small> <a href="http://www.slideshare.net/ircmaxell/password-storage-and-attacking-in-php">are outdated/too weak</a>, don't use them
+									</li>
+									<li class="fragment"><code>crypt()</code><small><a href="http://php.net/crypt">&#9873;</a></small> strong but no long preferred</li>
+								</uL>
+							</li>
 						</ul>
 
 						<footer class="fragment"><em style="color: #F55;">!! If you don't encrypt your passwords in the assignments or your exam, you will fail them !!</em></footer>
@@ -1242,27 +1251,25 @@ foreach ($comments as $c) {
 						<h2>Encrypt passwords (2)</h2>
 						<ul>
 							<li class="fragment">
-								Use <code>crypt()</code><small><a href="http://php.net/crypt">&#9873;</a></small>
+								Use <code>password_hash()</code><small><a href="http://php.net/password_hash">&#9873;</a></small> and <code>password_verify()</code><small><a href="http://php.net/password_verify">&#9873;</a></small>
 								<ul>
-									<li class="fragment">Cannot be decrypted and uses <em>salts</em></li>
-									<li class="fragment">
-										Encrypting a password:
-										<pre class="bigger"><code class="language-php">echo crypt('bramus'); // store this into your DB</code></pre>
-									</li>
-									<li class="fragment">
-										Verifying a password:
-										<pre class="bigger"><code class="language-php">$pass = isset($_POST['password']) ? $_POST['password'] : '';
-$encrypted = '$1$B7.GKnm5$WjRbbLV.9ryoLbP8VWf4R.'; // bramus
-
-if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
-									</li>
+									<li class="fragment">Uses a strong one-way hashing algorithm</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								<code>md5()</code><small><a href="http://php.net/md5">&#9873;</a></small> and <code>sha1()</code><small><a href="http://php.net/sha1">&#9873;</a></small> are outdated/too weak, don't use them
+							<li class="fragment" style="margin-top: 1em">
+								Encrypting a password:
+								<pre class="bigger"><code class="language-php">echo password_hash('bramus', PASSWORD_DEFAULT); // store this into your DB</code></pre>
 							</li>
-							<li class="fragment">Since PHP 5.5, use <code>password_hash()</code><small><a href="http://php.net/password_hash">&#9873;</a></small></li>
+							<li class="fragment" style="margin-top: 1em">
+								Verifying a password:
+								<pre class="bigger"><code class="language-php">$pass = isset($_POST['password']) ? $_POST['password'] : '';
+// Value as stored in database
+$encrypted = '$2y$10$Ae/ZoEnFze9SZKcgbNBluOObABeejekNoJ2iNmyf4QM5IYSIyzFPe';
+
+if (password_verify($pass, $encrypted)) { &hellip; }</code></pre>
+							</li>
 						</ul>
+						<footer class="fragment"><em>Note: these functions are new since PHP 5.5. When using 5.4, include <a href="https://github.com/ircmaxell/password_compat/blob/master/lib/password.php">this polyfill</a>.</em></footer>
 					</section>
 
 				</section>
