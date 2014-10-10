@@ -269,12 +269,9 @@
 
 						<ul>
 							<li class="fragment">
-								Connect using by creating a new instance of <code>PDO</code>
-							</li>
-							<li class="fragment">
-								Parameters:
+								Connect by creating a new instance of <code>PDO</code> with params:
 								<ol>
-									<li>A <abbr title="Data Source Name">DSN</abbr>, containing the database host and schema</li>
+									<li>A <abbr title="Data Source Name">DSN</abbr>, containing the database host, schema, and charset</li>
 									<li>The username to use when connecting to the DBMS</li>
 									<li>The password to use when connecting to the DBMS</li>
 								</ol>
@@ -284,14 +281,12 @@
 
 	require_once 'config.php';
 
-	// Make Connection
-	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8mb4', DB_USER, DB_PASS);
 
 	echo 'Connected to the database';
 
-	// ... your query magic here
-
 //EOF</code></pre></div>
+						<footer class="fragment"><em>(More on that charset later)</em></footer>
 					</section>
 
 					<section>
@@ -334,7 +329,7 @@
 	require_once 'config.php';
 
 	// Make Connection
-	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8mb4', DB_USER, DB_PASS);
 
 	echo 'Connected to the database';
 
@@ -372,7 +367,7 @@
 								<div class="fragment">
 
 							<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/02b.php">try {
-	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8mb4', DB_USER, DB_PASS);
 } catch (Exception $e) {
 	exit('Could not connect to database server or access database');
 }</code></pre>
@@ -404,7 +399,7 @@
 	require_once 'config.php';
 
 	try {
-		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8mb4', DB_USER, DB_PASS);
 	} catch (Exception $e) {
 		showDbError('connect');
 	}
@@ -443,7 +438,7 @@
 	}
 
 	try {
-		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8', DB_USER, DB_PASS);
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=does_not_exist;charset=utf8mb4', DB_USER, DB_PASS);
 	} catch (Exception $e) {
 		showDbError('connect', $e->getMessage());
 	}</code></pre>
@@ -529,7 +524,7 @@ var_dump($stmt);</code></pre>
 							<li class="fragment" style="margin-top: 1em;">
 								Call <code>PDO::setAttribute()</code><small><a href="http://www.php.net/manual/en/pdo.setattribute.php">&#9873;</a></small> to change the error mode so that exceptions are thrown when a faulty query is executed
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/07/examples/03c.php">try {
-	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8mb4', DB_USER, DB_PASS);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (Exception $e) {
 	showDbError('connect', $e->getMessage());
@@ -712,7 +707,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 								<ul>
 									<li class="fragment">
 										Charset must be set on the DSN!
-										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8mb4', DB_USER, DB_PASS);
 </code></pre>
 									</li>
 									<li class="fragment">
@@ -745,7 +740,7 @@ $stmt = $db->exec('DELETE FROM inexistent_table WHERE user_id = 10');</code></pr
 										You instruct it to disable emulated prepares using <code style="white-space: nowrap; font-size: 70%;">$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);</code>
 										<pre class="bigger"><code class="language-php">// Make Connection
 try {
-	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+	$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME . ';charset=utf8mb4', DB_USER, DB_PASS);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (Exception $e) {
@@ -992,27 +987,53 @@ echo 'Deleted ' . $stmt->rowCount() . ' rows';</code></pre>
 								In short: Use <code>UTF-8</code>, everywhere.
 								<ol>
 									<li class="fragment">
-										DB Schema and Tables: use <code>utf8_general_ci</code>
+										DB Schema and Tables
+									</li>
+									<li class="fragment">
+										DB Connection
+									</li>
+									<li class="fragment">
+										HTML charset
+									</li>
+								</ol>
+							</li>
+							<li class="fragment" style="margin-top: 1em">If you omit one of them, it will not work as expected.</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>UTF-8, everywhere</h2>
+								<ol>
+									<li class="fragment">
+										DB Schema and Tables: use <code>utf8mb4</code>/<code>utf8mb4_unicode_ci</code>
 										<pre class="bigger"><code>CREATE DATABASE `mydb`
-DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</code></pre>
+DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;</code></pre>
 										<pre class="bigger"><code>CREATE TABLE IF NOT EXISTS `records` (
 	`id` INT(10) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;</code></pre>
+DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;</code></pre>
 									</li>
 									<li class="fragment">
 										DB Connection
-										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);</code></pre>
+										<pre class="bigger"><code class="language-php">$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8mb4', DB_USER, DB_PASS);</code></pre>
 									</li>
 									<li class="fragment">
 										HTML charset
 										<pre class="bigger"><code class="language-html dontrun">&lt;meta charset=&quot;utf-8&quot; /&gt;</code></pre>
 									</li>
 								</ol>
-							</li>
+					</section>
+
+					<section>
+						<h2>UTF-8 charset in MySQL, sidenote</h2>
+						<ul>
+							<li class="fragment">MySQL sports multiple UTF-8 character sets</li>
+							<li class="fragment" style="margin-top: 1em">The original UTF-8 charset supported (<code>utf8</code>) was incomplete: it didn't support astral symbols <em>(= <a href="http://www.grumdrig.com/emoji-list/">emoji</a>)</em>, which require 4 byte encoding</li>
+							<li class="fragment" style="margin-top: 1em">Fixed in MySQL 5.5.3 by the addition of <code>utf8mb4</code> charset<br />&rarr; Always use <code>utf8mb4</code></li>
 						</ul>
+						<footer class="fragment">More info: <a href="http://mathiasbynens.be/notes/mysql-utf8mb4">http://mathiasbynens.be/notes/mysql-utf8mb4</a></footer>
 					</section>
 
 					<section>
@@ -1315,6 +1336,7 @@ if (crypt($pass, $encrypted) == $encrypted) { &hellip; }</code></pre>
 							<li><a href="http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/">http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/</a></li>
 							<li><a href="http://www.kitebird.com/articles/php-pdo.html">http://www.kitebird.com/articles/php-pdo.html</a></li>
 							<li><a href="http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string">http://shiflett.org/blog/2006/jan/addslashes-versus-mysql-real-escape-string</a></li>
+							<li><a href="http://www.toptal.com/php/a-utf-8-primer-for-php-and-mysql">http://www.toptal.com/php/a-utf-8-primer-for-php-and-mysql</a></li>
 						</ul>
 					</section>
 				</section>

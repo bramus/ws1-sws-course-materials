@@ -16,7 +16,7 @@
 
 	// Make Connection
 	try {
-		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8', DB_USER, DB_PASS);
+		$db = new PDO('mysql:host=' . DB_HOST .';dbname=' . DB_NAME_FF . ';charset=utf8mb4', DB_USER, DB_PASS);
 	} catch (Exception $e) {
 		showDbError('connect', $e->getMessage());
 	}
