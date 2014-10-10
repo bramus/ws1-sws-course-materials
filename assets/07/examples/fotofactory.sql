@@ -9,12 +9,12 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
--- 
+--
 -- Database: `fotofactory`
--- 
+--
 
 DROP DATABASE IF EXISTS fotofactory;
-CREATE DATABASE fotofactory;
+CREATE DATABASE fotofactory DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 USE fotofactory;
 
 -- --------------------------------------------------------
@@ -29,7 +29,7 @@ CREATE TABLE `collections` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `collections`
@@ -51,7 +51,7 @@ CREATE TABLE `comments` (
   `comment` text NOT NULL,
   `when` datetime NOT NULL,
   PRIMARY KEY (`photo_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `comments`
@@ -68,7 +68,7 @@ CREATE TABLE `interests` (
   `user_id` int(11) NOT NULL,
   `interest` enum('nature','people','still lives','abstract') NOT NULL,
   PRIMARY KEY (`user_id`,`interest`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `interests`
@@ -94,7 +94,7 @@ CREATE TABLE `photos` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `collection_id` (`collection_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=MyISAM  DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `photos`
@@ -125,7 +125,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `equipment` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
