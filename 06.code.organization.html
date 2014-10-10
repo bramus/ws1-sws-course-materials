@@ -202,8 +202,8 @@
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">I bet you can guess what <code>require_once</code> does</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">I bet you can guess what <code>require_once</code> does</li>
+							<li class="fragment" style="margin-top: 1em;">
 								Best practice: always use <code>require</code> or <code>require_once</code> instead of <code>include*</code>
 							</li>
 						</ul>
@@ -229,10 +229,10 @@
 									<li>&ldquo;<em>Every piece of knowledge must have a single, unambiguous, authoritative representation within a system</em>&rdquo;</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								If you have two files in your project which contain the same function/value you're not DRY, but WET <em>(Write Everything Twice)</em>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								One of the ways to remain DRY is to work with includes
 							</li>
 						</ul>
@@ -240,14 +240,14 @@
 
 					<section>
 						<h2>What needs to be DRY?</h2>
-						<ul>
+						<ol>
 							<li class="fragment">
 								Projectwide variables
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								Recurring functionality
 							</li>
-						</ul>
+						</ol>
 					</section>
 
 					<section>
@@ -264,8 +264,8 @@
 									<li class="fragment">...</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								You might also call this the configuration data
+							<li class="fragment" style="margin-top: 1em;">
+								&rarr; You might also call this the configuration data
 							</li>
 						</ul>
 					</section>
@@ -293,7 +293,7 @@ define('DB_NAME', 'world');
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								<code>config.php</code> is the only file that may be changed when publishing a site onto a server
 							</li>
 						</ul>
@@ -309,7 +309,7 @@ define('DB_NAME', 'world');
 									<li class="fragment">What if you want to check for <code>.png</code> too? You'll edit all files?</li>
 								</ul>
 							</li>
-							<li class="fragment">
+							<li class="fragment" style="margin-top: 1em;">
 								A class definition &mdash; which itself is a step towards becoming DRY &mdash; only needs to be defined once
 							</li>
 						</ul>
@@ -319,21 +319,21 @@ define('DB_NAME', 'world');
 						<h2>How to?</h2>
 						<ul>
 							<li class="fragment">
-								Create a <code>functions.php</code> file and put all often used functions in it <em>(*)</em>
+								Create a <code>functions.php</code> and put all often used functions in it
 								<ul>
 									<li class="fragment">
 										Include this file everywhere, as the very first file to include and use the defined constants
 									</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								If you define a class, define it in a separate file on disk <em>(*)</em>
+							<li class="fragment" style="margin-top: 1em;">
+								If you define a class, define it in a separate file on disk
 								<ul>
 									<li>Include the file when necessary</li>
 								</ul>
 							</li>
 						</ul>
-						<footer class="fragment">(*) Until we start using libraries and talk about PSR-0 this way of organizing is sufficient</footer>
+						<footer class="fragment">Note: Until we start using libraries and talk about PSR-0 this way of organizing is sufficient</footer>
 					</section>
 
 				</section>
@@ -355,18 +355,18 @@ define('DB_NAME', 'world');
 								Make use of an <code>includes/</code> subfolder to store <code>config.php</code> and <code>functions.php</code> in
 								<ul class="fragment">
 									<li>Define your configuration data in <code>config.php</code></li>
-									<li>Place commonly used functions in <code>functions.php</code> <em>(*)</em></li>
+									<li>Place commonly used functions in <code>functions.php</code></li>
 									<li>Always include these two files in your project</li>
 								</ul>
 							</li>
-							<li class="fragment">
-								Store all classes into <code>includes/classes/</code> <em>(*)</em>
+							<li class="fragment" style="margin-top: 1em;">
+								Store all classes into <code>includes/classes/</code>
 								<ul class="fragment">
 									<li>Include when necessary</li>
 								</ul>
 							</li>
 						</ul>
-						<footer class="fragment">(*) Again: Until we start using libraries and talk about PSR-0 this way of organizing is sufficient</footer>
+						<footer class="fragment">Again: Until we start using libraries and talk about PSR-0 this way of organizing is sufficient</footer>
 					</section>
 
 

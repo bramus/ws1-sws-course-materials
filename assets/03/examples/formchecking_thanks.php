@@ -1,28 +1,7 @@
 <?php
 
-	/**
-	 * Guaranteed slashes (if magic_quotes is off, it adds the slashes)
-	 *
-	 * @param string $string The string to add the slashes to
-	 * @return string
-	 */
-	function addPostSlashes($string) {
-		if ((get_magic_quotes_gpc()==1) || (get_magic_quotes_runtime()==1))
-			return $string;
-		else return addslashes($string);
-	}
-
-	/**
-	 * Guaranteed no slashes (if magic_quotes is on, it strips the slashes)
-	 *
-	 * @param string $string The string to remove the slashes from
-	 * @return string
-	 */
-	function stripPostSlashes($string) {
-		if ((get_magic_quotes_gpc()==1) || (get_magic_quotes_runtime()==1))
-			return stripslashes($string);
-		else return $string;
-	}
+	$name = isset($_GET['name']) ? $_GET['name'] : false;
+	$age = isset($_GET['age']) ? $_GET['age'] : false;
 
 ?><!DOCTYPE html>
 <html>
@@ -35,17 +14,17 @@
 
 <?php
 
-	// Name completed
-	if (isset($_GET['name'])) {
-		echo '<p>Hello ' . htmlentities(stripPostSlashes($_GET['name'])). '</p>';
+	// Name sent in
+	if ($name) {
+		echo '<p>Hello ' . htmlentities($name). '</p>';
 	}
 
-	// Age completed
-	else if (isset($_GET['age'])) {
-		echo '<p>Hello, ' . htmlentities(stripPostSlashes($_GET['age'])). ' year old stranger</p>';
+	// Age sent in
+	else if ($age) {
+		echo '<p>Hello, ' . htmlentities($age). ' year old stranger</p>';
 	}
 
-	// Name not completed
+	// Nothing sent in
 	else {
 		echo '<p>Hello, stranger</p>';
 	}
