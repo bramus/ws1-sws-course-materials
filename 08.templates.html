@@ -405,7 +405,7 @@ class Template {
 
 						<ol>
 							<li class="fragment">
-								Instead of manually including each class that ships with Twig, just include the Twig autoloader<small>(*)</small>.
+								Instead of manually including each class that ships with Twig, just include the Twig autoloader.
 								<pre class="bigger"><code class="language-php">require_once __DIR__ . '/includes/Twig/Autoloader.php';
 Twig_Autoloader::register();</code></pre>
 							</li>
@@ -423,7 +423,7 @@ $twig = new Twig_Environment($loader);</code></pre>
 							</li>
 						</ol>
 
-						<footer class="fragment"><em>(*) In <a href="http://bramus.github.io/ws2-sws-course-materials/">Webscripting2</a> we'll talk about autoloaders and PSR-0 in detail</em></footer>
+						<footer class="fragment"><em>Note: In <a href="http://bramus.github.io/ws2-sws-course-materials/">Webscripting2</a> we'll talk about autoloaders and PSR-0 in detail</em></footer>
 					</section>
 
 					<section>
@@ -819,6 +819,7 @@ echo $twig->render(array(
 {% endblock %}</code></pre>
 							</li>
 						</ul>
+						<footer class="fragment">Note: Child templates must always overwrite blocks/variables from the parent template</footer>
 					</section>
 
 					<section>
