@@ -468,7 +468,7 @@
 						<h2>SPL and files (1)</h2>
 						<ul>
 							<li class="fragment">SPL contains a <code>SPLFileInfo</code> class, an object oriented interface to information for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileinfo.php">phpdocs</a>)</em></li>
-							<li class="fragment">SPL contains a <code>SplFileObject</code> class &mdash; which extends <code>SPLFileInfo</code> &mdash; and object oriented interface for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileobject.php">phpdocs</a>)</em></li>
+							<li class="fragment">SPL contains a <code>SplFileObject</code> class &mdash; which extends <code>SPLFileInfo</code> &mdash; an object oriented interface for an individual file <em>(<a href="http://www.php.net/manual/en/class.splfileobject.php">phpdocs</a>)</em></li>
 						</ul>
 						<p class="fragment" style="text-align: left">&rarr; Instead of using the oldskool functions, create an instance of this class and access the datamembers/ functions on it</p>
 					</section>
@@ -609,7 +609,7 @@
 						<h2>Handling file uploads (1)</h2>
 						<ul>
 							<li class="fragment">
-								Files are uploaded into a temp location. You'll need to move them manually using <code>move_uploaded_file()</code>
+								Files are uploaded to a temp location. You'll need to move them manually using <code>move_uploaded_file()</code>
 							</li>
 							<li class="fragment">
 								PHP will populate a <em>superglobal</em> named <code>$_FILES</code> containing that temp location per file.
@@ -693,7 +693,7 @@ if (isset($_FILES['avatar'])) {
 					<section>
 						<h2>Code summary</h2>
 
-						<p style="margin-top: 5.5em;"><em>A code-only summary of this chapter available is at <a href="05.files.and.folders.summary.html">05.files.and.folders.summary.html</a></em></p>
+						<p style="margin-top: 5.5em;"><em>A code-only summary of this chapter is available at <a href="05.files.and.folders.summary.html">05.files.and.folders.summary.html</a></em></p>
 						<footer>
 							<em>Note: not all information from these slides can be found in this summary!</em>
 						</footer>
