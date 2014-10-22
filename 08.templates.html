@@ -806,7 +806,7 @@ $twig = new Twig_Environment($loader, array(
 									<li>The result is a merge between the first and second template</li>
 								</ul>
 								<pre class="bigger"><code class="language-php" data-overlay-example="assets/08/examples/twig/09/index.php">$tpl = $twig->loadTemplate('main.twig');
-echo $twig->render(array(
+echo $tpl->render(array(
 	'pageTitle' =&gt; 'Template Inheritance'
 ));</code></pre>
 							</li>
