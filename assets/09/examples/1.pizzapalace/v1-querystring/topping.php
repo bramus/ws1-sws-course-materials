@@ -11,7 +11,7 @@
 <head>
 	<title>PizzaPalace</title>
 
-	<meta charset="iso-8859-15" />
+	<meta charset="utf-8" />
 
 	<style>
 		label {
