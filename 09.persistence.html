@@ -914,8 +914,8 @@ session.gc_maxlifetime = 1440</code></pre>
 									<div class="tooltip">
 										<div>
 											<p>The login page is very simple for this proof-of-concept: any login where the username equals the password is accepted</p>
-											<p>If the login validates, a <code>loggedIn</code> variable is stored in the session, along with the <code>name</code></p>
-											<p>The content pages use a simple <code>if</code> to display the <code>$_SESSION['name']</code> or a request to log in</p>
+											<p>If the login validates, a <code>user</code> object <em>typically the result of a database query</em> is stored in the session, along with the <code>name</code></p>
+											<p>The content pages use a simple <code>if</code> to display the <code>$_SESSION['user']['username']</code> or a request to log in</p>
 											<p>The logout page simply destroys the session and redirects to the index</p>
 										</div>
 									</div>
